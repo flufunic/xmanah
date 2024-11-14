@@ -4,6 +4,7 @@ class LembagaPendidikanService {
   final CollectionReference lembagaCollection =
       FirebaseFirestore.instance.collection('lembaga_pendidikan');
 
+  // Fungsi untuk menambah lembaga pendidikan
   Future<void> tambahLembagaPendidikan({
     required String nama,
     required String alamat,
@@ -26,6 +27,35 @@ class LembagaPendidikanService {
       print("Data lembaga pendidikan berhasil ditambahkan!");
     } catch (e) {
       print("Gagal menambahkan data lembaga pendidikan: $e");
+      rethrow; // Rethrow the error so that it can be handled by the caller
+    }
+  }
+
+  // Fungsi untuk memperbarui lembaga pendidikan
+  Future<void> updateLembagaPendidikan({
+    required String lembagaId, // ID lembaga yang akan diperbarui
+    required String nama,
+    required String alamat,
+    required String akreditasi,
+    required String tingkat,
+    required String kontak,
+    required String ulasan,
+    required String desaId,
+  }) async {
+    try {
+      await lembagaCollection.doc(lembagaId).update({
+        'nama': nama,
+        'alamat': alamat,
+        'akreditasi': akreditasi,
+        'tingkat': tingkat,
+        'kontak': kontak,
+        'ulasan': ulasan,
+        'desa_id': desaId,
+      });
+      print("Data lembaga pendidikan berhasil diperbarui!");
+    } catch (e) {
+      print("Gagal memperbarui data lembaga pendidikan: $e");
+      rethrow; // Rethrow the error so that it can be handled by the caller
     }
   }
 }

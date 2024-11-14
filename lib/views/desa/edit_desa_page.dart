@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xmanah/controller/desa.dart';
 
-class TambahDesaPage extends StatefulWidget {
+class EditDesaPage extends StatefulWidget {
+  final String desaId; // The ID of the desa to be edited
+
+  EditDesaPage({required this.desaId});
+
   @override
-  _TambahDesaPageState createState() => _TambahDesaPageState();
+  _EditDesaPageState createState() => _EditDesaPageState();
 }
 
-class _TambahDesaPageState extends State<TambahDesaPage> {
+class _EditDesaPageState extends State<EditDesaPage> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controller untuk masing-masing field
+  // Controllers for each input field
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _kodePosController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
@@ -17,51 +22,85 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
 
   final DesaService _desaService = DesaService();
 
-  Future<void> _simpanDesa() async {
-    if (_formKey.currentState!.validate()) {
-      await _desaService.tambahDesa(
-        nama: _namaController.text,
-        kodePos: _kodePosController.text,
-        alamat: _alamatController.text,
-        kontak: _kontakController.text,
-      );
+  // Function to load existing data from Firestore
+  Future<void> _loadDesaData() async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('desa')
+          .doc(widget.desaId)
+          .get();
 
-      // Show alert dialog after successful data insertion
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Sukses'),
-            content: Text('Data desa berhasil ditambahkan!'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  // Clear the form fields
-                  _namaController.clear();
-                  _kodePosController.clear();
-                  _alamatController.clear();
-                  _kontakController.clear();
+      if (snapshot.exists) {
+        var data = snapshot.data() as Map<String, dynamic>;
 
-                  // Close the alert dialog
-                  Navigator.of(context).pop();
-
-                  // Navigate back to the previous page (DesaViewPage)
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
+        _namaController.text = data['nama'] ?? '';
+        _kodePosController.text = data['kode_pos'] ?? '';
+        _alamatController.text = data['alamat'] ?? '';
+        _kontakController.text = data['kontak'] ?? '';
+      }
+    } catch (e) {
+      print("Error loading desa data: $e");
     }
+  }
+
+  // Function to update the data in Firestore
+  Future<void> _updateDesa() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('desa')
+            .doc(widget.desaId)
+            .update({
+          'nama': _namaController.text,
+          'kode_pos': _kodePosController.text,
+          'alamat': _alamatController.text,
+          'kontak': _kontakController.text,
+        });
+
+        // Show success alert dialog
+        _showSuccessDialog();
+      } catch (e) {
+        print("Error updating desa data: $e");
+      }
+    }
+  }
+
+  // Function to show success dialog
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text('Data desa berhasil diperbarui!'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                // Close the alert dialog and navigate to the view page
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context)
+                    .pop(); // Go back to the previous page (View page)
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the desa data when the page is first created
+    _loadDesaData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Data Desa'),
+        title: Text('Edit Data Desa'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -114,8 +153,8 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _simpanDesa,
-                child: Text('Simpan Data Desa'),
+                onPressed: _updateDesa,
+                child: Text('Update Data Desa'),
               ),
             ],
           ),

@@ -4,6 +4,7 @@ class FasilitasKesehatanService {
   final CollectionReference fasilitasKesehatanCollection =
       FirebaseFirestore.instance.collection('fasilitas_kesehatan');
 
+  // Function to add a new health facility
   Future<void> tambahFasilitasKesehatan({
     required String nama,
     required String jenis, // jenis: Puskesmas, Klinik, Rumah Sakit
@@ -13,6 +14,16 @@ class FasilitasKesehatanService {
     required String desaId, // ID Desa
   }) async {
     try {
+      // Pastikan tidak ada nilai null yang ditambahkan
+      if (nama.isEmpty ||
+          jenis.isEmpty ||
+          alamat.isEmpty ||
+          kontak.isEmpty ||
+          ulasan.isEmpty ||
+          desaId.isEmpty) {
+        throw 'Semua field harus diisi!';
+      }
+
       await fasilitasKesehatanCollection.add({
         'nama': nama,
         'jenis': jenis,
@@ -21,9 +32,46 @@ class FasilitasKesehatanService {
         'ulasan': ulasan,
         'desa_id': desaId,
       });
+
       print("Fasilitas Kesehatan berhasil ditambahkan!");
     } catch (e) {
       print("Gagal menambahkan fasilitas kesehatan: $e");
+    }
+  }
+
+  // Function to update an existing health facility
+  Future<void> updateFasilitasKesehatan({
+    required String id,
+    required String nama,
+    required String jenis, // jenis: Puskesmas, Klinik, Rumah Sakit
+    required String alamat,
+    required String kontak,
+    required String ulasan,
+    required String desaId, // ID Desa
+  }) async {
+    try {
+      // Pastikan tidak ada nilai null yang ditambahkan
+      if (nama.isEmpty ||
+          jenis.isEmpty ||
+          alamat.isEmpty ||
+          kontak.isEmpty ||
+          ulasan.isEmpty ||
+          desaId.isEmpty) {
+        throw 'Semua field harus diisi!';
+      }
+
+      await fasilitasKesehatanCollection.doc(id).update({
+        'nama': nama,
+        'jenis': jenis,
+        'alamat': alamat,
+        'kontak': kontak,
+        'ulasan': ulasan,
+        'desa_id': desaId,
+      });
+
+      print("Fasilitas Kesehatan berhasil diperbarui!");
+    } catch (e) {
+      print("Gagal memperbarui fasilitas kesehatan: $e");
     }
   }
 }

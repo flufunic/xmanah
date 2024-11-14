@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/tempat_ibadah.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'view_tempat_ibadah_page.dart'; // Import ViewTempatIbadahPage
 
 class TambahTempatIbadahPage extends StatefulWidget {
   @override
@@ -119,7 +120,7 @@ class _TambahTempatIbadahPageState extends State<TambahTempatIbadahPage> {
     }
   }
 
-  // Function to show success dialog
+  // Function to show success dialog and navigate to ViewTempatIbadahPage
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -132,6 +133,13 @@ class _TambahTempatIbadahPageState extends State<TambahTempatIbadahPage> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ViewTempatIbadahPage(), // Navigate to View page
+                  ),
+                );
               },
             ),
           ],

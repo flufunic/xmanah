@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xmanah/controller/kost.dart';
 
-class TambahKostPage extends StatefulWidget {
+class EditKostPage extends StatefulWidget {
+  final String kostId; // ID of the Kost to edit
+
+  EditKostPage({required this.kostId});
+
   @override
-  _TambahKostPageState createState() => _TambahKostPageState();
+  _EditKostPageState createState() => _EditKostPageState();
 }
 
-class _TambahKostPageState extends State<TambahKostPage> {
+class _EditKostPageState extends State<EditKostPage> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controller untuk masing-masing field
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
   final TextEditingController _fasilitasController = TextEditingController();
@@ -28,9 +31,10 @@ class _TambahKostPageState extends State<TambahKostPage> {
   void initState() {
     super.initState();
     _fetchDesaList();
+    _fetchKostData();
   }
 
-  // Fetch desa data from Firestore and populate dropdown items
+  // Fetch desa data from Firestore
   Future<void> _fetchDesaList() async {
     try {
       QuerySnapshot snapshot =
@@ -38,7 +42,7 @@ class _TambahKostPageState extends State<TambahKostPage> {
       List<DropdownMenuItem<String>> items = snapshot.docs.map((doc) {
         return DropdownMenuItem(
           value: doc.id,
-          child: Text(doc['nama']), // menampilkan nama desa dalam dropdown
+          child: Text(doc['nama']),
         );
       }).toList();
       setState(() {
@@ -49,9 +53,34 @@ class _TambahKostPageState extends State<TambahKostPage> {
     }
   }
 
-  Future<void> _simpanKost() async {
+  // Fetch existing kost data
+  Future<void> _fetchKostData() async {
+    try {
+      DocumentSnapshot kostSnapshot = await FirebaseFirestore.instance
+          .collection('kost')
+          .doc(widget.kostId)
+          .get();
+      if (kostSnapshot.exists) {
+        var data = kostSnapshot.data() as Map<String, dynamic>;
+        _namaController.text = data['nama'];
+        _alamatController.text = data['alamat'];
+        _fasilitasController.text = data['fasilitas'];
+        _kontakController.text = data['kontak'];
+        _hargaController.text = data['harga'].toString();
+        _ulasanController.text = data['ulasan'];
+        _gambarController.text = data['gambar'];
+        _selectedDesaId = data['desa_id'];
+        setState(() {});
+      }
+    } catch (e) {
+      print("Gagal mengambil data kost: $e");
+    }
+  }
+
+  Future<void> _updateKost() async {
     if (_formKey.currentState!.validate() && _selectedDesaId != null) {
-      await _kostService.tambahKost(
+      await _kostService.updateKost(
+        kostId: widget.kostId,
         nama: _namaController.text,
         alamat: _alamatController.text,
         fasilitas: _fasilitasController.text,
@@ -62,35 +91,11 @@ class _TambahKostPageState extends State<TambahKostPage> {
         desaId: _selectedDesaId!,
       );
 
-      // Show success alert dialog
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Berhasil'),
-          content: Text('Data kos berhasil ditambahkan!'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).pop(true); // Return to the previous page
-              },
-              child: Text('OK'),
-            ),
-          ],
-        ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Data kos berhasil diperbarui!')),
       );
 
-      // Bersihkan form setelah menyimpan
-      _namaController.clear();
-      _alamatController.clear();
-      _fasilitasController.clear();
-      _kontakController.clear();
-      _hargaController.clear();
-      _ulasanController.clear();
-      _gambarController.clear();
-      setState(() {
-        _selectedDesaId = null;
-      });
+      Navigator.pop(context); // Go back to the previous screen after saving
     } else if (_selectedDesaId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Pilih desa terlebih dahulu!')),
@@ -102,7 +107,7 @@ class _TambahKostPageState extends State<TambahKostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Data Kos'),
+        title: Text('Edit Data Kos'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -197,8 +202,8 @@ class _TambahKostPageState extends State<TambahKostPage> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _simpanKost,
-                  child: Text('Simpan Data Kos'),
+                  onPressed: _updateKost,
+                  child: Text('Perbarui Data Kos'),
                 ),
               ],
             ),
