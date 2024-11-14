@@ -30,4 +30,18 @@ class KostService {
       print("Gagal menambahkan data kost: $e");
     }
   }
+
+  // Fungsi untuk mengambil daftar kost (dapat digunakan di UI)
+  Future<List<Map<String, dynamic>>> getKostList() async {
+    try {
+      QuerySnapshot snapshot = await kostCollection.get();
+      List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+      return kostList;
+    } catch (e) {
+      print("Error fetching kost data: $e");
+      return [];
+    }
+  }
 }
