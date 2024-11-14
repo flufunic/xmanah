@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/fasilitas_kesehatan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'view_fasilitas_kesehatan_page.dart'; // Pastikan Anda import halaman ViewFasilitasKesehatanPage
 
 class TambahFasilitasKesehatanPage extends StatefulWidget {
   @override
@@ -77,6 +78,13 @@ class _TambahFasilitasKesehatanPageState
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
+                // Navigasi ke halaman ViewFasilitasKesehatanPage setelah OK
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewFasilitasKesehatanPage(),
+                  ),
+                );
               },
             ),
           ],

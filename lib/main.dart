@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:xmanah/controller/fasilitas_kesehatan.dart';
+import 'package:xmanah/views/admin_page.dart';
 import 'package:xmanah/views/desa/edit_desa_page.dart';
 import 'package:xmanah/views/desa/tambah_desa_page.dart';
 import 'package:xmanah/views/desa/view_desa_page.dart';
@@ -10,6 +11,7 @@ import 'package:xmanah/views/kost/tambah_kost_page.dart';
 import 'package:xmanah/views/kost/view_kost_page.dart';
 import 'package:xmanah/views/lembaga_pendidikan/tambah_lembaga_pendidikan_page.dart';
 import 'package:xmanah/views/lembaga_pendidikan/view_lembaga_pendidikan_page.dart';
+import 'package:xmanah/views/login_page.dart';
 import 'package:xmanah/views/tempat_ibadah/tambah_tempat_ibadah_page.dart';
 import 'package:xmanah/views/tempat_ibadah/view_tempat_ibadah_page.dart';
 import 'package:xmanah/views/tempat_makan/tambah_tempat_makan_page.dart';
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: DesaViewPage(),
+      home: AdminPage(),
     );
   }
 }

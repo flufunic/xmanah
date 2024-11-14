@@ -83,6 +83,7 @@ class DesaViewPage extends StatelessWidget {
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: ListTile(
+                  leading: Icon(Icons.home, color: Colors.blue), // Icon rumah
                   title: Text(nama),
                   subtitle:
                       Text('$alamat\nKode Pos: $kodePos\nKontak: $kontak'),

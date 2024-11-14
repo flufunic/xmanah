@@ -6,7 +6,7 @@ class EditFasilitasKesehatanPage extends StatefulWidget {
   final String fasilitasId; // ID fasilitas yang akan diedit
 
   EditFasilitasKesehatanPage(
-      {required this.fasilitasId, required Map initialData});
+      {required this.fasilitasId, required Map<String, dynamic> initialData});
 
   @override
   _EditFasilitasKesehatanPageState createState() =>
@@ -52,6 +52,40 @@ class _EditFasilitasKesehatanPageState
     } catch (e) {
       print("Gagal mengambil data fasilitas: $e");
     }
+  }
+
+  // Function to fetch desa list from Firestore
+  Future<void> _fetchDesaList() async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('desa').get();
+      List<DropdownMenuItem<String>> items = [];
+      snapshot.docs.forEach((doc) {
+        items.add(DropdownMenuItem(
+          value: doc.id,
+          child: Text(doc['nama']),
+        ));
+      });
+
+      setState(() {
+        _desaItems = items;
+
+        // Ensure _selectedDesaId is valid (it must exist in the dropdown items)
+        if (_selectedDesaId != null &&
+            !items.any((item) => item.value == _selectedDesaId)) {
+          _selectedDesaId = null; // Reset if not found in the fetched list
+        }
+      });
+    } catch (e) {
+      print("Gagal mengambil data desa: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDesaList(); // Fetch the desa list when the page is loaded
+    _fetchFasilitasData(); // Fetch the fasilitas data based on ID
   }
 
   // Function to update fasilitas kesehatan
@@ -122,32 +156,6 @@ class _EditFasilitasKesehatanPageState
     );
   }
 
-  // Function to fetch desa list from Firestore
-  Future<void> _fetchDesaList() async {
-    try {
-      QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('desa').get();
-      List<DropdownMenuItem<String>> items = snapshot.docs.map((doc) {
-        return DropdownMenuItem(
-          value: doc.id, // Ensure the value is the document ID
-          child: Text(doc['nama']), // Display desa name in dropdown
-        );
-      }).toList();
-      setState(() {
-        _desaItems = items;
-      });
-    } catch (e) {
-      print("Gagal mengambil data desa: $e");
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchDesaList(); // Fetch the desa list when the page is loaded
-    _fetchFasilitasData(); // Fetch the fasilitas data based on ID
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,7 +206,7 @@ class _EditFasilitasKesehatanPageState
             Text('Desa', style: TextStyle(fontSize: 16)),
             _desaItems.isEmpty
                 ? CircularProgressIndicator() // Loading spinner while items are being fetched
-                : DropdownButton<String>(
+                : DropdownButtonFormField<String>(
                     value: _selectedDesaId,
                     onChanged: (String? newValue) {
                       setState(() {
@@ -208,6 +216,7 @@ class _EditFasilitasKesehatanPageState
                     items: _desaItems,
                     hint: Text('Pilih Desa'),
                     isExpanded: true, // Make dropdown full-width
+                    validator: (value) => value == null ? 'Pilih desa' : null,
                   ),
             SizedBox(height: 20),
             ElevatedButton(
