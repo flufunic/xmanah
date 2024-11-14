@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "217763982735",
+    "firebase_url": "https://xmanah-default-rtdb.firebaseio.com",
+    "project_id": "xmanah",
+    "storage_bucket": "xmanah.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217763982735:android:3449c877a190daaedbeffa",
+        "android_client_info": {
+          "package_name": "com.xma"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP_fKj_36oygPMufDeB-L0_aK10qvxyBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
