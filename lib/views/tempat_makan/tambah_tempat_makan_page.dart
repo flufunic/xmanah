@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/tempat_makan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'view_tempat_makan_page.dart'; // Import the view page to navigate after success
 
 class TambahTempatMakanPage extends StatefulWidget {
   @override
@@ -97,7 +98,14 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); // Close the success dialog
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ViewTempatMakanPage(), // Navigate to ViewTempatMakanPage
+                  ),
+                );
               },
             ),
           ],
@@ -118,7 +126,7 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); // Close the error dialog
               },
             ),
           ],

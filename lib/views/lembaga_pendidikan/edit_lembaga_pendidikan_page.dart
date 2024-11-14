@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xmanah/controller/lembaga_pendidikan.dart';
-import 'package:xmanah/views/lembaga_pendidikan/view_lembaga_pendidikan_page.dart';
 
-class TambahLembagaPendidikanPage extends StatefulWidget {
+class EditLembagaPendidikanPage extends StatefulWidget {
+  final String lembagaId; // ID lembaga yang akan diedit
+
+  EditLembagaPendidikanPage({required this.lembagaId});
+
   @override
-  _TambahLembagaPendidikanPageState createState() =>
-      _TambahLembagaPendidikanPageState();
+  _EditLembagaPendidikanPageState createState() =>
+      _EditLembagaPendidikanPageState();
 }
 
-class _TambahLembagaPendidikanPageState
-    extends State<TambahLembagaPendidikanPage> {
+class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
@@ -27,11 +29,37 @@ class _TambahLembagaPendidikanPageState
 
   final LembagaPendidikanService lembagaService = LembagaPendidikanService();
 
-  // Fungsi untuk menambahkan lembaga pendidikan
-  void tambahLembaga() async {
+  // Fetch lembaga data based on ID
+  Future<void> _fetchLembagaData() async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('lembaga_pendidikan')
+          .doc(widget.lembagaId)
+          .get();
+      if (snapshot.exists) {
+        Map<String, dynamic> lembagaData =
+            snapshot.data() as Map<String, dynamic>;
+        setState(() {
+          namaController.text = lembagaData['nama'];
+          alamatController.text = lembagaData['alamat'];
+          kontakController.text = lembagaData['kontak'];
+          ulasanController.text = lembagaData['ulasan'];
+          selectedAkreditasi = lembagaData['akreditasi'];
+          selectedTingkat = lembagaData['tingkat'];
+          _selectedDesaId = lembagaData['desa_id'];
+        });
+      }
+    } catch (e) {
+      print("Gagal mengambil data lembaga: $e");
+    }
+  }
+
+  // Function to update lembaga pendidikan
+  void updateLembaga() async {
     try {
       if (_selectedDesaId != null) {
-        await lembagaService.tambahLembagaPendidikan(
+        await lembagaService.updateLembagaPendidikan(
+          lembagaId: widget.lembagaId,
           nama: namaController.text,
           alamat: alamatController.text,
           akreditasi: selectedAkreditasi,
@@ -41,18 +69,7 @@ class _TambahLembagaPendidikanPageState
           desaId: _selectedDesaId!, // Include desa_id
         );
 
-        // Reset form setelah berhasil
-        setState(() {
-          namaController.clear();
-          alamatController.clear();
-          kontakController.clear();
-          ulasanController.clear();
-          selectedAkreditasi = 'A';
-          selectedTingkat = 'SD';
-          _selectedDesaId = null; // Clear selected desa
-        });
-
-        // Show success alert dialog after the data is added and form is cleared
+        // Show success alert dialog
         _showSuccessDialog();
       } else {
         _showErrorDialog("Pilih desa terlebih dahulu!");
@@ -63,45 +80,20 @@ class _TambahLembagaPendidikanPageState
     }
   }
 
-  // Function to fetch desa list from Firestore
-  Future<void> _fetchDesaList() async {
-    try {
-      QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('desa').get();
-      List<DropdownMenuItem<String>> items = snapshot.docs.map((doc) {
-        return DropdownMenuItem(
-          value: doc.id,
-          child: Text(doc['nama']), // Display desa name in dropdown
-        );
-      }).toList();
-      setState(() {
-        _desaItems = items;
-      });
-    } catch (e) {
-      print("Gagal mengambil data desa: $e");
-    }
-  }
-
-  // Function to show success dialog and navigate to view page
+  // Function to show success dialog
   void _showSuccessDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Success'),
-          content: Text('Lembaga Pendidikan berhasil ditambahkan!'),
+          content: Text('Lembaga Pendidikan berhasil diperbarui!'),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ViewLembagaPendidikanPage(), // Navigate to view page
-                  ),
-                );
+                Navigator.of(context).pop(); // Return to previous page
               },
             ),
           ],
@@ -131,17 +123,37 @@ class _TambahLembagaPendidikanPageState
     );
   }
 
+  // Function to fetch desa list from Firestore
+  Future<void> _fetchDesaList() async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('desa').get();
+      List<DropdownMenuItem<String>> items = snapshot.docs.map((doc) {
+        return DropdownMenuItem(
+          value: doc.id,
+          child: Text(doc['nama']), // Display desa name in dropdown
+        );
+      }).toList();
+      setState(() {
+        _desaItems = items;
+      });
+    } catch (e) {
+      print("Gagal mengambil data desa: $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _fetchDesaList(); // Fetch the desa list when the page is loaded
+    _fetchLembagaData(); // Fetch the lembaga data based on ID
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tambah Lembaga Pendidikan"),
+        title: Text("Edit Lembaga Pendidikan"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -217,8 +229,8 @@ class _TambahLembagaPendidikanPageState
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: tambahLembaga,
-              child: Text('Tambah Lembaga Pendidikan'),
+              onPressed: updateLembaga,
+              child: Text('Perbarui Lembaga Pendidikan'),
             ),
           ],
         ),
