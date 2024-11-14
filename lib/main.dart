@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:xmanah/views/tambah_desa_page.dart';
-import 'package:xmanah/views/tambah_fasilitas_kesehatan.dart';
-import 'package:xmanah/views/tambah_kost_page.dart';
-import 'package:xmanah/views/tambah_lembaga_pendidikan_page.dart';
-import 'package:xmanah/views/tambah_tempat_ibadah.dart';
+import 'package:xmanah/views/desa/tambah_desa_page.dart';
+import 'package:xmanah/views/fasilitas_kesehatan/tambah_fasilitas_kesehatan.dart';
+import 'package:xmanah/views/kost/tambah_kost_page.dart';
+import 'package:xmanah/views/lembaga_pendidikan/tambah_lembaga_pendidikan_page.dart';
+import 'package:xmanah/views/tempat_ibadah/tambah_tempat_ibadah.dart';
 import 'package:xmanah/views/tambah_tempat_makan.dart';
 import 'firebase_options.dart';
 
