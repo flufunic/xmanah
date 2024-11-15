@@ -43,33 +43,46 @@ class KostService {
     } catch (e) {
       print("Error fetching kost data: $e");
       return [];
-      
-  // Function to update existing "kost" data
-  Future<void> updateKost({
-    required String kostId,
-    required String nama,
-    required String alamat,
-    required String fasilitas,
-    required String kontak,
-    required int harga,
-    required String ulasan,
-    required String gambar,
-    required String desaId,
-  }) async {
-    try {
-      await kostCollection.doc(kostId).update({
-        'nama': nama,
-        'alamat': alamat,
-        'fasilitas': fasilitas,
-        'kontak': kontak,
-        'harga': harga,
-        'ulasan': ulasan,
-        'gambar': gambar,
-        'desa_id': desaId,
-      });
-      print("Data kost berhasil diperbarui!");
-    } catch (e) {
-      print("Gagal memperbarui data kost: $e");
+    }
+
+    // Function to update existing "kost" data
+    Future<void> updateKost({
+      required String kostId,
+      required String nama,
+      required String alamat,
+      required String fasilitas,
+      required String kontak,
+      required int harga,
+      required String ulasan,
+      required String gambar,
+      required String desaId,
+    }) async {
+      try {
+        await kostCollection.doc(kostId).update({
+          'nama': nama,
+          'alamat': alamat,
+          'fasilitas': fasilitas,
+          'kontak': kontak,
+          'harga': harga,
+          'ulasan': ulasan,
+          'gambar': gambar,
+          'desa_id': desaId,
+        });
+        print("Data kost berhasil diperbarui!");
+      } catch (e) {
+        print("Gagal memperbarui data kost: $e");
+      }
     }
   }
+
+  updateKost(
+      {required String kostId,
+      required String nama,
+      required String alamat,
+      required String fasilitas,
+      required String kontak,
+      required int harga,
+      required String ulasan,
+      required String gambar,
+      required String desaId}) {}
 }
