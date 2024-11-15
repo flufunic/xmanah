@@ -58,4 +58,18 @@ class LembagaPendidikanService {
       rethrow; // Rethrow the error so that it can be handled by the caller
     }
   }
+
+  Future<List<Map<String, dynamic>>> getLembagaPendidikanList() async {
+    try {
+      QuerySnapshot querySnapshot = await lembagaCollection.get();
+      List<Map<String, dynamic>> lembagaPendidikanList = [];
+      querySnapshot.docs.forEach((doc) {
+        lembagaPendidikanList.add(doc.data() as Map<String, dynamic>);
+      });
+      return lembagaPendidikanList;
+    } catch (e) {
+      print("Gagal mengambil data lembaga pendidikan: $e");
+      return [];
+    }
+  }
 }

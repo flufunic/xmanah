@@ -43,7 +43,26 @@ class KostService {
     } catch (e) {
       print("Error fetching kost data: $e");
       return [];
-      
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getKostListByDesa(String desaId) async {
+    try {
+      QuerySnapshot snapshot = await kostCollection
+          .where('desa_id', isEqualTo: desaId) // Filter berdasarkan desa_id
+          .get();
+
+      List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+
+      return kostList;
+    } catch (e) {
+      print("Error fetching kost data for desa $desaId: $e");
+      return [];
+    }
+  }
+
   // Function to update existing "kost" data
   Future<void> updateKost({
     required String kostId,
