@@ -44,45 +44,51 @@ class KostService {
       print("Error fetching kost data: $e");
       return [];
     }
+  }
 
-    // Function to update existing "kost" data
-    Future<void> updateKost({
-      required String kostId,
-      required String nama,
-      required String alamat,
-      required String fasilitas,
-      required String kontak,
-      required int harga,
-      required String ulasan,
-      required String gambar,
-      required String desaId,
-    }) async {
-      try {
-        await kostCollection.doc(kostId).update({
-          'nama': nama,
-          'alamat': alamat,
-          'fasilitas': fasilitas,
-          'kontak': kontak,
-          'harga': harga,
-          'ulasan': ulasan,
-          'gambar': gambar,
-          'desa_id': desaId,
-        });
-        print("Data kost berhasil diperbarui!");
-      } catch (e) {
-        print("Gagal memperbarui data kost: $e");
-      }
+  Future<List<Map<String, dynamic>>> getKostListByDesa(String desaId) async {
+    try {
+      QuerySnapshot snapshot = await kostCollection
+          .where('desa_id', isEqualTo: desaId) // Filter berdasarkan desa_id
+          .get();
+
+      List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+
+      return kostList;
+    } catch (e) {
+      print("Error fetching kost data for desa $desaId: $e");
+      return [];
     }
   }
 
-  updateKost(
-      {required String kostId,
-      required String nama,
-      required String alamat,
-      required String fasilitas,
-      required String kontak,
-      required int harga,
-      required String ulasan,
-      required String gambar,
-      required String desaId}) {}
+  // Function to update existing "kost" data
+  Future<void> updateKost({
+    required String kostId,
+    required String nama,
+    required String alamat,
+    required String fasilitas,
+    required String kontak,
+    required int harga,
+    required String ulasan,
+    required String gambar,
+    required String desaId,
+  }) async {
+    try {
+      await kostCollection.doc(kostId).update({
+        'nama': nama,
+        'alamat': alamat,
+        'fasilitas': fasilitas,
+        'kontak': kontak,
+        'harga': harga,
+        'ulasan': ulasan,
+        'gambar': gambar,
+        'desa_id': desaId,
+      });
+      print("Data kost berhasil diperbarui!");
+    } catch (e) {
+      print("Gagal memperbarui data kost: $e");
+    }
+  }
 }

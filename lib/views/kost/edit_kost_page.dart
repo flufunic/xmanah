@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xmanah/controller/kost.dart';
+import 'package:xmanah/views/kost/view_kost_page.dart';
 
 class EditKostPage extends StatefulWidget {
   final String kostId; // ID of the Kost to edit
@@ -91,11 +92,30 @@ class _EditKostPageState extends State<EditKostPage> {
         desaId: _selectedDesaId!,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data kos berhasil diperbarui!')),
+      // Show success dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Berhasil!'),
+            content: Text('Data kos berhasil diperbarui.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Navigate to the ViewKostPage after successful update
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewKostPage(),
+                    ),
+                  );
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
       );
-
-      Navigator.pop(context); // Go back to the previous screen after saving
     } else if (_selectedDesaId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Pilih desa terlebih dahulu!')),
