@@ -15,13 +15,13 @@ class _CustomNavbarState extends State<CustomNavbar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.purple[200],
       elevation: 0,
       leading: Padding(
         padding:
             const EdgeInsets.all(8.0), // Sesuaikan padding sesuai kebutuhan
         child: Image.asset(
-          'assets/images/x.png',
+          'assets/images/xmanah.png',
           height: 30, // Setel tinggi gambar
           width: 30, // Setel lebar gambar
           fit: BoxFit.contain, // Atur gambar agar tidak terpotong

@@ -57,4 +57,18 @@ class DesaService {
           "Gagal memperbarui data desa: $e"); // Rethrow the error for the UI to handle
     }
   }
+
+  // Fungsi untuk mengambil daftar desa
+  Future<List<Map<String, dynamic>>> getDesaList() async {
+    try {
+      QuerySnapshot snapshot = await desaCollection.get(); // Ambil semua desa
+      List<Map<String, dynamic>> desaList = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+      return desaList;
+    } catch (e) {
+      print("Error fetching desa data: $e");
+      return [];
+    }
+  }
 }

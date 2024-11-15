@@ -57,4 +57,19 @@ class TempatMakanService {
       print("Gagal memperbarui tempat makan: $e");
     }
   }
+
+  // Method untuk mendapatkan daftar tempat makan
+  Future<List<Map<String, dynamic>>> getTempatMakanList() async {
+    try {
+      QuerySnapshot querySnapshot = await tempatMakanCollection.get();
+      List<Map<String, dynamic>> tempatMakanList = [];
+      querySnapshot.docs.forEach((doc) {
+        tempatMakanList.add(doc.data() as Map<String, dynamic>);
+      });
+      return tempatMakanList;
+    } catch (e) {
+      print("Gagal mengambil data tempat makan: $e");
+      return [];
+    }
+  }
 }
