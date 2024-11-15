@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'edit_fasilitas_kesehatan_page.dart'; // Halaman Edit
+import 'package:xmanah/views/fasilitas_kesehatan/edit_fasilitas_kesehatan_page.dart';
+import 'package:xmanah/views/fasilitas_kesehatan/tambah_fasilitas_kesehatan_page.dart';
 
 class ViewFasilitasKesehatanPage extends StatefulWidget {
   @override
@@ -158,6 +159,23 @@ class _ViewFasilitasKesehatanPageState
             },
           );
         },
+      ),
+      // Floating Action Button (FAB) untuk menambah data fasilitas kesehatan
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Navigasi ke halaman untuk menambah fasilitas kesehatan
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TambahFasilitasKesehatanPage(),
+            ),
+          );
+          setState(() {
+            _fasilitasDataFuture = _fetchFasilitasData(); // Refresh data
+          });
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Tambah Fasilitas Kesehatan',
       ),
     );
   }
