@@ -91,5 +91,4 @@ class KostService {
       print("Gagal memperbarui data kost: $e");
     }
   }
-
- 
+}
