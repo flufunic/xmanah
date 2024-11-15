@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:xmanah/home.dart';
-import 'package:xmanah/controller/fasilitas_kesehatan.dart';
-import 'package:xmanah/views/admin_page.dart';
-import 'package:xmanah/views/desa/edit_desa_page.dart';
-import 'package:xmanah/views/desa/tambah_desa_page.dart';
-import 'package:xmanah/views/desa/view_desa_page.dart';
-import 'package:xmanah/views/fasilitas_kesehatan/tambah_fasilitas_kesehatan_page.dart';
-import 'package:xmanah/views/fasilitas_kesehatan/view_fasilitas_kesehatan_page.dart';
-import 'package:xmanah/views/kost/tambah_kost_page.dart';
-import 'package:xmanah/views/kost/view_kost_page.dart';
-import 'package:xmanah/views/lembaga_pendidikan/tambah_lembaga_pendidikan_page.dart';
 
+import 'package:xmanah/usersview/fasilitasuser.dart';
+import 'package:xmanah/usersview/kostuser.dart';
+import 'package:xmanah/usersview/tempatmakanuser.dart';
 import 'package:xmanah/widgets/navbar.dart';
-
-import 'package:xmanah/views/lembaga_pendidikan/view_lembaga_pendidikan_page.dart';
-import 'package:xmanah/views/login_page.dart';
-import 'package:xmanah/views/tempat_ibadah/tambah_tempat_ibadah_page.dart';
-import 'package:xmanah/views/tempat_ibadah/view_tempat_ibadah_page.dart';
-import 'package:xmanah/views/tempat_makan/tambah_tempat_makan_page.dart';
-import 'package:xmanah/views/tempat_makan/view_tempat_makan_page.dart';
 
 import 'firebase_options.dart';
 
@@ -49,9 +35,9 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     HomePage(),
-    TambahKostPage(),
-    TambahFasilitasKesehatanPage(),
-    TambahTempatMakanPage(),
+    KostUser(),
+    FasilitasUser(),
+    TempatMakanUser(),
   ];
 
   @override
@@ -67,7 +53,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.purple[200],
         unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(

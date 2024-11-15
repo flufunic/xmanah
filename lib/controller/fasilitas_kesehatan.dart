@@ -74,4 +74,18 @@ class FasilitasKesehatanService {
       print("Gagal memperbarui fasilitas kesehatan: $e");
     }
   }
+
+  Future<List<Map<String, dynamic>>> getFasilitasKesehatanList() async {
+    try {
+      QuerySnapshot querySnapshot = await fasilitasKesehatanCollection.get();
+      List<Map<String, dynamic>> fasilitasKesehatanList = [];
+      querySnapshot.docs.forEach((doc) {
+        fasilitasKesehatanList.add(doc.data() as Map<String, dynamic>);
+      });
+      return fasilitasKesehatanList;
+    } catch (e) {
+      print("Gagal mengambil data tempat makan: $e");
+      return [];
+    }
+  }
 }

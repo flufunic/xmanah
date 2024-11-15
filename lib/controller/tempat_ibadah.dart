@@ -61,4 +61,18 @@ class TempatIbadahService {
       print("Gagal memperbarui tempat ibadah: $e");
     }
   }
+
+  Future<List<Map<String, dynamic>>> getTempatIbadaList() async {
+    try {
+      QuerySnapshot querySnapshot = await tempatIbadahCollection.get();
+      List<Map<String, dynamic>> tempatIbadahList = [];
+      querySnapshot.docs.forEach((doc) {
+        tempatIbadahList.add(doc.data() as Map<String, dynamic>);
+      });
+      return tempatIbadahList;
+    } catch (e) {
+      print("Gagal mengambil data tempat makan: $e");
+      return [];
+    }
+  }
 }
