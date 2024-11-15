@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xmanah/views/login_page.dart';
 
 class CustomNavbar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -18,13 +19,12 @@ class _CustomNavbarState extends State<CustomNavbar> {
       backgroundColor: Colors.purple[200],
       elevation: 0,
       leading: Padding(
-        padding:
-            const EdgeInsets.all(8.0), // Sesuaikan padding sesuai kebutuhan
+        padding: const EdgeInsets.all(8.0), // Adjust padding as needed
         child: Image.asset(
           'assets/images/xmanah.png',
-          height: 30, // Setel tinggi gambar
-          width: 30, // Setel lebar gambar
-          fit: BoxFit.contain, // Atur gambar agar tidak terpotong
+          height: 30, // Set the height of the image
+          width: 30, // Set the width of the image
+          fit: BoxFit.contain, // Ensure the image is not cropped
         ),
       ),
       title: _isSearching
@@ -33,9 +33,9 @@ class _CustomNavbarState extends State<CustomNavbar> {
               decoration: InputDecoration(
                 hintText: 'Search...',
                 border: InputBorder.none,
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: TextStyle(color: Colors.white),
               ),
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             )
           : null, // Show search bar when searching
       actions: [
@@ -58,6 +58,16 @@ class _CustomNavbarState extends State<CustomNavbar> {
               });
             },
           ),
+        IconButton(
+          icon: Icon(Icons.person, color: Colors.black), // User icon
+          onPressed: () {
+            // Navigate to LoginPage
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+        ),
       ],
     );
   }
