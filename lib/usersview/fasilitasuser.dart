@@ -157,8 +157,9 @@ class FasilitasCard extends StatelessWidget {
                   )
                 : Container(
                     height: 180,
+                    width: double.infinity,
                     color: Colors.grey[300],
-                    child: Center(child: Text("No Image")),
+                    child: Icon(Icons.image, color: Colors.white, size: 40),
                   ),
           ),
           Padding(
