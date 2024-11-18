@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:xmanah/firstopen.dart';
 import 'package:xmanah/home.dart';
 
 import 'package:xmanah/usersview/fasilitasuser.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNavBarExample(),
+      home: FirtsOpen(),
     );
   }
 }

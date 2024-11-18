@@ -32,10 +32,10 @@ class KostUser extends StatelessWidget {
               itemBuilder: (context, index) {
                 final kost = kostList[index];
                 return KostCard(
-                  imageUrl: kost['gambar'],
-                  name: kost['nama'],
-                  address: kost['alamat'],
-                  review: kost['ulasan'],
+                  imageUrl: kost['gambar'] ?? '',
+                  name: kost['nama'] ?? 'Nama Kost',
+                  address: kost['alamat'] ?? 'Alamat Kost',
+                  review: kost['ulasan'] ?? 'Ulasan',
                 );
               },
             );
@@ -79,15 +79,21 @@ class KostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gambar Kost
           ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
-            child: Image.network(
-              imageUrl,
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: imageUrl.isNotEmpty
+                ? Image.network(
+                    imageUrl,
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : Container(
+                    height: 180,
+                    width: double.infinity,
+                    color: Colors.grey[300],
+                    child: Icon(Icons.image, color: Colors.white, size: 40),
+                  ),
           ),
           // Nama, Alamat, dan Ulasan Kost
           Padding(
