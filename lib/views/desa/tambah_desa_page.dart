@@ -21,43 +21,68 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
 
   Future<void> _simpanDesa() async {
     if (_formKey.currentState!.validate()) {
-      await _desaService.tambahDesa(
-        nama: _namaController.text,
-        kodePos: _kodePosController.text,
-        alamat: _alamatController.text,
-        kontak: _kontakController.text,
-        gambar: _gambarController.text, // Menambahkan gambar URL
-      );
+      try {
+        // Menyimpan data desa menggunakan layanan DesaService
+        await _desaService.tambahDesa(
+          nama: _namaController.text,
+          kodePos: _kodePosController.text,
+          alamat: _alamatController.text,
+          kontak: _kontakController.text,
+          gambar: _gambarController.text, // Menambahkan gambar URL
+        );
 
-      // Show alert dialog after successful data insertion
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Sukses'),
-            content: Text('Data desa berhasil ditambahkan!'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  // Clear the form fields
-                  _namaController.clear();
-                  _kodePosController.clear();
-                  _alamatController.clear();
-                  _kontakController.clear();
-                  _gambarController.clear(); // Clear gambar URL field
+        // Menampilkan dialog sukses setelah berhasil menyimpan data
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sukses'),
+              content: Text('Data desa berhasil ditambahkan!'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    // Clear the form fields after saving
+                    _namaController.clear();
+                    _kodePosController.clear();
+                    _alamatController.clear();
+                    _kontakController.clear();
+                    _gambarController.clear(); // Clear gambar URL field
 
-                  // Close the alert dialog
-                  Navigator.of(context).pop();
+                    // Close the alert dialog
+                    Navigator.of(context).pop();
 
-                  // Navigate back to the previous page (DesaViewPage)
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
+                    // Navigate back to the previous page (DesaViewPage)
+                    Navigator.pop(
+                        context); // This navigates back to the previous screen
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } catch (e) {
+        print("Error saving desa data: $e");
+
+        // Show error message if data saving fails
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Gagal menyimpan data desa!'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
