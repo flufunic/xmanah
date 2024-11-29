@@ -15,7 +15,7 @@ class _TambahTempatIbadahPageState extends State<TambahTempatIbadahPage> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController gambarController = TextEditingController();
 
   TimeOfDay? jamBuka; // Jam Buka menggunakan TimeOfDay
   TimeOfDay? jamTutup; // Jam Tutup menggunakan TimeOfDay
@@ -95,7 +95,7 @@ class _TambahTempatIbadahPageState extends State<TambahTempatIbadahPage> {
           jamBuka: jamBuka!,
           jamTutup: jamTutup!,
           kontak: kontakController.text,
-          ulasan: ulasanController.text,
+          gambar: gambarController.text,
           desaId: selectedDesaId!, // Menambahkan desaId
         );
 
@@ -104,7 +104,7 @@ class _TambahTempatIbadahPageState extends State<TambahTempatIbadahPage> {
           namaController.clear();
           alamatController.clear();
           kontakController.clear();
-          ulasanController.clear();
+          gambarController.clear();
           jamBuka = null;
           jamTutup = null;
           selectedKategori = 'Masjid'; // Reset kategori ke default
@@ -262,11 +262,11 @@ class _TambahTempatIbadahPageState extends State<TambahTempatIbadahPage> {
                 },
               ),
               TextFormField(
-                controller: ulasanController,
-                decoration: InputDecoration(labelText: 'Ulasan'),
+                controller: gambarController,
+                decoration: InputDecoration(labelText: 'Gambar'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Ulasan harus diisi';
+                    return 'Gambar harus diisi';
                   }
                   return null;
                 },

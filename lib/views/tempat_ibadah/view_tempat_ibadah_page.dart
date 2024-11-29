@@ -93,7 +93,6 @@ class _ViewTempatIbadahPageState extends State<ViewTempatIbadahPage> {
                       Text('Jam Buka: ${tempatIbadah['jamBuka']}'),
                       Text('Jam Tutup: ${tempatIbadah['jamTutup']}'),
                       Text('Kontak: ${tempatIbadah['kontak']}'),
-                      Text('Ulasan: ${tempatIbadah['ulasan']}'),
                     ],
                   ),
                   trailing: Row(

@@ -11,7 +11,7 @@ class LembagaPendidikanService {
     required String akreditasi, // Akreditasi (unggul, a, b, c)
     required String tingkat, // Tingkat (sd, smp, sma/k, universitas)
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId,
   }) async {
     try {
@@ -21,7 +21,7 @@ class LembagaPendidikanService {
         'akreditasi': akreditasi,
         'tingkat': tingkat,
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
       print("Data lembaga pendidikan berhasil ditambahkan!");
@@ -39,7 +39,7 @@ class LembagaPendidikanService {
     required String akreditasi,
     required String tingkat,
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId,
   }) async {
     try {
@@ -49,7 +49,7 @@ class LembagaPendidikanService {
         'akreditasi': akreditasi,
         'tingkat': tingkat,
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
       print("Data lembaga pendidikan berhasil diperbarui!");

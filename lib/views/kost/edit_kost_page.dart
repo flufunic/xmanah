@@ -20,7 +20,6 @@ class _EditKostPageState extends State<EditKostPage> {
   final TextEditingController _fasilitasController = TextEditingController();
   final TextEditingController _kontakController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
-  final TextEditingController _ulasanController = TextEditingController();
   final TextEditingController _gambarController = TextEditingController();
 
   final KostService _kostService = KostService();
@@ -68,7 +67,6 @@ class _EditKostPageState extends State<EditKostPage> {
         _fasilitasController.text = data['fasilitas'];
         _kontakController.text = data['kontak'];
         _hargaController.text = data['harga'].toString();
-        _ulasanController.text = data['ulasan'];
         _gambarController.text = data['gambar'];
         _selectedDesaId = data['desa_id'];
         setState(() {});
@@ -87,7 +85,6 @@ class _EditKostPageState extends State<EditKostPage> {
         fasilitas: _fasilitasController.text,
         kontak: _kontakController.text,
         harga: int.parse(_hargaController.text),
-        ulasan: _ulasanController.text,
         gambar: _gambarController.text,
         desaId: _selectedDesaId!,
       );
@@ -185,16 +182,6 @@ class _EditKostPageState extends State<EditKostPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Harga harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _ulasanController,
-                  decoration: InputDecoration(labelText: 'Ulasan'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Ulasan harus diisi';
                     }
                     return null;
                   },

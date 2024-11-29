@@ -82,11 +82,15 @@ class _ViewFasilitasKesehatanPageState
             itemBuilder: (context, index) {
               var fasilitas =
                   fasilitasData[index].data() as Map<String, dynamic>;
+
+              // URL gambar
+              String imageUrl = fasilitas['imageUrl'] ??
+                  ''; // Ambil URL gambar dari Firestore
+
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
-                  leading: Icon(Icons.local_hospital,
-                      size: 40), // Changed icon to hospital
+                  leading: Icon(Icons.local_hospital, size: 40),
                   title: Text(fasilitas['nama'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
@@ -95,7 +99,15 @@ class _ViewFasilitasKesehatanPageState
                       Text('Alamat: ${fasilitas['alamat']}'),
                       Text('Jenis: ${fasilitas['jenis']}'),
                       Text('Kontak: ${fasilitas['kontak']}'),
-                      Text('Ulasan: ${fasilitas['ulasan']}'),
+                      // Menampilkan gambar jika URL tersedia
+                      imageUrl.isNotEmpty
+                          ? Image.network(
+                              imageUrl, // Menampilkan gambar dari URL
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : SizedBox(), // Jika tidak ada URL, tidak tampilkan gambar
                     ],
                   ),
                   trailing: Row(
@@ -104,7 +116,6 @@ class _ViewFasilitasKesehatanPageState
                       IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () async {
-                          // Arahkan ke halaman edit fasilitas kesehatan
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -122,10 +133,9 @@ class _ViewFasilitasKesehatanPageState
                       IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () async {
-                          // Konfirmasi sebelum menghapus
                           bool? confirm = await showDialog<bool>(
                             context: context,
-                            builder: (context) {
+                            builder: (BuildContext dialogContext) {
                               return AlertDialog(
                                 title: Text('Konfirmasi Hapus'),
                                 content: Text(
@@ -133,13 +143,13 @@ class _ViewFasilitasKesehatanPageState
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop(false);
+                                      Navigator.of(dialogContext).pop(false);
                                     },
                                     child: Text('Tidak'),
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop(true);
+                                      Navigator.of(dialogContext).pop(true);
                                     },
                                     child: Text('Ya'),
                                   ),
@@ -163,7 +173,6 @@ class _ViewFasilitasKesehatanPageState
       // Floating Action Button (FAB) untuk menambah data fasilitas kesehatan
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Navigasi ke halaman untuk menambah fasilitas kesehatan
           await Navigator.push(
             context,
             MaterialPageRoute(

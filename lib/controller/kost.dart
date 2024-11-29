@@ -11,7 +11,6 @@ class KostService {
     required String fasilitas,
     required String kontak,
     required int harga,
-    required String ulasan,
     required String gambar,
     required String desaId, // Foreign Key dari koleksi desa
   }) async {
@@ -22,7 +21,6 @@ class KostService {
         'fasilitas': fasilitas,
         'kontak': kontak,
         'harga': harga,
-        'ulasan': ulasan,
         'gambar': gambar,
         'desa_id': desaId,
       });
@@ -71,7 +69,6 @@ class KostService {
     required String fasilitas,
     required String kontak,
     required int harga,
-    required String ulasan,
     required String gambar,
     required String desaId,
   }) async {
@@ -82,7 +79,6 @@ class KostService {
         'fasilitas': fasilitas,
         'kontak': kontak,
         'harga': harga,
-        'ulasan': ulasan,
         'gambar': gambar,
         'desa_id': desaId,
       });

@@ -19,6 +19,8 @@ class _EditDesaPageState extends State<EditDesaPage> {
   final TextEditingController _kodePosController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
   final TextEditingController _kontakController = TextEditingController();
+  final TextEditingController _gambarController =
+      TextEditingController(); // Controller for image URL
 
   final DesaService _desaService = DesaService();
 
@@ -37,6 +39,8 @@ class _EditDesaPageState extends State<EditDesaPage> {
         _kodePosController.text = data['kode_pos'] ?? '';
         _alamatController.text = data['alamat'] ?? '';
         _kontakController.text = data['kontak'] ?? '';
+        _gambarController.text =
+            data['gambar'] ?? ''; // Load image URL if available
       }
     } catch (e) {
       print("Error loading desa data: $e");
@@ -55,6 +59,7 @@ class _EditDesaPageState extends State<EditDesaPage> {
           'kode_pos': _kodePosController.text,
           'alamat': _alamatController.text,
           'kontak': _kontakController.text,
+          'gambar': _gambarController.text, // Include image URL update
         });
 
         // Show success alert dialog
@@ -147,6 +152,16 @@ class _EditDesaPageState extends State<EditDesaPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Kontak harus diisi';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _gambarController, // Input for image URL
+                decoration: InputDecoration(labelText: 'URL Gambar'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'URL gambar harus diisi';
                   }
                   return null;
                 },

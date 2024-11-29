@@ -10,6 +10,7 @@ class DesaService {
     required String kodePos,
     required String alamat,
     required String kontak,
+    required String gambar,
   }) async {
     try {
       // Add a new document to the 'desa' collection
@@ -18,6 +19,7 @@ class DesaService {
         'kode_pos': kodePos,
         'alamat': alamat,
         'kontak': kontak,
+        'gambar': gambar,
       });
 
       print("Data desa berhasil ditambahkan!");
@@ -39,6 +41,7 @@ class DesaService {
     required String kodePos,
     required String alamat,
     required String kontak,
+    required String gambar,
   }) async {
     try {
       // Update the document in the 'desa' collection
@@ -47,6 +50,7 @@ class DesaService {
         'kode_pos': kodePos,
         'alamat': alamat,
         'kontak': kontak,
+        'gambar': gambar,
       });
 
       print("Data desa berhasil diperbarui!");

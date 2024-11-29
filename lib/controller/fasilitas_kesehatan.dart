@@ -10,7 +10,7 @@ class FasilitasKesehatanService {
     required String jenis, // jenis: Puskesmas, Klinik, Rumah Sakit
     required String alamat,
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId, // ID Desa
   }) async {
     try {
@@ -19,7 +19,7 @@ class FasilitasKesehatanService {
           jenis.isEmpty ||
           alamat.isEmpty ||
           kontak.isEmpty ||
-          ulasan.isEmpty ||
+          gambar.isEmpty ||
           desaId.isEmpty) {
         throw 'Semua field harus diisi!';
       }
@@ -29,7 +29,7 @@ class FasilitasKesehatanService {
         'jenis': jenis,
         'alamat': alamat,
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
 
@@ -46,7 +46,7 @@ class FasilitasKesehatanService {
     required String jenis, // jenis: Puskesmas, Klinik, Rumah Sakit
     required String alamat,
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId, // ID Desa
   }) async {
     try {
@@ -55,7 +55,7 @@ class FasilitasKesehatanService {
           jenis.isEmpty ||
           alamat.isEmpty ||
           kontak.isEmpty ||
-          ulasan.isEmpty ||
+          gambar.isEmpty ||
           desaId.isEmpty) {
         throw 'Semua field harus diisi!';
       }
@@ -65,7 +65,7 @@ class FasilitasKesehatanService {
         'jenis': jenis,
         'alamat': alamat,
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
 

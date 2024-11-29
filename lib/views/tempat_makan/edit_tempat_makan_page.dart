@@ -22,7 +22,7 @@ class _EditTempatMakanPageState extends State<EditTempatMakanPage> {
   late TextEditingController kontakController;
   late TextEditingController jamBukaController;
   late TextEditingController jamTutupController;
-  late TextEditingController ulasanController;
+  late TextEditingController gambarController;
 
   String? selectedDesaId; // Selected desaId for dropdown
   List<DropdownMenuItem<String>> desaItems =
@@ -40,8 +40,8 @@ class _EditTempatMakanPageState extends State<EditTempatMakanPage> {
         TextEditingController(text: widget.initialData['jamBuka']);
     jamTutupController =
         TextEditingController(text: widget.initialData['jamTutup']);
-    ulasanController =
-        TextEditingController(text: widget.initialData['ulasan']);
+    gambarController =
+        TextEditingController(text: widget.initialData['gambar']);
     selectedDesaId = widget.desaId; // Set initial selected desaId
     _fetchDesaList(); // Fetch desa list from Firestore
   }
@@ -82,7 +82,7 @@ class _EditTempatMakanPageState extends State<EditTempatMakanPage> {
         'kontak': kontakController.text,
         'jamBuka': jamBukaController.text,
         'jamTutup': jamTutupController.text,
-        'ulasan': ulasanController.text,
+        'gambar': gambarController.text,
         'desa_id': selectedDesaId, // Include selected desa_id in the update
       });
       Navigator.pop(context); // Close after successful update
@@ -137,8 +137,8 @@ class _EditTempatMakanPageState extends State<EditTempatMakanPage> {
                 controller: jamTutupController,
                 decoration: InputDecoration(labelText: 'Jam Tutup')),
             TextField(
-                controller: ulasanController,
-                decoration: InputDecoration(labelText: 'Ulasan')),
+                controller: gambarController,
+                decoration: InputDecoration(labelText: 'Gambar')),
 
             // Dropdown for desa_id
             DropdownButtonFormField<String>(

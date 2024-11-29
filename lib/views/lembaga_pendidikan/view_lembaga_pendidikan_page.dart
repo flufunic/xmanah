@@ -91,7 +91,6 @@ class _ViewLembagaPendidikanPageState extends State<ViewLembagaPendidikanPage> {
                       Text('Akreditasi: ${lembaga['akreditasi']}'),
                       Text('Tingkat: ${lembaga['tingkat']}'),
                       Text('Kontak: ${lembaga['kontak']}'),
-                      Text('Ulasan: ${lembaga['ulasan']}'),
                     ],
                   ),
                   trailing: Row(

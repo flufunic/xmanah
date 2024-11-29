@@ -16,7 +16,7 @@ class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController gambarController = TextEditingController();
 
   String selectedAkreditasi = 'A'; // Default value
   String selectedTingkat = 'SD'; // Default value
@@ -43,7 +43,7 @@ class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
           namaController.text = lembagaData['nama'];
           alamatController.text = lembagaData['alamat'];
           kontakController.text = lembagaData['kontak'];
-          ulasanController.text = lembagaData['ulasan'];
+          gambarController.text = lembagaData['gambar'];
           selectedAkreditasi = lembagaData['akreditasi'];
           selectedTingkat = lembagaData['tingkat'];
           _selectedDesaId = lembagaData['desa_id'];
@@ -65,7 +65,7 @@ class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
           akreditasi: selectedAkreditasi,
           tingkat: selectedTingkat,
           kontak: kontakController.text,
-          ulasan: ulasanController.text,
+          gambar: gambarController.text,
           desaId: _selectedDesaId!, // Include desa_id
         );
 
@@ -212,8 +212,8 @@ class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
               decoration: InputDecoration(labelText: 'Kontak'),
             ),
             TextField(
-              controller: ulasanController,
-              decoration: InputDecoration(labelText: 'Ulasan'),
+              controller: gambarController,
+              decoration: InputDecoration(labelText: 'Gambar'),
             ),
             SizedBox(height: 10),
             DropdownButtonFormField<String>(

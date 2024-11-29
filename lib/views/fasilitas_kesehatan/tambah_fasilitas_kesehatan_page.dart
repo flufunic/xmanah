@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/fasilitas_kesehatan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'view_fasilitas_kesehatan_page.dart'; // Pastikan Anda import halaman ViewFasilitasKesehatanPage
+import 'view_fasilitas_kesehatan_page.dart';
 
 class TambahFasilitasKesehatanPage extends StatefulWidget {
   @override
@@ -14,14 +14,10 @@ class _TambahFasilitasKesehatanPageState
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController _gambarController = TextEditingController();
 
   String selectedJenis = 'Puskesmas'; // Default value untuk jenis
-  List<String> jenisOptions = [
-    'Puskesmas',
-    'Klinik',
-    'Rumah Sakit'
-  ]; // Opsi jenis fasilitas kesehatan
+  List<String> jenisOptions = ['Puskesmas', 'Klinik', 'Rumah Sakit'];
 
   String? selectedDesaId; // ID Desa yang dipilih
   List<DropdownMenuItem<String>> desaItems = []; // Dropdown desa
@@ -31,9 +27,12 @@ class _TambahFasilitasKesehatanPageState
 
   // Fungsi untuk menambahkan fasilitas kesehatan
   void tambahFasilitasKesehatan() async {
-    if (selectedDesaId == null) {
-      // Validasi jika ID Desa belum dipilih
-      _showErrorDialog("Desa harus dipilih terlebih dahulu.");
+    if (namaController.text.isEmpty ||
+        alamatController.text.isEmpty ||
+        kontakController.text.isEmpty ||
+        selectedDesaId == null ||
+        _gambarController.text.isEmpty) {
+      _showErrorDialog("Semua kolom harus diisi!");
       return;
     }
 
@@ -43,7 +42,7 @@ class _TambahFasilitasKesehatanPageState
         jenis: selectedJenis,
         alamat: alamatController.text,
         kontak: kontakController.text,
-        ulasan: ulasanController.text,
+        gambar: _gambarController.text, // Gunakan URL gambar dari input
         desaId: selectedDesaId!,
       );
 
@@ -52,15 +51,13 @@ class _TambahFasilitasKesehatanPageState
         namaController.clear();
         alamatController.clear();
         kontakController.clear();
-        ulasanController.clear();
         selectedJenis = 'Puskesmas'; // Reset jenis ke default
         selectedDesaId = null; // Reset ID Desa
+        _gambarController.clear(); // Reset input gambar
       });
 
-      // Tampilkan alert dialog setelah data berhasil ditambahkan
       _showSuccessDialog();
     } catch (e) {
-      // Tampilkan error dialog jika terjadi kesalahan
       _showErrorDialog(e.toString());
     }
   }
@@ -77,8 +74,7 @@ class _TambahFasilitasKesehatanPageState
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                // Navigasi ke halaman ViewFasilitasKesehatanPage setelah OK
+                Navigator.of(context).pop();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -105,7 +101,7 @@ class _TambahFasilitasKesehatanPageState
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -122,7 +118,7 @@ class _TambahFasilitasKesehatanPageState
       List<DropdownMenuItem<String>> items = snapshot.docs.map((doc) {
         return DropdownMenuItem(
           value: doc.id,
-          child: Text(doc['nama']), // Menampilkan nama desa dalam dropdown
+          child: Text(doc['nama']),
         );
       }).toList();
       setState(() {
@@ -147,70 +143,69 @@ class _TambahFasilitasKesehatanPageState
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align left
-          children: [
-            TextField(
-              controller: namaController,
-              decoration:
-                  InputDecoration(labelText: 'Nama Fasilitas Kesehatan'),
-            ),
-            TextField(
-              controller: alamatController,
-              decoration: InputDecoration(labelText: 'Alamat'),
-            ),
-            SizedBox(height: 10),
-            Text('Jenis Fasilitas', style: TextStyle(fontSize: 16)),
-            DropdownButton<String>(
-              value: selectedJenis,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedJenis = newValue!;
-                });
-              },
-              items: jenisOptions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              hint: Text('Pilih Jenis Fasilitas Kesehatan'),
-              isExpanded: true, // Make dropdown full-width
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: kontakController,
-              decoration: InputDecoration(labelText: 'Kontak'),
-            ),
-            TextField(
-              controller: ulasanController,
-              decoration: InputDecoration(labelText: 'Ulasan'),
-            ),
-            SizedBox(height: 10),
-            Text('Pilih Desa', style: TextStyle(fontSize: 16)),
-            DropdownButtonFormField<String>(
-              value: selectedDesaId,
-              items: desaItems,
-              onChanged: (value) {
-                setState(() {
-                  selectedDesaId = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Desa'),
-              isExpanded: true, // Full-width dropdown
-              validator: (value) {
-                if (value == null) {
-                  return 'Pilih desa terlebih dahulu';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: tambahFasilitasKesehatan,
-              child: Text('Tambah Fasilitas Kesehatan'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align left
+            children: [
+              TextField(
+                controller: namaController,
+                decoration:
+                    InputDecoration(labelText: 'Nama Fasilitas Kesehatan'),
+              ),
+              TextField(
+                controller: alamatController,
+                decoration: InputDecoration(labelText: 'Alamat'),
+              ),
+              SizedBox(height: 10),
+              Text('Jenis Fasilitas', style: TextStyle(fontSize: 16)),
+              DropdownButton<String>(
+                value: selectedJenis,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedJenis = newValue!;
+                  });
+                },
+                items:
+                    jenisOptions.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                hint: Text('Pilih Jenis Fasilitas Kesehatan'),
+                isExpanded: true,
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: kontakController,
+                decoration: InputDecoration(labelText: 'Kontak'),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: _gambarController,
+                decoration: InputDecoration(labelText: 'URL Gambar'),
+                keyboardType: TextInputType.url, // Allow URL input
+              ),
+              SizedBox(height: 10),
+              Text('Pilih Desa', style: TextStyle(fontSize: 16)),
+              DropdownButtonFormField<String>(
+                value: selectedDesaId,
+                items: desaItems,
+                onChanged: (value) {
+                  setState(() {
+                    selectedDesaId = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Desa'),
+                isExpanded: true,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: tambahFasilitasKesehatan,
+                child: Text('Tambah Fasilitas Kesehatan'),
+              ),
+            ],
+          ),
         ),
       ),
     );

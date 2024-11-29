@@ -12,7 +12,7 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController gambarController = TextEditingController();
 
   TimeOfDay? jamBuka; // Jam Buka menggunakan TimeOfDay
   TimeOfDay? jamTutup; // Jam Tutup menggunakan TimeOfDay
@@ -63,7 +63,7 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
         jamBuka: jamBuka!,
         jamTutup: jamTutup!,
         kontak: kontakController.text,
-        ulasan: ulasanController.text,
+        gambar: gambarController.text,
         desaId: selectedDesaId!,
       );
 
@@ -72,7 +72,7 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
         namaController.clear();
         alamatController.clear();
         kontakController.clear();
-        ulasanController.clear();
+        gambarController.clear();
         jamBuka = null;
         jamTutup = null;
         selectedDesaId = null; // Reset ID Desa
@@ -209,8 +209,8 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
               decoration: InputDecoration(labelText: 'Kontak'),
             ),
             TextField(
-              controller: ulasanController,
-              decoration: InputDecoration(labelText: 'Ulasan'),
+              controller: gambarController,
+              decoration: InputDecoration(labelText: 'URL Gambar'),
             ),
             SizedBox(height: 10),
             Text('Pilih Desa', style: TextStyle(fontSize: 16)),

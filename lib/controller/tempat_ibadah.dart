@@ -13,7 +13,7 @@ class TempatIbadahService {
     required TimeOfDay jamBuka,
     required TimeOfDay jamTutup,
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId,
   }) async {
     try {
@@ -24,7 +24,7 @@ class TempatIbadahService {
         'jamBuka': '${jamBuka.hour}:${jamBuka.minute}', // Convert to string
         'jamTutup': '${jamTutup.hour}:${jamTutup.minute}', // Convert to string
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
       print("Tempat Ibadah berhasil ditambahkan!");
@@ -42,7 +42,7 @@ class TempatIbadahService {
     required TimeOfDay jamBuka,
     required TimeOfDay jamTutup,
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId,
   }) async {
     try {
@@ -53,7 +53,7 @@ class TempatIbadahService {
         'jamBuka': '${jamBuka.hour}:${jamBuka.minute}', // Convert to string
         'jamTutup': '${jamTutup.hour}:${jamTutup.minute}', // Convert to string
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
       print("Tempat Ibadah berhasil diperbarui!");

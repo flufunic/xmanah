@@ -18,7 +18,8 @@ class _EditFasilitasKesehatanPageState
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController gambarController =
+      TextEditingController(); // Controller untuk gambar
 
   String selectedJenis = 'Puskesmas'; // Default value for jenis
   String? _selectedDesaId; // To store selected desa_id
@@ -44,7 +45,7 @@ class _EditFasilitasKesehatanPageState
           namaController.text = fasilitasData['nama'];
           alamatController.text = fasilitasData['alamat'];
           kontakController.text = fasilitasData['kontak'];
-          ulasanController.text = fasilitasData['ulasan'];
+          gambarController.text = fasilitasData['gambar']; // Isi gambar
           selectedJenis = fasilitasData['jenis'];
           _selectedDesaId = fasilitasData['desa_id'];
         });
@@ -98,7 +99,7 @@ class _EditFasilitasKesehatanPageState
           jenis: selectedJenis,
           alamat: alamatController.text,
           kontak: kontakController.text,
-          ulasan: ulasanController.text,
+          gambar: gambarController.text, // Tambahkan gambar
           desaId: _selectedDesaId!, // Include desa_id
         );
 
@@ -199,8 +200,8 @@ class _EditFasilitasKesehatanPageState
               decoration: InputDecoration(labelText: 'Kontak'),
             ),
             TextField(
-              controller: ulasanController,
-              decoration: InputDecoration(labelText: 'Ulasan'),
+              controller: gambarController,
+              decoration: InputDecoration(labelText: 'URL Gambar'),
             ),
             SizedBox(height: 10),
             Text('Desa', style: TextStyle(fontSize: 16)),

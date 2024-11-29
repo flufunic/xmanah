@@ -17,7 +17,7 @@ class _EditTempatIbadahPageState extends State<EditTempatIbadahPage> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController gambarController = TextEditingController();
   final TextEditingController jamBukaController = TextEditingController();
   final TextEditingController jamTutupController = TextEditingController();
 
@@ -73,7 +73,7 @@ class _EditTempatIbadahPageState extends State<EditTempatIbadahPage> {
         namaController.text = data['nama'];
         alamatController.text = data['alamat'];
         kontakController.text = data['kontak'];
-        ulasanController.text = data['ulasan'];
+        gambarController.text = data['gambar'];
         selectedKategori = data['kategori'];
         selectedDesaId = data['desa_id'];
 
@@ -106,7 +106,7 @@ class _EditTempatIbadahPageState extends State<EditTempatIbadahPage> {
           'jamBuka': jamBukaController.text,
           'jamTutup': jamTutupController.text,
           'kontak': kontakController.text,
-          'ulasan': ulasanController.text,
+          'gambar': gambarController.text,
           'desa_id': selectedDesaId,
         });
 
@@ -167,8 +167,8 @@ class _EditTempatIbadahPageState extends State<EditTempatIbadahPage> {
                 },
               ),
               TextFormField(
-                controller: ulasanController,
-                decoration: InputDecoration(labelText: 'Ulasan'),
+                controller: gambarController,
+                decoration: InputDecoration(labelText: 'Gambar'),
               ),
               DropdownButtonFormField<String>(
                 value: selectedKategori,

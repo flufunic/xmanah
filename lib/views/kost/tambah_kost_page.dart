@@ -16,7 +16,6 @@ class _TambahKostPageState extends State<TambahKostPage> {
   final TextEditingController _fasilitasController = TextEditingController();
   final TextEditingController _kontakController = TextEditingController();
   final TextEditingController _hargaController = TextEditingController();
-  final TextEditingController _ulasanController = TextEditingController();
   final TextEditingController _gambarController = TextEditingController();
 
   final KostService _kostService = KostService();
@@ -57,7 +56,6 @@ class _TambahKostPageState extends State<TambahKostPage> {
         fasilitas: _fasilitasController.text,
         kontak: _kontakController.text,
         harga: int.parse(_hargaController.text),
-        ulasan: _ulasanController.text,
         gambar: _gambarController.text,
         desaId: _selectedDesaId!,
       );
@@ -86,7 +84,6 @@ class _TambahKostPageState extends State<TambahKostPage> {
       _fasilitasController.clear();
       _kontakController.clear();
       _hargaController.clear();
-      _ulasanController.clear();
       _gambarController.clear();
       setState(() {
         _selectedDesaId = null;
@@ -160,16 +157,6 @@ class _TambahKostPageState extends State<TambahKostPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Harga harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _ulasanController,
-                  decoration: InputDecoration(labelText: 'Ulasan'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Ulasan harus diisi';
                     }
                     return null;
                   },

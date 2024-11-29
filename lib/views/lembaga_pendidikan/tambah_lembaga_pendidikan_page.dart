@@ -14,7 +14,7 @@ class _TambahLembagaPendidikanPageState
   final TextEditingController namaController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController kontakController = TextEditingController();
-  final TextEditingController ulasanController = TextEditingController();
+  final TextEditingController gambarController = TextEditingController();
 
   String selectedAkreditasi = 'A'; // Default value
   String selectedTingkat = 'SD'; // Default value
@@ -37,7 +37,7 @@ class _TambahLembagaPendidikanPageState
           akreditasi: selectedAkreditasi,
           tingkat: selectedTingkat,
           kontak: kontakController.text,
-          ulasan: ulasanController.text,
+          gambar: gambarController.text, // Store URL directly in Firestore
           desaId: _selectedDesaId!, // Include desa_id
         );
 
@@ -46,7 +46,7 @@ class _TambahLembagaPendidikanPageState
           namaController.clear();
           alamatController.clear();
           kontakController.clear();
-          ulasanController.clear();
+          gambarController.clear();
           selectedAkreditasi = 'A';
           selectedTingkat = 'SD';
           _selectedDesaId = null; // Clear selected desa
@@ -131,6 +131,25 @@ class _TambahLembagaPendidikanPageState
     );
   }
 
+  // Fungsi untuk menampilkan gambar
+  Widget _buildImagePreview(String imageUrl) {
+    // Cek apakah URL gambar valid
+    if (imageUrl.isNotEmpty &&
+        Uri.tryParse(imageUrl)?.hasAbsolutePath == true) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Image.network(
+          imageUrl,
+          height: 150, // Set desired image height
+          width: double.infinity, // Set image width to fill container
+          fit: BoxFit.cover, // Scale the image to cover the container
+        ),
+      );
+    } else {
+      return SizedBox.shrink(); // Tidak menampilkan apa-apa jika URL invalid
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -200,9 +219,11 @@ class _TambahLembagaPendidikanPageState
               decoration: InputDecoration(labelText: 'Kontak'),
             ),
             TextField(
-              controller: ulasanController,
-              decoration: InputDecoration(labelText: 'Ulasan'),
+              controller: gambarController,
+              decoration: InputDecoration(labelText: 'Gambar (URL)'),
             ),
+            // Menampilkan gambar jika URL valid
+            _buildImagePreview(gambarController.text),
             SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: _selectedDesaId,

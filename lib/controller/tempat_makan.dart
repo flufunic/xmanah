@@ -12,7 +12,7 @@ class TempatMakanService {
     required TimeOfDay jamBuka, // Using TimeOfDay for open time
     required TimeOfDay jamTutup, // Using TimeOfDay for close time
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId, // Foreign Key from desa collection
   }) async {
     try {
@@ -22,7 +22,7 @@ class TempatMakanService {
         'jamBuka': '${jamBuka.hour}:${jamBuka.minute}', // Convert to string
         'jamTutup': '${jamTutup.hour}:${jamTutup.minute}', // Convert to string
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
       print("Tempat makan berhasil ditambahkan!");
@@ -39,7 +39,7 @@ class TempatMakanService {
     required TimeOfDay jamBuka, // Using TimeOfDay for open time
     required TimeOfDay jamTutup, // Using TimeOfDay for close time
     required String kontak,
-    required String ulasan,
+    required String gambar,
     required String desaId, // Foreign Key from desa collection
   }) async {
     try {
@@ -49,7 +49,7 @@ class TempatMakanService {
         'jamBuka': '${jamBuka.hour}:${jamBuka.minute}', // Convert to string
         'jamTutup': '${jamTutup.hour}:${jamTutup.minute}', // Convert to string
         'kontak': kontak,
-        'ulasan': ulasan,
+        'gambar': gambar,
         'desa_id': desaId,
       });
       print("Tempat makan berhasil diperbarui!");

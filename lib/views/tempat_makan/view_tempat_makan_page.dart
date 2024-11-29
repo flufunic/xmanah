@@ -92,7 +92,6 @@ class _ViewTempatMakanPageState extends State<ViewTempatMakanPage> {
                       Text('Jam Buka: ${tempatMakan['jamBuka']}'),
                       Text('Jam Tutup: ${tempatMakan['jamTutup']}'),
                       Text('Kontak: ${tempatMakan['kontak']}'),
-                      Text('Ulasan: ${tempatMakan['ulasan']}'),
                     ],
                   ),
                   trailing: Row(

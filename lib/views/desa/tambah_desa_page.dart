@@ -14,6 +14,8 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
   final TextEditingController _kodePosController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
   final TextEditingController _kontakController = TextEditingController();
+  final TextEditingController _gambarController =
+      TextEditingController(); // Controller untuk URL gambar
 
   final DesaService _desaService = DesaService();
 
@@ -24,6 +26,7 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
         kodePos: _kodePosController.text,
         alamat: _alamatController.text,
         kontak: _kontakController.text,
+        gambar: _gambarController.text, // Menambahkan gambar URL
       );
 
       // Show alert dialog after successful data insertion
@@ -42,6 +45,7 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
                   _kodePosController.clear();
                   _alamatController.clear();
                   _kontakController.clear();
+                  _gambarController.clear(); // Clear gambar URL field
 
                   // Close the alert dialog
                   Navigator.of(context).pop();
@@ -108,6 +112,16 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Kontak harus diisi';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _gambarController, // Input untuk URL gambar
+                decoration: InputDecoration(labelText: 'URL Gambar'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'URL gambar harus diisi';
                   }
                   return null;
                 },
