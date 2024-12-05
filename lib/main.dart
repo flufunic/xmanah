@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:xmanah/firstopen.dart';
 import 'package:xmanah/home.dart';
-
 import 'package:xmanah/usersview/fasilitasuser.dart';
 import 'package:xmanah/usersview/kostuser.dart';
 import 'package:xmanah/usersview/tempatmakanuser.dart';
 import 'package:xmanah/widgets/navbar.dart';
-
 import 'firebase_options.dart';
 
 void main() async {

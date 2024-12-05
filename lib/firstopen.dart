@@ -34,7 +34,7 @@ class _FirtsOpenState extends State<FirtsOpen>
   }
 
   void _navigateToHome() async {
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 3));
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => BottomNavBarExample()),
