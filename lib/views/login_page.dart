@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:xmanah/firstopen.dart';
 import 'package:xmanah/views/admin_page.dart';
-import 'package:xmanah/home.dart';
-import 'package:xmanah/widgets/banner_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -27,6 +27,12 @@ class _LoginPageState extends State<LoginPage> {
       String? email = userCredential.user?.email;
 
       if (email != null) {
+        // Simpan status login
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString(
+            'userEmail', email); // Simpan email untuk referensi
+
         if (email.endsWith('@admin.com')) {
           Navigator.push(
             context,
@@ -105,6 +111,9 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -120,7 +129,21 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _passwordController.text,
       );
 
-      // Jika registrasi berhasil, navigasi kembali ke halaman login
+      // Ambil user dari hasil registrasi
+      User? user = userCredential.user;
+
+      // Simpan nama pengguna ke Firestore
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).set({
+          'name': _nameController.text,
+          'email': _emailController.text,
+        });
+
+        // Update display name pada profil pengguna
+        await user.updateDisplayName(_nameController.text);
+      }
+
+      // Navigasi kembali ke halaman login
       Navigator.pop(context);
     } catch (e) {
       setState(() {
@@ -140,6 +163,10 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Name'),
+            ),
             TextField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),

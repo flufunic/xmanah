@@ -3,7 +3,6 @@ import 'package:xmanah/controller/kost.dart';
 import 'package:xmanah/controller/lembaga_pendidikan.dart';
 import 'package:xmanah/controller/tempat_makan.dart';
 import 'widgets/banner_card.dart';
-import 'widgets/navbar.dart';
 
 class HomePage extends StatelessWidget {
   final KostService kostService = KostService();
