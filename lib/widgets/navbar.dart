@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xmanah/views/login_page.dart';
+import 'package:xmanah/views/profile.dart'; // Tambahkan import halaman profil Anda
 
 class CustomNavbar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -12,6 +14,23 @@ class CustomNavbar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomNavbarState extends State<CustomNavbar> {
   bool _isSearching = false; // Track search state
   TextEditingController _searchController = TextEditingController();
+  bool isLoggedIn = false; // Track login status
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus(); // Check login status when widget is initialized
+  }
+
+  // Function to check login status
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool loginStatus = prefs.getBool('isLoggedIn') ?? false;
+    print('Login status: $loginStatus'); // Tambahkan log untuk debugging
+    setState(() {
+      isLoggedIn = loginStatus;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +80,19 @@ class _CustomNavbarState extends State<CustomNavbar> {
         IconButton(
           icon: Icon(Icons.person, color: Colors.black), // User icon
           onPressed: () {
-            // Navigate to LoginPage
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
-            );
+            if (isLoggedIn) {
+              // Navigate to ProfilePage if logged in
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            } else {
+              // Navigate to LoginPage if not logged in
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            }
           },
         ),
       ],
