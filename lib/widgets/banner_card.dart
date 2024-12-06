@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class BannerCard extends StatelessWidget {
   final String title;
-  final String description;
   final String imageUrl;
 
   const BannerCard({
     required this.title,
-    required this.description,
     required this.imageUrl,
   });
 
@@ -41,10 +39,6 @@ class BannerCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              Text(
-                description,
-                style: TextStyle(color: Colors.white, fontSize: 14),
               ),
             ],
           ),

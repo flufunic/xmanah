@@ -297,7 +297,6 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: BannerCard(
                     title: item['nama'],
-                    description: item['ulasan'],
                     imageUrl:
                         item['gambar'] ?? 'https://via.placeholder.com/200',
                   ),

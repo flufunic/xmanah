@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xmanah/controller/desa.dart';
 
 class EditDesaPage extends StatefulWidget {
-  final String desaId; // The ID of the desa to be edited
+  final String desaId;
 
   EditDesaPage({required this.desaId});
 
@@ -13,18 +13,13 @@ class EditDesaPage extends StatefulWidget {
 
 class _EditDesaPageState extends State<EditDesaPage> {
   final _formKey = GlobalKey<FormState>();
-
-  // Controllers for each input field
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _kodePosController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
   final TextEditingController _kontakController = TextEditingController();
-  final TextEditingController _gambarController =
-      TextEditingController(); // Controller for image URL
-
+  final TextEditingController _gambarController = TextEditingController();
   final DesaService _desaService = DesaService();
 
-  // Function to load existing data from Firestore
   Future<void> _loadDesaData() async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -34,20 +29,17 @@ class _EditDesaPageState extends State<EditDesaPage> {
 
       if (snapshot.exists) {
         var data = snapshot.data() as Map<String, dynamic>;
-
         _namaController.text = data['nama'] ?? '';
         _kodePosController.text = data['kode_pos'] ?? '';
         _alamatController.text = data['alamat'] ?? '';
         _kontakController.text = data['kontak'] ?? '';
-        _gambarController.text =
-            data['gambar'] ?? ''; // Load image URL if available
+        _gambarController.text = data['gambar'] ?? '';
       }
     } catch (e) {
       print("Error loading desa data: $e");
     }
   }
 
-  // Function to update the data in Firestore
   Future<void> _updateDesa() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -59,10 +51,8 @@ class _EditDesaPageState extends State<EditDesaPage> {
           'kode_pos': _kodePosController.text,
           'alamat': _alamatController.text,
           'kontak': _kontakController.text,
-          'gambar': _gambarController.text, // Include image URL update
+          'gambar': _gambarController.text,
         });
-
-        // Show success alert dialog
         _showSuccessDialog();
       } catch (e) {
         print("Error updating desa data: $e");
@@ -70,7 +60,6 @@ class _EditDesaPageState extends State<EditDesaPage> {
     }
   }
 
-  // Function to show success dialog
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -82,10 +71,8 @@ class _EditDesaPageState extends State<EditDesaPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                // Close the alert dialog and navigate to the view page
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context)
-                    .pop(); // Go back to the previous page (View page)
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -97,84 +84,134 @@ class _EditDesaPageState extends State<EditDesaPage> {
   @override
   void initState() {
     super.initState();
-    // Load the desa data when the page is first created
     _loadDesaData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Edit Data Desa'),
+        backgroundColor: Color(0xFF334d2b),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: _namaController,
-                decoration: InputDecoration(labelText: 'Nama Desa'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Nama desa harus diisi';
-                  }
-                  return null;
-                },
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 5,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      "Edit Data Desa",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF334d2b),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 20),
+                    _buildTextField(
+                        controller: _namaController,
+                        label: 'Nama Desa',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama desa harus diisi';
+                          }
+                          return null;
+                        }),
+                    SizedBox(height: 10),
+                    _buildTextField(
+                        controller: _kodePosController,
+                        label: 'Kode Pos',
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Kode pos harus diisi';
+                          }
+                          return null;
+                        }),
+                    SizedBox(height: 10),
+                    _buildTextField(
+                        controller: _alamatController,
+                        label: 'Alamat Balai Desa',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Alamat harus diisi';
+                          }
+                          return null;
+                        }),
+                    SizedBox(height: 10),
+                    _buildTextField(
+                        controller: _kontakController,
+                        label: 'Kontak',
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Kontak harus diisi';
+                          }
+                          return null;
+                        }),
+                    SizedBox(height: 10),
+                    _buildTextField(
+                        controller: _gambarController,
+                        label: 'URL Gambar',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'URL gambar harus diisi';
+                          }
+                          return null;
+                        }),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _updateDesa,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF334d2b),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: Text(
+                        'Update Data Desa',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              TextFormField(
-                controller: _kodePosController,
-                decoration: InputDecoration(labelText: 'Kode Pos'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Kode pos harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _alamatController,
-                decoration: InputDecoration(labelText: 'Alamat'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Alamat harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _kontakController,
-                decoration: InputDecoration(labelText: 'Kontak'),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Kontak harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _gambarController, // Input for image URL
-                decoration: InputDecoration(labelText: 'URL Gambar'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'URL gambar harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _updateDesa,
-                child: Text('Update Data Desa'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType keyboardType = TextInputType.text,
+    required String? Function(String?) validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        filled: true,
+        fillColor: Colors.grey[200],
+      ),
+      validator: validator,
     );
   }
 }

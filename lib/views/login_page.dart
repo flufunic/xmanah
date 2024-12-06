@@ -56,6 +56,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF334d2b), // Warna background AppBar
+        elevation: 0, // Menghilangkan bayangan AppBar
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white), // Ikon kembali
+          onPressed: () {
+            Navigator.pop(context); // Kembali ke halaman sebelumnya
+          },
+        ),
+      ),
       backgroundColor: Color(0xFF334d2b),
       body: Center(
         child: SingleChildScrollView(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:xmanah/firstopen.dart';
+import 'package:xmanah/home.dart';
 import 'package:xmanah/views/desa/view_desa_page.dart';
 import 'package:xmanah/views/fasilitas_kesehatan/view_fasilitas_kesehatan_page.dart';
 import 'package:xmanah/views/kost/view_kost_page.dart';
@@ -81,7 +83,7 @@ class _AdminPageState extends State<AdminPage> {
     await _auth.signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => FirtsOpen()),
     );
   }
 
@@ -196,9 +198,13 @@ class _AdminPageState extends State<AdminPage> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.exit_to_app),
+                      Icon(
+                        Icons.exit_to_app,
+                        color: Colors.white,
+                      ),
                       SizedBox(width: 10),
-                      Text('Logout', style: TextStyle(fontSize: 16)),
+                      Text('Logout',
+                          style: TextStyle(fontSize: 16, color: Colors.white)),
                     ],
                   ),
                 ),
@@ -214,8 +220,8 @@ class _AdminPageState extends State<AdminPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Selamat datang di Dashboard Admin!',
-                    style: TextStyle(fontSize: 18)),
+                Text('Selamat datang di Dashboard Admin Xmanah!',
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
                 SizedBox(height: 20),
                 // Card widgets untuk menampilkan jumlah data
                 Padding(

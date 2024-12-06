@@ -5,6 +5,7 @@ import 'package:xmanah/home.dart';
 import 'package:xmanah/usersview/fasilitasuser.dart';
 import 'package:xmanah/usersview/kostuser.dart';
 import 'package:xmanah/usersview/tempatmakanuser.dart';
+import 'package:xmanah/views/admin_page.dart';
 import 'package:xmanah/widgets/navbar.dart';
 import 'firebase_options.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FirtsOpen(),
+      home: AdminPage(),
     );
   }
 }
