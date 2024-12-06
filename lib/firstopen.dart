@@ -44,7 +44,7 @@ class _FirtsOpenState extends State<FirtsOpen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple[200], // Latar belakang ungu
+      backgroundColor: Color(0xFF334d2b), // Latar belakang ungu
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

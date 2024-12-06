@@ -35,7 +35,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.purple[200],
+      backgroundColor: Color(0xFF334d2b),
       elevation: 0,
       leading: Padding(
         padding: const EdgeInsets.all(8.0), // Adjust padding as needed

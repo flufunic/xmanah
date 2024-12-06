@@ -52,7 +52,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.purple[200],
+        selectedItemColor: Color(0xFF334d2b),
         unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(

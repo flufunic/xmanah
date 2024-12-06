@@ -54,6 +54,7 @@ class _ViewTempatIbadahPageState extends State<ViewTempatIbadahPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Tempat Ibadah'),
       ),
@@ -82,7 +83,8 @@ class _ViewTempatIbadahPageState extends State<ViewTempatIbadahPage> {
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
-                  leading: Icon(Icons.place, size: 40),
+                  leading:
+                      Icon(Icons.place, size: 40, color: Color(0xFF334d2b)),
                   title: Text(tempatIbadah['nama'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
@@ -100,6 +102,7 @@ class _ViewTempatIbadahPageState extends State<ViewTempatIbadahPage> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.edit),
+                        color: Color(0xFF007BFF),
                         onPressed: () async {
                           // Navigate to edit page
                           await Navigator.push(
@@ -118,6 +121,7 @@ class _ViewTempatIbadahPageState extends State<ViewTempatIbadahPage> {
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
+                        color: Color.fromARGB(255, 164, 11, 11),
                         onPressed: () async {
                           // Confirmation dialog before deleting
                           bool? confirm = await showDialog<bool>(
@@ -170,6 +174,7 @@ class _ViewTempatIbadahPageState extends State<ViewTempatIbadahPage> {
         },
         child: Icon(Icons.add),
         tooltip: 'Tambah Tempat Ibadah',
+        backgroundColor: Color.fromARGB(255, 121, 188, 100),
       ),
     );
   }

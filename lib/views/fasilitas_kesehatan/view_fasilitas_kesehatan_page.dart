@@ -57,6 +57,7 @@ class _ViewFasilitasKesehatanPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Fasilitas Kesehatan'),
       ),
@@ -88,9 +89,11 @@ class _ViewFasilitasKesehatanPageState
                   ''; // Ambil URL gambar dari Firestore
 
               return Card(
+                color: const Color.fromARGB(255, 255, 255, 255),
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
-                  leading: Icon(Icons.local_hospital, size: 40),
+                  leading: Icon(Icons.local_hospital,
+                      size: 40, color: Color(0xFF334d2b)),
                   title: Text(fasilitas['nama'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
@@ -114,6 +117,7 @@ class _ViewFasilitasKesehatanPageState
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
+                        color: Color(0xFF007BFF),
                         icon: Icon(Icons.edit),
                         onPressed: () async {
                           await Navigator.push(
@@ -132,6 +136,7 @@ class _ViewFasilitasKesehatanPageState
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
+                        color: Color.fromARGB(255, 164, 11, 11),
                         onPressed: () async {
                           bool? confirm = await showDialog<bool>(
                             context: context,
@@ -185,6 +190,7 @@ class _ViewFasilitasKesehatanPageState
         },
         child: Icon(Icons.add),
         tooltip: 'Tambah Fasilitas Kesehatan',
+        backgroundColor: Color.fromARGB(255, 121, 188, 100),
       ),
     );
   }

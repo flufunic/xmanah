@@ -54,6 +54,7 @@ class _ViewTempatMakanPageState extends State<ViewTempatMakanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Tempat Makan'),
       ),
@@ -82,7 +83,8 @@ class _ViewTempatMakanPageState extends State<ViewTempatMakanPage> {
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
-                  leading: Icon(Icons.restaurant, size: 40),
+                  leading: Icon(Icons.restaurant,
+                      size: 40, color: Color(0xFF334d2b)),
                   title: Text(tempatMakan['nama'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
@@ -99,6 +101,7 @@ class _ViewTempatMakanPageState extends State<ViewTempatMakanPage> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.edit),
+                        color: Color(0xFF007BFF),
                         onPressed: () async {
                           // Pass the actual data to the edit page including desa_id
                           await Navigator.push(
@@ -118,6 +121,7 @@ class _ViewTempatMakanPageState extends State<ViewTempatMakanPage> {
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
+                        color: Color.fromARGB(255, 164, 11, 11),
                         onPressed: () async {
                           // Konfirmasi sebelum menghapus
                           bool? confirm = await showDialog<bool>(
@@ -173,6 +177,7 @@ class _ViewTempatMakanPageState extends State<ViewTempatMakanPage> {
         },
         child: Icon(Icons.add),
         tooltip: 'Tambah Tempat Makan',
+        backgroundColor: Color.fromARGB(255, 121, 188, 100),
       ),
     );
   }

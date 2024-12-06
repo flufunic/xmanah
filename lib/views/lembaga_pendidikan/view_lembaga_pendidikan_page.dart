@@ -54,6 +54,7 @@ class _ViewLembagaPendidikanPageState extends State<ViewLembagaPendidikanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Lembaga Pendidikan'),
       ),
@@ -81,7 +82,8 @@ class _ViewLembagaPendidikanPageState extends State<ViewLembagaPendidikanPage> {
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
-                  leading: Icon(Icons.school, size: 40),
+                  leading:
+                      Icon(Icons.school, size: 40, color: Color(0xFF334d2b)),
                   title: Text(lembaga['nama'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
@@ -98,6 +100,7 @@ class _ViewLembagaPendidikanPageState extends State<ViewLembagaPendidikanPage> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.edit),
+                        color: Color(0xFF007BFF),
                         onPressed: () async {
                           await Navigator.push(
                             context,
@@ -113,6 +116,7 @@ class _ViewLembagaPendidikanPageState extends State<ViewLembagaPendidikanPage> {
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
+                        color: Color.fromARGB(255, 164, 11, 11),
                         onPressed: () async {
                           bool? confirm = await showDialog<bool>(
                             context: context,
@@ -169,6 +173,7 @@ class _ViewLembagaPendidikanPageState extends State<ViewLembagaPendidikanPage> {
         },
         child: Icon(Icons.add),
         tooltip: 'Tambah Lembaga Pendidikan',
+        backgroundColor: Color.fromARGB(255, 121, 188, 100),
       ),
     );
   }

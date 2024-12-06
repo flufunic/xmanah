@@ -50,6 +50,7 @@ class _ViewKostPageState extends State<ViewKostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Data Kost'),
       ),
@@ -76,7 +77,7 @@ class _ViewKostPageState extends State<ViewKostPage> {
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
-                  leading: Icon(Icons.home, size: 40),
+                  leading: Icon(Icons.home, size: 40, color: Color(0xFF334d2b)),
                   title: Text(kost['nama'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
@@ -92,6 +93,7 @@ class _ViewKostPageState extends State<ViewKostPage> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.edit),
+                        color: Color(0xFF007BFF),
                         onPressed: () async {
                           // After the user edits the kost, refresh the data
                           await Navigator.push(
@@ -110,6 +112,7 @@ class _ViewKostPageState extends State<ViewKostPage> {
                       ),
                       IconButton(
                         icon: Icon(Icons.delete),
+                        color: Color.fromARGB(255, 164, 11, 11),
                         onPressed: () async {
                           // Confirm deletion
                           bool? confirmDelete = await showDialog(
@@ -164,6 +167,7 @@ class _ViewKostPageState extends State<ViewKostPage> {
         },
         child: Icon(Icons.add),
         tooltip: 'Tambah Kost',
+        backgroundColor: Color.fromARGB(255, 121, 188, 100),
       ),
     );
   }

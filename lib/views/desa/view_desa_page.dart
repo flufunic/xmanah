@@ -49,6 +49,7 @@ class DesaViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Data Desa'),
       ),
@@ -81,9 +82,11 @@ class DesaViewPage extends StatelessWidget {
               String desaId = desa.id; // Document ID for the specific desa
 
               return Card(
+                color: const Color.fromARGB(255, 255, 255, 255),
                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: ListTile(
-                  leading: Icon(Icons.home, color: Colors.blue), // Icon rumah
+                  leading:
+                      Icon(Icons.home, color: Color(0xFF334d2b)), // Icon rumah
                   title: Text(nama),
                   subtitle:
                       Text('$alamat\nKode Pos: $kodePos\nKontak: $kontak'),
@@ -92,10 +95,12 @@ class DesaViewPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
+                        color: Color(0xFF007BFF),
                         icon: Icon(Icons.edit),
                         onPressed: () => _showDesaDetails(context, desaId),
                       ),
                       IconButton(
+                        color: Color.fromARGB(255, 164, 11, 11),
                         icon: Icon(Icons.delete),
                         onPressed: () {
                           // Show a confirmation dialog before deleting
@@ -148,7 +153,8 @@ class DesaViewPage extends StatelessWidget {
         },
         child: Icon(Icons.add), // Icon for the button
         tooltip: 'Tambah Desa',
-        backgroundColor: Colors.blue, // FAB background color
+        backgroundColor:
+            Color.fromARGB(255, 121, 188, 100), // FAB background color
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation
           .endFloat, // Position the FAB at the bottom-right

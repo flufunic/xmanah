@@ -97,7 +97,7 @@ class _AdminPageState extends State<AdminPage> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Color(0xFF334d2b),
               ),
               child: Text(
                 'Dashboard Admin',
@@ -207,107 +207,110 @@ class _AdminPageState extends State<AdminPage> {
           ],
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Selamat datang di Dashboard Admin!',
-                  style: TextStyle(fontSize: 18)),
-              SizedBox(height: 20),
-              SizedBox(height: 20),
-              // Card widgets untuk menampilkan jumlah data
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: Colors.blue[50],
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    title: Text('Desa'),
-                    subtitle: Text('Jumlah: $desaCount'),
-                    leading: Icon(Icons.home, color: Colors.blue),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: Colors.green[50],
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    title: Text('Tempat Makan'),
-                    subtitle: Text('Jumlah: $tempatMakanCount'),
-                    leading: Icon(Icons.restaurant, color: Colors.green),
+      body: Container(
+        color: Color(0xFF334d2b), // Background color #7da12d
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Selamat datang di Dashboard Admin!',
+                    style: TextStyle(fontSize: 18)),
+                SizedBox(height: 20),
+                // Card widgets untuk menampilkan jumlah data
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.blue[50],
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      title: Text('Desa'),
+                      subtitle: Text('Jumlah: $desaCount'),
+                      leading: Icon(Icons.home, color: Colors.blue),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: Colors.red[50],
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    title: Text('Fasilitas Kesehatan'),
-                    subtitle: Text('Jumlah: $fasilitasKesehatanCount'),
-                    leading: Icon(Icons.local_hospital, color: Colors.red),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: Colors.purple[50],
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    title: Text('Tempat Ibadah'),
-                    subtitle: Text('Jumlah: $tempatIbadahCount'),
-                    leading: Icon(Icons.church, color: Colors.purple),
+                // Card lainnya di sini
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.green[50],
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      title: Text('Tempat Makan'),
+                      subtitle: Text('Jumlah: $tempatMakanCount'),
+                      leading: Icon(Icons.restaurant, color: Colors.green),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: Colors.orange[50],
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    title: Text('Kost'),
-                    subtitle: Text('Jumlah: $kostCount'),
-                    leading: Icon(Icons.hotel, color: Colors.orange),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: Colors.yellow[50],
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    title: Text('Lembaga Pendidikan'),
-                    subtitle: Text('Jumlah: $lembagaPendidikanCount'),
-                    leading: Icon(Icons.school, color: Colors.yellow),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.red[50],
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      title: Text('Fasilitas Kesehatan'),
+                      subtitle: Text('Jumlah: $fasilitasKesehatanCount'),
+                      leading: Icon(Icons.local_hospital, color: Colors.red),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.purple[50],
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      title: Text('Tempat Ibadah'),
+                      subtitle: Text('Jumlah: $tempatIbadahCount'),
+                      leading: Icon(Icons.church, color: Colors.purple),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.orange[50],
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      title: Text('Kost'),
+                      subtitle: Text('Jumlah: $kostCount'),
+                      leading: Icon(Icons.hotel, color: Colors.orange),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.yellow[50],
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      title: Text('Lembaga Pendidikan'),
+                      subtitle: Text('Jumlah: $lembagaPendidikanCount'),
+                      leading: Icon(Icons.school, color: Colors.yellow),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

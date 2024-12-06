@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.apartment,
                     label: 'Kost',
-                    color: const Color.fromARGB(255, 226, 128, 243),
+                    color: const Color(0xFF334d2b),
                     iconSize: 24.0, // Ukuran ikon lebih kecil
                     labelSize: 12.0, // Ukuran teks lebih kecil
                     iconPadding: 10.0,
@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.restaurant,
                     label: 'Tempat Makan',
-                    color: const Color.fromARGB(255, 226, 128, 243),
+                    color: const Color(0xFF334d2b),
                     iconSize: 24.0,
                     labelSize: 12.0,
                     iconPadding: 10.0,
@@ -104,7 +104,7 @@ class HomePage extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.mosque,
                     label: 'Tempat Ibadah',
-                    color: const Color.fromARGB(255, 226, 128, 243),
+                    color: const Color(0xFF334d2b),
                     iconSize: 24.0,
                     labelSize: 12.0,
                     iconPadding: 10.0,
@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.local_hospital,
                     label: 'Fasilitas Kesehatan',
-                    color: const Color.fromARGB(255, 226, 128, 243),
+                    color: const Color(0xFF334d2b),
                     iconSize: 24.0,
                     labelSize: 12.0,
                     iconPadding: 10.0,
@@ -126,7 +126,7 @@ class HomePage extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.school,
                     label: 'Lembaga Pendidikan',
-                    color: const Color.fromARGB(255, 226, 128, 243),
+                    color: const Color(0xFF334d2b),
                     iconSize: 24.0,
                     labelSize: 12.0,
                     iconPadding: 10.0,
@@ -254,7 +254,7 @@ class HomePage extends StatelessWidget {
           ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 91, 0, 107),
+              backgroundColor: const Color(0xFF334d2b),
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               shape: RoundedRectangleBorder(
@@ -283,7 +283,7 @@ class HomePage extends StatelessWidget {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(
               child: Text(placeholderText,
-                  style: TextStyle(color: Colors.purple[700])));
+                  style: TextStyle(color: Color(0xFF334d2b))));
         } else {
           List<Map<String, dynamic>> itemList = snapshot.data!;
           return Container(

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:xmanah/firstopen.dart';
 import 'package:xmanah/views/admin_page.dart';
@@ -27,11 +26,9 @@ class _LoginPageState extends State<LoginPage> {
       String? email = userCredential.user?.email;
 
       if (email != null) {
-        // Simpan status login
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        await prefs.setString(
-            'userEmail', email); // Simpan email untuk referensi
+        await prefs.setString('userEmail', email);
 
         if (email.endsWith('@admin.com')) {
           Navigator.push(
@@ -59,46 +56,128 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            SizedBox(height: 20),
-            if (_errorMessage.isNotEmpty)
+      backgroundColor: Color(0xFF334d2b),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Text(
-                _errorMessage,
-                style: TextStyle(color: Colors.red),
+                'XMANAH', // Tulisan XMANAH menjadi putih
+                style: TextStyle(
+                  color: Colors.white, // Ubah warna teks menjadi putih
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
               ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text('Login'),
-            ),
-            SizedBox(height: 10),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
-                );
-              },
-              child: Text('Belum punya akun? Daftar di sini'),
-            ),
-          ],
+              SizedBox(height: 24),
+              Card(
+                elevation: 6,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF334d2b),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      _buildTextField(
+                        controller: _emailController,
+                        label: 'Email',
+                        icon: Icons.email_outlined,
+                      ),
+                      SizedBox(height: 16),
+                      _buildTextField(
+                        controller: _passwordController,
+                        label: 'Password',
+                        icon: Icons.lock_outline,
+                        isPassword: true,
+                      ),
+                      SizedBox(height: 20),
+                      if (_errorMessage.isNotEmpty)
+                        Text(
+                          _errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF334D2B),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          minimumSize: Size(double.infinity, 50),
+                        ),
+                        onPressed: _login,
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 255, 255, 255)),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          },
+                          child: Text(
+                            'Belum punya akun? Daftar di sini',
+                            style: TextStyle(color: Color(0xFF334d2b)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool isPassword = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Color(0xFF334d2b)),
+        labelStyle: TextStyle(color: Color(0xFF334d2b)),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF334d2b)),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        filled: true,
+        fillColor: Colors.white,
       ),
     );
   }
@@ -111,39 +190,33 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   String _errorMessage = '';
 
-  // Fungsi untuk registrasi
   Future<void> _register() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _errorMessage = 'Password dan konfirmasi password tidak cocok.';
+      });
+      return;
+    }
+
     try {
-      // Melakukan registrasi dengan email dan password
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
 
-      // Ambil user dari hasil registrasi
       User? user = userCredential.user;
-
-      // Simpan nama pengguna ke Firestore
       if (user != null) {
-        await _firestore.collection('users').doc(user.uid).set({
-          'name': _nameController.text,
-          'email': _emailController.text,
-        });
-
-        // Update display name pada profil pengguna
-        await user.updateDisplayName(_nameController.text);
+        await user.updateDisplayName(_emailController.text);
       }
 
-      // Navigasi kembali ke halaman login
       Navigator.pop(context);
     } catch (e) {
       setState(() {
@@ -155,40 +228,131 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            SizedBox(height: 20),
-            if (_errorMessage.isNotEmpty)
+      backgroundColor: Color(0xFF334d2b),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Text(
-                _errorMessage,
-                style: TextStyle(color: Colors.red),
+                'XMANAH', // Tulisan XMANAH menjadi putih
+                style: TextStyle(
+                  color: Colors.white, // Ubah warna teks menjadi putih
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
               ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _register,
-              child: Text('Register'),
-            ),
-          ],
+              SizedBox(height: 24),
+              Card(
+                elevation: 6,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Buat Akun Baru',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF334d2b),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      _buildTextField(
+                        controller: _emailController,
+                        label: 'Email',
+                        icon: Icons.email_outlined,
+                      ),
+                      SizedBox(height: 16),
+                      _buildTextField(
+                        controller: _passwordController,
+                        label: 'Password',
+                        icon: Icons.lock_outline,
+                        isPassword: true,
+                      ),
+                      SizedBox(height: 16),
+                      _buildTextField(
+                        controller: _confirmPasswordController,
+                        label: 'Konfirmasi Password',
+                        icon: Icons.lock_outline,
+                        isPassword: true,
+                      ),
+                      SizedBox(height: 20),
+                      if (_errorMessage.isNotEmpty)
+                        Text(
+                          _errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF334d2b),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          minimumSize: Size(double.infinity, 50),
+                        ),
+                        onPressed: _register,
+                        child: Text(
+                          'Daftar',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 255, 255, 255)),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pop(context); // Kembali ke halaman login
+                          },
+                          child: Text(
+                            'Sudah punya akun? Login di sini',
+                            style: TextStyle(color: Color(0xFF334d2b)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool isPassword = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: const Color.fromARGB(255, 2, 0, 0)),
+        labelStyle: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        filled: true,
+        fillColor: const Color.fromARGB(255, 255, 254, 254),
       ),
     );
   }
