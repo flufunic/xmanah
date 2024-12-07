@@ -11,14 +11,14 @@ class KostUser extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Daftar Kost",
-          style: TextStyle(color: Colors.black), // Ubah warna teks judul
+          style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
       backgroundColor: Colors.white,
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: kostService.getKostList(), // This returns a List of maps
+        future: kostService.getKostList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -33,13 +33,14 @@ class KostUser extends StatelessWidget {
               itemBuilder: (context, index) {
                 final kost = kostList[index];
                 return KostCard(
+                  kostId: kost['id'] ?? '', // Add unique identifier
                   imageUrl: kost['gambar'] ?? '',
                   name: kost['nama'] ?? 'Nama Kost',
                   address: kost['alamat'] ?? 'Alamat Kost',
-                  review: kost['ulasan'] ?? 'Ulasan',
                   kontak: kost['kontak'] ?? 'Kontak',
                   fasilitas: kost['fasilitas'] ?? 'Fasilitas',
-                  harga: kost['harga'] ?? 'Harga',
+
+                  harga: kost['harga'] is int ? kost['harga'] : 0,
                 );
               },
             );
@@ -51,20 +52,20 @@ class KostUser extends StatelessWidget {
 }
 
 class KostCard extends StatelessWidget {
+  final String kostId;
   final String imageUrl;
   final String name;
   final String address;
-  final String review;
   final String kontak;
   final int harga;
   final String fasilitas;
 
   const KostCard({
     Key? key,
+    required this.kostId,
     required this.imageUrl,
     required this.name,
     required this.address,
-    required this.review,
     required this.kontak,
     required this.harga,
     required this.fasilitas,
@@ -78,10 +79,10 @@ class KostCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => KostDetail(
+              kostId: kostId, // Pass kostId to detail page
               imageUrl: imageUrl,
               name: name,
               address: address,
-              review: review,
               kontak: kontak,
               harga: harga,
               fasilitas: fasilitas,
@@ -105,7 +106,7 @@ class KostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar Kost
+            // Kost Image
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
               child: imageUrl.isNotEmpty
@@ -122,7 +123,7 @@ class KostCard extends StatelessWidget {
                       child: Icon(Icons.image, color: Colors.white, size: 40),
                     ),
             ),
-            // Nama, Alamat, dan Ulasan Kost
+            // Kost Name and Address
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -144,22 +145,14 @@ class KostCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.yellow[700],
-                        size: 20.0,
-                      ),
-                      SizedBox(width: 4.0),
-                      Text(
-                        review,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                    ],
+                  // Optional: Add price information
+                  Text(
+                    'Harga: Rp ${harga.toString()}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
