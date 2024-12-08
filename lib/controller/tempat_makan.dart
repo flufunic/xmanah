@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class TempatMakanService {
   final CollectionReference tempatMakanCollection =
       FirebaseFirestore.instance.collection('tempat_makan');
+      
 
   // Method to add new tempat makan
   Future<void> tambahTempatMakan({
@@ -16,7 +17,7 @@ class TempatMakanService {
     required String desaId, // Foreign Key from desa collection
   }) async {
     try {
-      await tempatMakanCollection.add({
+     DocumentReference docRef = await tempatMakanCollection.add({
         'nama': nama,
         'alamat': alamat,
         'jamBuka': '${jamBuka.hour}:${jamBuka.minute}', // Convert to string
@@ -59,17 +60,38 @@ class TempatMakanService {
   }
 
   // Method untuk mendapatkan daftar tempat makan
-  Future<List<Map<String, dynamic>>> getTempatMakanList() async {
+   Future<List<Map<String, dynamic>>> getTempatMakanList() async {
     try {
       QuerySnapshot querySnapshot = await tempatMakanCollection.get();
-      List<Map<String, dynamic>> tempatMakanList = [];
-      querySnapshot.docs.forEach((doc) {
-        tempatMakanList.add(doc.data() as Map<String, dynamic>);
-      });
+      List<Map<String, dynamic>> tempatMakanList = querySnapshot.docs.map((doc) { // Perbaiki di sini
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
+        return data;
+      }).toList();
       return tempatMakanList;
     } catch (e) {
       print("Gagal mengambil data tempat makan: $e");
       return [];
     }
   }
+
+ Future<List<Map<String, dynamic>>> getTempatMakantListByDesa(String desaId) async {
+  try {
+    QuerySnapshot snapshot = await tempatMakanCollection
+        .where('desa_id', isEqualTo: desaId)
+        .get();
+
+    List<Map<String, dynamic>> tempatMakanList = snapshot.docs.map((doc) {
+      var data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
+      return data;
+    }).toList();
+
+    return tempatMakanList;
+  } catch (e) {
+    print("Error fetching tempat makan data for desa $desaId: $e");
+    return [];
+  }
+}
+
 }

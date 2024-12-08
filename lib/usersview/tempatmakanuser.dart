@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/tempat_makan.dart';
+import 'package:xmanah/usersview/intempatmakan.dart';
+
 
 class TempatMakanUser extends StatelessWidget {
   @override
@@ -36,10 +38,10 @@ class TempatMakanUser extends StatelessWidget {
                 final jamTutup = tempatMakan['jamTutup'];
 
                 return TempatMakanCard(
+                  makanId: tempatMakan['id'] ?? '',
                   imageUrl: tempatMakan['gambar'] ?? '',
                   name: tempatMakan['nama'] ?? 'Nama Tempat Makan',
                   address: tempatMakan['alamat'] ?? 'Alamat tidak tersedia',
-                  review: tempatMakan['ulasan'] ?? 'No reviews',
                   openingHours: '$jamBuka - $jamTutup',
                 );
               },
@@ -52,108 +54,107 @@ class TempatMakanUser extends StatelessWidget {
 }
 
 class TempatMakanCard extends StatelessWidget {
+   final String makanId;
   final String imageUrl;
   final String name;
   final String address;
-  final String review;
   final String openingHours;
 
   const TempatMakanCard({
     Key? key,
+    required this.makanId,
     required this.imageUrl,
     required this.name,
     required this.address,
-    required this.review,
     required this.openingHours,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Gambar Tempat Makan
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
-            child: imageUrl.isNotEmpty
-                ? Image.network(
-                    imageUrl,
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : Container(
-                    height: 180,
-                    width: double.infinity,
-                    color: Colors.grey[300],
-                    child: Icon(Icons.image, color: Colors.white, size: 40),
-                  ),
-          ),
-          // Nama, Alamat, Ulasan, dan Jam Buka-Tutup
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 4.0),
-                Text(
-                  address,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow[700],
-                      size: 20.0,
-                    ),
-                    SizedBox(width: 4.0),
-                    Text(
-                      review,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  "Jam Buka: $openingHours",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[800],
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TempatMakanDetail(
+              makanId: makanId, // Pass makanId to detail page
+              imageUrl: imageUrl,
+              name: name,
+              address: address,
+              openingHours:openingHours,
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6.0,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Tempat Makan Image
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                      imageUrl,
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      height: 180,
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.image, color: Colors.white, size: 40),
+                    ),
+            ),
+            // Tempat Name and Address
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    address,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  // Optional: Add price information
+                 Text(
+                    openingHours,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
