@@ -120,7 +120,7 @@ class _EditFasilitasKesehatanPageState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Success'),
+          title: Text('Sukses'),
           content: Text('Fasilitas Kesehatan berhasil diperbarui!'),
           actions: <Widget>[
             TextButton(
@@ -162,7 +162,7 @@ class _EditFasilitasKesehatanPageState
     return Scaffold(
       backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
-        title: Text("Edit Fasilitas Kesehatan"),
+        title: Text("Edit Data Fasilitas Kesehatan"),
         backgroundColor: Color(0xFF334d2b), // AppBar color
       ),
       body: Padding(

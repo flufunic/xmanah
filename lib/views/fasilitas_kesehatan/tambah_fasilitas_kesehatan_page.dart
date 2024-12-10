@@ -152,7 +152,7 @@ class _TambahFasilitasKesehatanPageState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Tambah Fasilitas Kesehatan",
+                    "Tambah Data Fasilitas Kesehatan",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

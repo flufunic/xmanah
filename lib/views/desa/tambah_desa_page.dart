@@ -82,7 +82,7 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
     return Scaffold(
       backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
-        backgroundColor: Color(0xFF334d2b),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         title: Text('Tambah Data Desa'),
         elevation: 0,
       ),
@@ -149,7 +149,8 @@ class _TambahDesaPageState extends State<TambahDesaPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         padding: EdgeInsets.symmetric(vertical: 16),
-                        minimumSize: Size(double.infinity, 50),
+                        minimumSize:
+                            Size(double.infinity, 50), // Full-width button
                       ),
                       onPressed: _simpanDesa,
                       child: Text(

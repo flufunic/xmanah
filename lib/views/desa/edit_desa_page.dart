@@ -65,7 +65,7 @@ class _EditDesaPageState extends State<EditDesaPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Success'),
+          title: Text('Sukses'),
           content: Text('Data desa berhasil diperbarui!'),
           actions: <Widget>[
             TextButton(
@@ -93,7 +93,7 @@ class _EditDesaPageState extends State<EditDesaPage> {
       backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
         title: Text('Edit Data Desa'),
-        backgroundColor: Color(0xFF334d2b),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
       ),
       body: SingleChildScrollView(
         child: Padding(

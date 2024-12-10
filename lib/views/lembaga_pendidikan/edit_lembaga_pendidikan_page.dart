@@ -86,7 +86,7 @@ class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Success'),
+          title: Text('Sukses'),
           content: Text('Lembaga Pendidikan berhasil diperbarui!'),
           actions: <Widget>[
             TextButton(
@@ -153,86 +153,165 @@ class _EditLembagaPendidikanPageState extends State<EditLembagaPendidikanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Lembaga Pendidikan"),
+        title: Text("Edit  Data Lembaga Pendidikan"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align left
-          children: [
-            TextField(
-              controller: namaController,
-              decoration: InputDecoration(labelText: 'Nama Lembaga'),
+      body: SingleChildScrollView(
+        // Wrap the content with SingleChildScrollView
+        child: Container(
+          color: Color(0xFF334d2b), // Background color
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
             ),
-            TextField(
-              controller: alamatController,
-              decoration: InputDecoration(labelText: 'Alamat'),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // Align left
+                children: [
+                  Text(
+                    'Edit Data Lembaga Pendidikan',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF334d2b),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Nama Lembaga TextField
+                  TextField(
+                    controller: namaController,
+                    decoration: InputDecoration(
+                      labelText: 'Nama Lembaga',
+                      prefixIcon: Icon(Icons.school, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Alamat TextField
+                  TextField(
+                    controller: alamatController,
+                    decoration: InputDecoration(
+                      labelText: 'Alamat',
+                      prefixIcon:
+                          Icon(Icons.location_on, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Kontak TextField
+                  TextField(
+                    controller: kontakController,
+                    decoration: InputDecoration(
+                      labelText: 'Kontak',
+                      prefixIcon: Icon(Icons.phone, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Gambar Link TextField
+                  TextField(
+                    controller: gambarController,
+                    decoration: InputDecoration(
+                      labelText: 'Link Gambar',
+                      prefixIcon: Icon(Icons.image, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Akreditasi Dropdown with border
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Akreditasi',
+                      prefixIcon: Icon(Icons.star, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedAkreditasi,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedAkreditasi = newValue!;
+                        });
+                      },
+                      items: akreditasiOptions
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      isExpanded: true, // Make dropdown full-width
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Tingkat Dropdown with border
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Tingkat',
+                      prefixIcon: Icon(Icons.school, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedTingkat,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedTingkat = newValue!;
+                        });
+                      },
+                      items: tingkatOptions
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      isExpanded: true, // Make dropdown full-width
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Desa Dropdown with border
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Desa',
+                      prefixIcon:
+                          Icon(Icons.location_city, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(), // Add border here
+                    ),
+                    child: DropdownButton<String>(
+                      value: _selectedDesaId,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedDesaId = newValue;
+                        });
+                      },
+                      items: _desaItems,
+                      isExpanded: true, // Make dropdown full-width
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  // Save Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: updateLembaga,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF334d2b), // Button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        'Update Lembaga Pendidikan',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 10),
-            Text('Akreditasi', style: TextStyle(fontSize: 16)),
-            DropdownButton<String>(
-              value: selectedAkreditasi,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedAkreditasi = newValue!;
-                });
-              },
-              items: akreditasiOptions
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              hint: Text('Pilih Akreditasi'),
-              isExpanded: true, // Make dropdown full-width
-            ),
-            SizedBox(height: 10),
-            Text('Tingkat', style: TextStyle(fontSize: 16)),
-            DropdownButton<String>(
-              value: selectedTingkat,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedTingkat = newValue!;
-                });
-              },
-              items:
-                  tingkatOptions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              hint: Text('Pilih Tingkat'),
-              isExpanded: true, // Make dropdown full-width
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: kontakController,
-              decoration: InputDecoration(labelText: 'Kontak'),
-            ),
-            TextField(
-              controller: gambarController,
-              decoration: InputDecoration(labelText: 'Gambar'),
-            ),
-            SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: _selectedDesaId,
-              items: _desaItems,
-              onChanged: (value) {
-                setState(() {
-                  _selectedDesaId = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Desa'),
-              validator: (value) => value == null ? 'Pilih desa' : null,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: updateLembaga,
-              child: Text('Perbarui Lembaga Pendidikan'),
-            ),
-          ],
+          ),
         ),
       ),
     );

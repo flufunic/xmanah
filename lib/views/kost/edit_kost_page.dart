@@ -94,7 +94,7 @@ class _EditKostPageState extends State<EditKostPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Berhasil!'),
+            title: Text('Sukses!'),
             content: Text('Data kos berhasil diperbarui.'),
             actions: <Widget>[
               TextButton(
@@ -123,98 +123,160 @@ class _EditKostPageState extends State<EditKostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b), // Set background color to dark green
       appBar: AppBar(
         title: Text('Edit Data Kos'),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: _namaController,
-                  decoration: InputDecoration(labelText: 'Nama Kos'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nama kos harus diisi';
-                    }
-                    return null;
-                  },
+        padding: const EdgeInsets.all(8.0), // Small padding for compact design
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(12.0), // Slightly smaller radius
+          ),
+          color: Colors.white, // White background for the card
+          elevation: 5,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0), // Smaller padding inside card
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title Text
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: Text(
+                        'Edit Data Kost',
+                        style: TextStyle(
+                          fontSize: 20, // Smaller font size
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF334d2b),
+                        ),
+                      ),
+                    ),
+                    // Name input with icon
+                    _buildTextField(
+                      controller: _namaController,
+                      label: 'Nama Kos',
+                      icon: Icons.home,
+                    ),
+                    // Address input with icon
+                    _buildTextField(
+                      controller: _alamatController,
+                      label: 'Alamat',
+                      icon: Icons.location_on,
+                    ),
+                    // Facilities input with icon
+                    _buildTextField(
+                      controller: _fasilitasController,
+                      label: 'Fasilitas',
+                      icon: Icons.build,
+                    ),
+                    // Contact input with icon
+                    _buildTextField(
+                      controller: _kontakController,
+                      label: 'Kontak',
+                      icon: Icons.phone,
+                      keyboardType: TextInputType.phone,
+                    ),
+                    // Price input with icon
+                    _buildTextField(
+                      controller: _hargaController,
+                      label: 'Harga',
+                      icon: Icons.attach_money,
+                      keyboardType: TextInputType.number,
+                    ),
+                    // Image URL input with icon
+                    _buildTextField(
+                      controller: _gambarController,
+                      label: 'URL Gambar',
+                      icon: Icons.image,
+                    ),
+                    // Dropdown for Desa
+                    DropdownButtonFormField<String>(
+                      value: _selectedDesaId,
+                      items: _desaItems,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDesaId = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Desa',
+                        prefixIcon: Icon(Icons.location_city),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                              8), // Slightly smaller border radius
+                        ),
+                      ),
+                      validator: (value) => value == null ? 'Pilih desa' : null,
+                    ),
+                    SizedBox(height: 16), // Smaller gap before button
+                    // Update button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _updateKost,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF334d2b),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14), // Smaller padding
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(8), // Smaller radius
+                          ),
+                        ),
+                        child: Text(
+                          'Update Data Kos',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                TextFormField(
-                  controller: _alamatController,
-                  decoration: InputDecoration(labelText: 'Alamat'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Alamat harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _fasilitasController,
-                  decoration: InputDecoration(labelText: 'Fasilitas'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Fasilitas harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _kontakController,
-                  decoration: InputDecoration(labelText: 'Kontak'),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Kontak harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _hargaController,
-                  decoration: InputDecoration(labelText: 'Harga'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Harga harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _gambarController,
-                  decoration: InputDecoration(labelText: 'URL Gambar'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'URL Gambar harus diisi';
-                    }
-                    return null;
-                  },
-                ),
-                DropdownButtonFormField<String>(
-                  value: _selectedDesaId,
-                  items: _desaItems,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedDesaId = value;
-                    });
-                  },
-                  decoration: InputDecoration(labelText: 'Desa'),
-                  validator: (value) => value == null ? 'Pilih desa' : null,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _updateKost,
-                  child: Text('Perbarui Data Kos'),
-                ),
-              ],
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method to create a text input field with icon
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(bottom: 12.0), // Smaller gap between fields
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(8), // Smaller radius for the container
+          border: Border.all(color: Colors.grey),
+        ),
+        child: TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: label,
+            prefixIcon: Icon(icon, color: Color(0xFF334d2b)),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: 12.0, horizontal: 12.0), // Smaller padding
+          ),
+          keyboardType: keyboardType,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '$label harus diisi';
+            }
+            return null;
+          },
         ),
       ),
     );

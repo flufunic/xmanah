@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/tempat_makan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'view_tempat_makan_page.dart'; // Import the view page to navigate after success
+import 'view_tempat_makan_page.dart';
 
 class TambahTempatMakanPage extends StatefulWidget {
   @override
@@ -14,37 +14,38 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
   final TextEditingController kontakController = TextEditingController();
   final TextEditingController gambarController = TextEditingController();
 
-  TimeOfDay? jamBuka; // Jam Buka menggunakan TimeOfDay
-  TimeOfDay? jamTutup; // Jam Tutup menggunakan TimeOfDay
+  TimeOfDay? jamBuka;
+  TimeOfDay? jamTutup;
 
-  String? selectedDesaId; // ID Desa yang dipilih
-  List<DropdownMenuItem<String>> desaItems = []; // Dropdown desa
+  String? selectedDesaId;
+  List<DropdownMenuItem<String>> desaItems = [];
 
   final TempatMakanService tempatMakanService = TempatMakanService();
 
-  // Fungsi untuk memilih waktu jam buka
   Future<void> _selectJamBuka(BuildContext context) async {
-    TimeOfDay picked = (await showTimePicker(
+    TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
-    ))!;
-    setState(() {
-      jamBuka = picked;
-    });
+    );
+    if (picked != null) {
+      setState(() {
+        jamBuka = picked;
+      });
+    }
   }
 
-  // Fungsi untuk memilih waktu jam tutup
   Future<void> _selectJamTutup(BuildContext context) async {
-    TimeOfDay picked = (await showTimePicker(
+    TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
-    ))!;
-    setState(() {
-      jamTutup = picked;
-    });
+    );
+    if (picked != null) {
+      setState(() {
+        jamTutup = picked;
+      });
+    }
   }
 
-  // Fungsi untuk menambahkan tempat makan
   void tambahTempatMakan() async {
     if (jamBuka == null || jamTutup == null) {
       _showErrorDialog("Jam buka dan jam tutup harus dipilih.");
@@ -67,7 +68,6 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
         desaId: selectedDesaId!,
       );
 
-      // Reset form setelah berhasil
       setState(() {
         namaController.clear();
         alamatController.clear();
@@ -75,18 +75,15 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
         gambarController.clear();
         jamBuka = null;
         jamTutup = null;
-        selectedDesaId = null; // Reset ID Desa
+        selectedDesaId = null;
       });
 
-      // Tampilkan alert dialog setelah data berhasil ditambahkan
       _showSuccessDialog();
     } catch (e) {
-      // Tampilkan error dialog jika terjadi kesalahan
       _showErrorDialog(e.toString());
     }
   }
 
-  // Function to show success dialog
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -98,12 +95,11 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the success dialog
+                Navigator.of(context).pop();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        ViewTempatMakanPage(), // Navigate to ViewTempatMakanPage
+                    builder: (context) => ViewTempatMakanPage(),
                   ),
                 );
               },
@@ -114,7 +110,6 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
     );
   }
 
-  // Function to show error dialog
   void _showErrorDialog(String errorMessage) {
     showDialog(
       context: context,
@@ -126,7 +121,7 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the error dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -135,7 +130,6 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
     );
   }
 
-  // Fetch desa data from Firestore
   Future<void> _fetchDesaList() async {
     try {
       QuerySnapshot snapshot =
@@ -143,7 +137,7 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
       List<DropdownMenuItem<String>> items = snapshot.docs.map((doc) {
         return DropdownMenuItem(
           value: doc.id,
-          child: Text(doc['nama']), // Menampilkan nama desa dalam dropdown
+          child: Text(doc['nama']),
         );
       }).toList();
       setState(() {
@@ -157,86 +151,155 @@ class _TambahTempatMakanPageState extends State<TambahTempatMakanPage> {
   @override
   void initState() {
     super.initState();
-    _fetchDesaList(); // Load the desa list when the page is initialized
+    _fetchDesaList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
-        title: Text("Tambah Tempat Makan"),
+        title: Text("Tambah Data Tempat Makan"),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align left
-          children: [
-            TextField(
-              controller: namaController,
-              decoration: InputDecoration(labelText: 'Nama Tempat Makan'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 8,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      'Tambah Data Tempat Makan',
+                      style: TextStyle(
+                        color: Color(0xFF334d2b),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  _buildTextField(
+                    controller: namaController,
+                    label: 'Nama Tempat Makan',
+                    icon: Icons.restaurant,
+                  ),
+                  _buildTextField(
+                    controller: alamatController,
+                    label: 'Alamat',
+                    icon: Icons.location_on,
+                  ),
+                  _buildTimeField(
+                    label: 'Jam Buka',
+                    time: jamBuka,
+                    onPressed: () => _selectJamBuka(context),
+                    icon: Icons.access_time,
+                  ),
+                  _buildTimeField(
+                    label: 'Jam Tutup',
+                    time: jamTutup,
+                    onPressed: () => _selectJamTutup(context),
+                    icon: Icons.access_time_outlined,
+                  ),
+                  _buildTextField(
+                    controller: kontakController,
+                    label: 'Kontak',
+                    icon: Icons.phone,
+                  ),
+                  _buildTextField(
+                    controller: gambarController,
+                    label: 'URL Gambar',
+                    icon: Icons.image,
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: selectedDesaId,
+                    items: desaItems,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedDesaId = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.map, color: Color(0xFF334d2b)),
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: Text(
+                      'Pilih Desa',
+                      style: TextStyle(fontSize: 16, color: Color(0xFF334d2b)),
+                    ),
+                    isExpanded: true,
+                  ),
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width:
+                          double.infinity, // Membuat tombol mengisi lebar penuh
+                      child: ElevatedButton.icon(
+                        onPressed: tambahTempatMakan,
+                        label: Text('Tambah Tempat Makan'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF334d2b),
+                          foregroundColor: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            TextField(
-              controller: alamatController,
-              decoration: InputDecoration(labelText: 'Alamat'),
-            ),
-            SizedBox(height: 10),
-            Text('Jam Buka', style: TextStyle(fontSize: 16)),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () => _selectJamBuka(context),
-                  child: Text(jamBuka != null
-                      ? '${jamBuka!.hour}:${jamBuka!.minute}'
-                      : 'Pilih Jam Buka'),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Text('Jam Tutup', style: TextStyle(fontSize: 16)),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () => _selectJamTutup(context),
-                  child: Text(jamTutup != null
-                      ? '${jamTutup!.hour}:${jamTutup!.minute}'
-                      : 'Pilih Jam Tutup'),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: kontakController,
-              decoration: InputDecoration(labelText: 'Kontak'),
-            ),
-            TextField(
-              controller: gambarController,
-              decoration: InputDecoration(labelText: 'URL Gambar'),
-            ),
-            SizedBox(height: 10),
-            Text('Pilih Desa', style: TextStyle(fontSize: 16)),
-            DropdownButtonFormField<String>(
-              value: selectedDesaId,
-              items: desaItems,
-              onChanged: (value) {
-                setState(() {
-                  selectedDesaId = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Desa'),
-              isExpanded: true, // Full-width dropdown
-              validator: (value) {
-                if (value == null) {
-                  return 'Pilih desa terlebih dahulu';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: tambahTempatMakan,
-              child: Text('Tambah Tempat Makan'),
-            ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Color(0xFF334d2b)),
+          prefixIcon: Icon(icon, color: Color(0xFF334d2b)),
+          border: OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeField({
+    required String label,
+    required TimeOfDay? time,
+    required VoidCallback onPressed,
+    required IconData icon,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: TextField(
+        readOnly: true,
+        onTap: onPressed,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Color(0xFF334d2b)),
+          prefixIcon: Icon(icon, color: Color(0xFF334d2b)),
+          suffixIcon: Icon(Icons.arrow_drop_down, color: Color(0xFF334d2b)),
+          border: OutlineInputBorder(),
+          hintText: time != null
+              ? '${time.hour}:${time.minute.toString().padLeft(2, '0')}'
+              : 'Pilih $label',
         ),
       ),
     );

@@ -124,107 +124,6 @@ class _EditTempatIbadahPageState extends State<EditTempatIbadahPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Tempat Ibadah'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: namaController,
-                decoration: InputDecoration(labelText: 'Nama Tempat Ibadah'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Nama tempat ibadah harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: alamatController,
-                decoration: InputDecoration(labelText: 'Alamat'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Alamat harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: kontakController,
-                decoration: InputDecoration(labelText: 'Kontak'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Kontak harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: gambarController,
-                decoration: InputDecoration(labelText: 'Gambar'),
-              ),
-              DropdownButtonFormField<String>(
-                value: selectedKategori,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedKategori = newValue!;
-                  });
-                },
-                items: kategoriOptions
-                    .map((kategori) => DropdownMenuItem(
-                          value: kategori,
-                          child: Text(kategori),
-                        ))
-                    .toList(),
-                decoration: InputDecoration(labelText: 'Kategori'),
-              ),
-              DropdownButtonFormField<String>(
-                value: selectedDesaId,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedDesaId = newValue!;
-                  });
-                },
-                items: desaItems,
-                decoration: InputDecoration(labelText: 'Desa'),
-              ),
-              TextFormField(
-                controller: jamBukaController,
-                decoration: InputDecoration(
-                  labelText: 'Jam Buka',
-                  suffixIcon: Icon(Icons.access_time),
-                ),
-                onTap: () => _selectJam(context, 'jamBuka'),
-                readOnly: true, // Make it read-only since it's a picker
-              ),
-              TextFormField(
-                controller: jamTutupController,
-                decoration: InputDecoration(
-                  labelText: 'Jam Tutup',
-                  suffixIcon: Icon(Icons.access_time),
-                ),
-                onTap: () => _selectJam(context, 'jamTutup'),
-                readOnly: true, // Make it read-only since it's a picker
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: updateTempatIbadah,
-                child: Text('Update Tempat Ibadah'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   // Time picker for Jam Buka and Jam Tutup
   Future<void> _selectJam(BuildContext context, String field) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -242,5 +141,193 @@ class _EditTempatIbadahPageState extends State<EditTempatIbadahPage> {
         }
       });
     }
+  }
+
+  // Build the form for dropdown fields
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required IconData icon,
+    required List<DropdownMenuItem<String>> items,
+    required Function(String?) onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Color(0xFF334d2b)),
+        border: OutlineInputBorder(),
+      ),
+      onChanged: onChanged,
+      items: items,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF334d2b), // Set background color
+      appBar: AppBar(
+        title: Text('Edit Data Tempat Ibadah'),
+        backgroundColor:
+            Color.fromARGB(255, 255, 255, 255), // Set AppBar background color
+      ),
+      body: SingleChildScrollView(
+        // Make the entire form scrollable
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Edit Data Tempat Ibadah',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF334d2b),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: namaController,
+                      decoration: InputDecoration(
+                        labelText: 'Nama Tempat Ibadah',
+                        prefixIcon:
+                            Icon(Icons.location_city, color: Color(0xFF334d2b)),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Nama tempat ibadah harus diisi';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: alamatController,
+                      decoration: InputDecoration(
+                        labelText: 'Alamat',
+                        prefixIcon:
+                            Icon(Icons.location_on, color: Color(0xFF334d2b)),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Alamat harus diisi';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: kontakController,
+                      decoration: InputDecoration(
+                        labelText: 'Kontak',
+                        prefixIcon: Icon(Icons.phone, color: Color(0xFF334d2b)),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Kontak harus diisi';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: gambarController,
+                      decoration: InputDecoration(
+                        labelText: 'URL Gambar',
+                        prefixIcon: Icon(Icons.image, color: Color(0xFF334d2b)),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    _buildDropdownField(
+                      label: 'Kategori',
+                      value: selectedKategori,
+                      icon: Icons.category,
+                      items: kategoriOptions
+                          .map(
+                              (e) => DropdownMenuItem(value: e, child: Text(e)))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedKategori = value!;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildDropdownField(
+                      label: 'Desa',
+                      value: selectedDesaId,
+                      icon: Icons.place,
+                      items: desaItems,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedDesaId = value;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: jamBukaController,
+                      decoration: InputDecoration(
+                        labelText: 'Jam Buka',
+                        prefixIcon:
+                            Icon(Icons.access_time, color: Color(0xFF334d2b)),
+                        border: OutlineInputBorder(),
+                      ),
+                      onTap: () {
+                        _selectJam(context, 'jamBuka');
+                      },
+                      readOnly: true,
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: jamTutupController,
+                      decoration: InputDecoration(
+                        labelText: 'Jam Tutup',
+                        prefixIcon:
+                            Icon(Icons.access_time, color: Color(0xFF334d2b)),
+                        border: OutlineInputBorder(),
+                      ),
+                      onTap: () {
+                        _selectJam(context, 'jamTutup');
+                      },
+                      readOnly: true,
+                    ),
+                    SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: updateTempatIbadah,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF334d2b),
+                        foregroundColor: Color.fromARGB(
+                            255, 255, 255, 255), // Button background color
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Text(
+                        'Update Tempat Ibadah',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
