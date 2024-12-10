@@ -75,23 +75,25 @@ class TempatMakanService {
     }
   }
 
- Future<List<Map<String, dynamic>>> getTempatMakantListByDesa(String desaId) async {
-  try {
-    QuerySnapshot snapshot = await tempatMakanCollection
-        .where('desa_id', isEqualTo: desaId)
-        .get();
+ // Method to get tempat makan list filtered by desa
+  Future<List<Map<String, dynamic>>> getTempatMakanListByDesa(String desaId) async {
+    try {
+      QuerySnapshot snapshot = await tempatMakanCollection
+          .where('desa_id', isEqualTo: desaId)
+          .get();
 
-    List<Map<String, dynamic>> tempatMakanList = snapshot.docs.map((doc) {
-      var data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
-      return data;
-    }).toList();
+      List<Map<String, dynamic>> tempatMakanList = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
+        return data;
+      }).toList();
 
-    return tempatMakanList;
-  } catch (e) {
-    print("Error fetching tempat makan data for desa $desaId: $e");
-    return [];
+      print("Berhasil mengambil tempat makan di desa $desaId!");
+      return tempatMakanList;
+    } catch (e) {
+      print("Error fetching tempat makan data for desa $desaId: $e");
+      return [];
+    }
   }
-}
 
 }

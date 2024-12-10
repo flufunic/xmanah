@@ -62,7 +62,7 @@ class TempatIbadahService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getTempatIbadaList() async {
+  Future<List<Map<String, dynamic>>> getTempatIbadahList() async {
     try {
       QuerySnapshot querySnapshot = await tempatIbadahCollection.get();
       List<Map<String, dynamic>> tempatIbadahList = [];
@@ -72,6 +72,21 @@ class TempatIbadahService {
       return tempatIbadahList;
     } catch (e) {
       print("Gagal mengambil data tempat makan: $e");
+      return [];
+    }
+  }
+  Future<List<Map<String, dynamic>>> getTempatIbadahListByDesa(String desaId) async {
+    try {
+      QuerySnapshot querySnapshot = await tempatIbadahCollection
+          .where('desa_id', isEqualTo: desaId)  // Filter by desa_id
+          .get();
+      List<Map<String, dynamic>> tempatIbadahList = [];
+      querySnapshot.docs.forEach((doc) {
+        tempatIbadahList.add(doc.data() as Map<String, dynamic>);
+      });
+      return tempatIbadahList;
+    } catch (e) {
+      print("Gagal mengambil data tempat ibadah: $e");
       return [];
     }
   }

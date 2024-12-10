@@ -75,4 +75,19 @@ class DesaService {
       return [];
     }
   }
+  Future<List<Map<String, dynamic>>> searchDesa(String query) async {
+    try {
+      QuerySnapshot snapshot = await desaCollection
+          .where('nama', isGreaterThanOrEqualTo: query)
+          .where('nama', isLessThanOrEqualTo: query + '\uf8ff')
+          .get();  // Fetch documents that match the query
+      
+      return snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+    } catch (e) {
+      print("Error searching desa data: $e");
+      return [];
+    }
+  }
 }

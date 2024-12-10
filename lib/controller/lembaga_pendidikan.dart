@@ -27,13 +27,13 @@ class LembagaPendidikanService {
       print("Data lembaga pendidikan berhasil ditambahkan!");
     } catch (e) {
       print("Gagal menambahkan data lembaga pendidikan: $e");
-      rethrow; // Rethrow the error so that it can be handled by the caller
+      rethrow;
     }
   }
 
   // Fungsi untuk memperbarui lembaga pendidikan
   Future<void> updateLembagaPendidikan({
-    required String lembagaId, // ID lembaga yang akan diperbarui
+    required String lembagaId, 
     required String nama,
     required String alamat,
     required String akreditasi,
@@ -55,9 +55,27 @@ class LembagaPendidikanService {
       print("Data lembaga pendidikan berhasil diperbarui!");
     } catch (e) {
       print("Gagal memperbarui data lembaga pendidikan: $e");
-      rethrow; // Rethrow the error so that it can be handled by the caller
+      rethrow;
     }
   }
+
+  // Get lembaga pendidikan by desaId
+ Future<List<Map<String, dynamic>>> getLembagaPendidikanByDesa(String desaId) async {
+    try {
+      QuerySnapshot querySnapshot = await lembagaCollection
+          .where('desa_id', isEqualTo: desaId)  // Filter by desa_id
+          .get();
+      List<Map<String, dynamic>> lembagaPendidikanList = []; // Local list here
+      querySnapshot.docs.forEach((doc) {
+        lembagaPendidikanList.add(doc.data() as Map<String, dynamic>);
+      });
+      return lembagaPendidikanList;
+    } catch (e) {
+      print("Gagal mengambil data lembaga pendidikan: $e");
+      return [];
+    }
+  }
+
 
   Future<List<Map<String, dynamic>>> getLembagaPendidikanList() async {
     try {

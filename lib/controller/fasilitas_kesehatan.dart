@@ -88,4 +88,27 @@ class FasilitasKesehatanService {
       return [];
     }
   }
+  
+  // Function to get fasilitas kesehatan by desaId
+  Future<List<Map<String, dynamic>>> getFasilitasKesehatanListByDesa(String desaId) async {
+    try {
+      QuerySnapshot snapshot = await fasilitasKesehatanCollection
+          .where('desa_id', isEqualTo: desaId)
+          .get();
+
+      List<Map<String, dynamic>> fasilitasKesehatanList = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+
+      return fasilitasKesehatanList;
+    } catch (e) {
+      print("Error fetching fasilitas kesehatan data: $e");
+      return [];
+    }
+  }
 }
+
+
+
