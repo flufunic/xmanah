@@ -1,44 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:xmanah/controller/lembaga_pendidikan.dart';
 import 'package:xmanah/controller/tempat_ibadah.dart';
-import 'package:xmanah/controller/fasilitas_kesehatan.dart'; // Import FasilitasKesehatanService
+import 'package:xmanah/controller/fasilitas_kesehatan.dart'; 
+import 'package:xmanah/usersview/inkesehatan.dart';
+import 'package:xmanah/usersview/inlembaga.dart';
+import 'package:xmanah/usersview/intempatibadah.dart';
 
 class FasilitasUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final LembagaPendidikanService lembagaPendidikanService =
-        LembagaPendidikanService();
-    final TempatIbadahService tempatIbadahService = TempatIbadahService();
-    final FasilitasKesehatanService fasilitasKesehatanService =
-        FasilitasKesehatanService();
+    // Inisialisasi layanan
+    final lembagaPendidikanService = LembagaPendidikanService();
+    final tempatIbadahService = TempatIbadahService();
+    final fasilitasKesehatanService = FasilitasKesehatanService();
 
     return DefaultTabController(
       length: 3, // Jumlah tab
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight:
-              kToolbarHeight - 50, // Kurangi tinggi AppBar jika diperlukan
-          automaticallyImplyLeading:
-              false, // Hilangkan ikon default pada AppBar
-          backgroundColor:
-              Colors.white, // Ubah sesuai warna latar yang Anda inginkan
+          toolbarHeight: kToolbarHeight - 50, // Tinggi AppBar
+          automaticallyImplyLeading: false, // Hilangkan ikon back
+          backgroundColor: Colors.white,
           bottom: TabBar(
             tabs: [
               Tab(text: 'Pendidikan'),
               Tab(text: 'Tempat Ibadah'),
               Tab(text: 'Kesehatan'),
             ],
-            indicatorColor: Colors.purple[200], // Warna indikator tab aktif
-            labelColor: Colors.black, // Warna teks tab aktif
-            unselectedLabelColor:
-                Colors.grey[800], // Warna teks tab tidak aktif
+            indicatorColor: Colors.purple[200], // Indikator tab aktif
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey[800],
           ),
           elevation: 0,
         ),
         backgroundColor: Colors.white,
         body: TabBarView(
           children: [
-            // Konten untuk masing-masing tab
+            // Konten tiap tab
             LembagaList(
               service: lembagaPendidikanService,
               category: 'Pendidikan',
@@ -59,8 +57,7 @@ class FasilitasUser extends StatelessWidget {
 }
 
 class LembagaList extends StatelessWidget {
-  final dynamic
-      service; // Bisa LembagaPendidikanService, TempatIbadahService, atau FasilitasKesehatanService
+  final dynamic service;
   final String category;
 
   LembagaList({required this.service, required this.category});
@@ -69,7 +66,7 @@ class LembagaList extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: category == 'Tempat Ibadah'
-          ? service.getTempatIbadaList()
+          ? service.getTempatIbadahList() // Perbaikan: getTempatIbadaList -> getTempatIbadahList
           : category == 'Kesehatan'
               ? service.getFasilitasKesehatanList()
               : service.getLembagaPendidikanList(),
@@ -77,9 +74,9 @@ class LembagaList extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text("Error fetching data"));
+          return Center(child: Text("Terjadi kesalahan saat mengambil data"));
         } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-          return Center(child: Text("Tidak ada data"));
+          return Center(child: Text("Tidak ada data tersedia"));
         } else {
           final lembagaList = snapshot.data!;
           return ListView.builder(
@@ -90,14 +87,27 @@ class LembagaList extends StatelessWidget {
                 imageUrl: lembaga['gambar'] ?? '',
                 name: lembaga['nama'] ?? '',
                 address: lembaga['alamat'] ?? '',
-                review: lembaga['ulasan'] ?? '',
-                akreditasi: lembaga.containsKey('akreditasi')
-                    ? lembaga['akreditasi'] ?? ''
-                    : '',
-                tingkat: lembaga.containsKey('tingkat')
-                    ? lembaga['tingkat'] ?? ''
-                    : '',
+                akreditasi: lembaga['akreditasi'] ?? '',
+                tingkat: lembaga['tingkat'] ?? '',
+                jenis: lembaga['jenis'] ?? '',
+                openingHours: lembaga['jamBuka'] ?? '',
+                closedHours: lembaga['jamTutup'] ?? '',
                 kontak: lembaga['kontak'] ?? '',
+                onTap: () {
+                  // Navigasi ke halaman detail
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => category == 'Pendidikan'
+                          ? DetailLembagaPendidikan(data: lembaga) // Perbaikan: lembaga -> data
+                          : category == 'Tempat Ibadah'
+                              ? DetailTempatIbadah(data: lembaga)
+                              : category == 'Kesehatan'
+                              ? DetailFasilitasKesehatan(data: lembaga) // Perbaikan: parameter tetap data
+                              : DetailPage(lembaga: lembaga), // for Kesehatan or other categories
+                    ),
+                  );
+                },
               );
             },
           );
@@ -111,123 +121,103 @@ class FasilitasCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String address;
-  final String review;
   final String akreditasi;
   final String tingkat;
+  final String jenis;
   final String kontak;
+  final String openingHours;
+  final String closedHours;
+  final VoidCallback onTap;
 
   const FasilitasCard({
     Key? key,
     required this.imageUrl,
     required this.name,
     required this.address,
-    required this.review,
     required this.akreditasi,
     required this.tingkat,
+    required this.jenis,
     required this.kontak,
+    required this.openingHours,
+    required this.closedHours,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
-            child: imageUrl.isNotEmpty
-                ? Image.network(
-                    imageUrl,
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : Container(
-                    height: 180,
-                    width: double.infinity,
-                    color: Colors.grey[300],
-                    child: Icon(Icons.image, color: Colors.white, size: 40),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 4.0),
-                Text(
-                  address,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow[700],
-                      size: 20.0,
-                    ),
-                    SizedBox(width: 4.0),
-                    Text(
-                      review,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                  ],
-                ),
-                if (akreditasi.isNotEmpty)
-                  Text(
-                    "Akreditasi: $akreditasi",
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                if (tingkat.isNotEmpty)
-                  Text(
-                    "Tingkat: $tingkat",
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                SizedBox(height: 8.0),
-                Text(
-                  "Kontak: $kontak",
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.grey[700],
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6.0,
+              offset: Offset(0, 3),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                      imageUrl,
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      height: 180,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.image, color: Colors.white, size: 40),
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 4.0),
+                  Text(address, style: TextStyle(fontSize: 16.0)),
+                  SizedBox(height: 8.0),
+                  if (akreditasi.isNotEmpty) Text("Akreditasi: $akreditasi"),
+                  if (tingkat.isNotEmpty) Text("Tingkat: $tingkat"),
+                  if (jenis.isNotEmpty) Text("Jenis: $jenis"),
+                  if (openingHours.isNotEmpty)
+                    Text("Jam Buka: $openingHours"),
+                  if (closedHours.isNotEmpty)
+                    Text("Jam Tutup: $closedHours"),
+                  Text("Kontak: $kontak"),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DetailPage extends StatelessWidget {
+  final Map<String, dynamic> lembaga;
+
+  DetailPage({required this.lembaga});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(lembaga['nama'] ?? 'Detail')),
+      body: Center(
+        child: Text("Detail informasi tentang ${lembaga['nama']}"),
       ),
     );
   }

@@ -5,70 +5,68 @@ class KostService {
       FirebaseFirestore.instance.collection('kost');
 
   // Function to add new "kost" data
- Future<void> tambahKost({
-  required String nama,
-  required String alamat,
-  required String fasilitas,
-  required String kontak,
-  required int harga,
-  required String gambar,
-  required String desaId,
-}) async {
-  try {
-    DocumentReference docRef = await kostCollection.add({
-      'nama': nama,
-      'alamat': alamat,
-      'fasilitas': fasilitas,
-      'kontak': kontak,
-      'harga': harga,
-      'gambar': gambar,
-      'desa_id': desaId,
-    });
+  Future<void> tambahKost({
+    required String nama,
+    required String alamat,
+    required String fasilitas,
+    required String kontak,
+    required int harga,
+    required String gambar,
+    required String desaId,
+  }) async {
+    try {
+      DocumentReference docRef = await kostCollection.add({
+        'nama': nama,
+        'alamat': alamat,
+        'fasilitas': fasilitas,
+        'kontak': kontak,
+        'harga': harga,
+        'gambar': gambar,
+        'desa_id': desaId,
+      });
 
-    print("Data kost berhasil ditambahkan dengan ID: ${docRef.id}");
-  } catch (e) {
-    print("Gagal menambahkan data kost: $e");
+      print("Data kost berhasil ditambahkan dengan ID: ${docRef.id}");
+    } catch (e) {
+      print("Gagal menambahkan data kost: $e");
+    }
   }
-}
-
 
   // Fungsi untuk mengambil daftar kost (dapat digunakan di UI)
   Future<List<Map<String, dynamic>>> getKostList() async {
-  try {
-    QuerySnapshot snapshot = await kostCollection.get();
-    List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
-      var data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
-      return data;
-    }).toList();
+    try {
+      QuerySnapshot snapshot = await kostCollection.get();
+      List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
+        return data;
+      }).toList();
 
-    return kostList;
-  } catch (e) {
-    print("Error fetching kost data: $e");
-    return [];
+      return kostList;
+    } catch (e) {
+      print("Error fetching kost data: $e");
+      return [];
+    }
   }
-}
 
+  // Function to get kost by desaId (only one declaration should exist)
+  Future<List<Map<String, dynamic>>> getKostListByDesa(String desaId) async {
+    try {
+      QuerySnapshot snapshot = await kostCollection
+          .where('desa_id', isEqualTo: desaId)
+          .get();
 
- Future<List<Map<String, dynamic>>> getKostListByDesa(String desaId) async {
-  try {
-    QuerySnapshot snapshot = await kostCollection
-        .where('desa_id', isEqualTo: desaId)
-        .get();
+      List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
 
-    List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
-      var data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
-      return data;
-    }).toList();
-
-    return kostList;
-  } catch (e) {
-    print("Error fetching kost data for desa $desaId: $e");
-    return [];
+      return kostList;
+    } catch (e) {
+      print("Error fetching kost data for desa $desaId: $e");
+      return [];
+    }
   }
-}
-
 
   // Function to update existing "kost" data
   Future<void> updateKost({
