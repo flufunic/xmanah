@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xmanah/views/login_page.dart';
@@ -60,58 +59,57 @@ class _CustomNavbarState extends State<CustomNavbar> {
     });
   }
 
-  // Fungsi ini akan dipanggil setelah debounce
-  Future<void> _performSearch(String query) async {
-    // Lakukan pencarian seperti yang sudah ada sebelumnya
+  // Comprehensive search method
+  Future<List<Map<String, dynamic>>> _searchAllData(String query) async {
+    List<Map<String, dynamic>> allResults = [];
+
+    // Search for desa first
     List<Map<String, dynamic>> desaResults = await _desaService.searchDesa(query);
-
-    if (desaResults.isNotEmpty) {
-      // Lakukan pencarian terkait data lain berdasarkan desa
-      List<Map<String, dynamic>> allResults = await _getRelatedData(desaResults);
-      setState(() {
-        _searchResults = allResults;
-      });
-
-      if (_searchResults.isNotEmpty) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SearchResultsPage(results: _searchResults),
-          ),
-        );
-      }
-    } else {
-      setState(() {
-        _searchResults = [];
-      });
-    }
-  }
-
-  // Fungsi untuk mengambil data terkait
-  Future<List<Map<String, dynamic>>> _getRelatedData(List<Map<String, dynamic>> desaResults) async {
-    List<Map<String, dynamic>> fasilitasResults = [];
-    List<Map<String, dynamic>> kostResults = [];
-    List<Map<String, dynamic>> tempatIbadahResults = [];
-    List<Map<String, dynamic>> lembagaPendidikanResults = [];
-    List<Map<String, dynamic>> tempatMakanResults = [];
 
     for (var desa in desaResults) {
       String desaId = desa['id'];
+      
+      // Fetch related data for the desa
+      List<Map<String, dynamic>> kostResults = await _kostService.getKostListByDesa(desaId);
+      List<Map<String, dynamic>> fasilitasResults = await _fasilitasKesehatanService.getFasilitasKesehatanListByDesa(desaId);
+      List<Map<String, dynamic>> tempatIbadahResults = await _tempatIbadahService.getTempatIbadahListByDesa(desaId);
+      List<Map<String, dynamic>> lembagaPendidikanResults = await _lembagaPendidikanService.getLembagaPendidikanByDesa(desaId);
+      List<Map<String, dynamic>> tempatMakanResults = await _tempatMakanService.getTempatMakanListByDesa(desaId);
 
-      fasilitasResults.addAll(await _fasilitasKesehatanService.getFasilitasKesehatanListByDesa(desaId));
-      kostResults.addAll(await _kostService.getKostListByDesa(desaId));
-      tempatIbadahResults.addAll(await _tempatIbadahService.getTempatIbadahListByDesa(desaId));
-      lembagaPendidikanResults.addAll(await _lembagaPendidikanService.getLembagaPendidikanByDesa(desaId));
-      tempatMakanResults.addAll(await _tempatMakanService.getTempatMakanListByDesa(desaId));
+      allResults.addAll(kostResults);
+      allResults.addAll(fasilitasResults);
+      allResults.addAll(tempatIbadahResults);
+      allResults.addAll(lembagaPendidikanResults);
+      allResults.addAll(tempatMakanResults);
     }
 
-    return [
-      ...fasilitasResults,
-      ...kostResults,
-      ...tempatIbadahResults,
-      ...lembagaPendidikanResults,
-      ...tempatMakanResults,
-    ];
+    return allResults;
+  }
+
+  // Fungsi untuk melakukan pencarian
+  Future<void> _performSearch(String query) async {
+    try {
+      List<Map<String, dynamic>> searchResults = await _searchAllData(query);
+
+      if (searchResults.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SearchResultsPage(results: searchResults),
+          ),
+        );
+      } else {
+        // Show a dialog or snackbar that no results were found
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tidak ada hasil untuk "$query"')),
+        );
+      }
+    } catch (e) {
+      print("Error in search: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan dalam pencarian')),
+      );
+    }
   }
 
   @override
@@ -132,7 +130,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
           ? TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search... (Desa, Fasilitas, Kost, etc.)',
+                hintText: 'Cari Desa, Fasilitas, Kost, dll.',
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: Colors.white),
               ),
@@ -185,7 +183,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
   }
 }
 
-// Class untuk debounce
+// Debouncer class remains the same
 class Debouncer {
   final int milliseconds;
   VoidCallback? action;
