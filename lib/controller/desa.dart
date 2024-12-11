@@ -75,15 +75,18 @@ class DesaService {
       return [];
     }
   }
-  Future<List<Map<String, dynamic>>> searchDesa(String query) async {
+ Future<List<Map<String, dynamic>>> searchDesa(String query) async {
     try {
       QuerySnapshot snapshot = await desaCollection
-          .where('nama', isGreaterThanOrEqualTo: query)
-          .where('nama', isLessThanOrEqualTo: query + '\uf8ff')
-          .get();  // Fetch documents that match the query
+          .where('nama', isGreaterThanOrEqualTo: query.toLowerCase())
+          .where('nama', isLessThanOrEqualTo: query.toLowerCase() + '\uf8ff')
+          .get();
       
       return snapshot.docs.map((doc) {
-        return doc.data() as Map<String, dynamic>;
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        data['type'] = 'desa';
+        return data;
       }).toList();
     } catch (e) {
       print("Error searching desa data: $e");

@@ -75,19 +75,26 @@ class TempatIbadahService {
       return [];
     }
   }
-  Future<List<Map<String, dynamic>>> getTempatIbadahListByDesa(String desaId) async {
+    Future<List<Map<String, dynamic>>> getTempatIbadahListByDesa(String desaId) async {
     try {
-      QuerySnapshot querySnapshot = await tempatIbadahCollection
-          .where('desa_id', isEqualTo: desaId)  // Filter by desa_id
+      QuerySnapshot snapshot = await tempatIbadahCollection
+          .where('desa_id', isEqualTo: desaId)
           .get();
-      List<Map<String, dynamic>> tempatIbadahList = [];
-      querySnapshot.docs.forEach((doc) {
-        tempatIbadahList.add(doc.data() as Map<String, dynamic>);
-      });
+
+      List<Map<String, dynamic>> tempatIbadahList = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        data['type'] = 'tempatIbadah';
+        data['name'] = data['nama'];
+        data['description'] = '${data['kategori']} di ${data['alamat']}';
+        return data;
+      }).toList();
+
       return tempatIbadahList;
     } catch (e) {
-      print("Gagal mengambil data tempat ibadah: $e");
+      print("Error fetching tempat ibadah data: $e");
       return [];
     }
   }
 }
+

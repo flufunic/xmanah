@@ -84,14 +84,16 @@ class TempatMakanService {
 
       List<Map<String, dynamic>> tempatMakanList = snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
-        data['id'] = doc.id; // Tambahkan ID dokumen ke dalam data
+        data['id'] = doc.id;
+        data['type'] = 'tempatMakan';
+        data['name'] = data['nama'];
+        data['description'] = 'Buka ${data['jamBuka']} - ${data['jamTutup']}';
         return data;
       }).toList();
 
-      print("Berhasil mengambil tempat makan di desa $desaId!");
       return tempatMakanList;
     } catch (e) {
-      print("Error fetching tempat makan data for desa $desaId: $e");
+      print("Error fetching tempat makan data: $e");
       return [];
     }
   }

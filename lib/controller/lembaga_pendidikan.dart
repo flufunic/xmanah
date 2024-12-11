@@ -62,21 +62,26 @@ class LembagaPendidikanService {
   // Get lembaga pendidikan by desaId
  Future<List<Map<String, dynamic>>> getLembagaPendidikanByDesa(String desaId) async {
     try {
-      QuerySnapshot querySnapshot = await lembagaCollection
-          .where('desa_id', isEqualTo: desaId)  // Filter by desa_id
+      QuerySnapshot snapshot = await lembagaCollection
+          .where('desa_id', isEqualTo: desaId)
           .get();
-      List<Map<String, dynamic>> lembagaPendidikanList = []; // Local list here
-      querySnapshot.docs.forEach((doc) {
-        lembagaPendidikanList.add(doc.data() as Map<String, dynamic>);
-      });
-      return lembagaPendidikanList;
+
+      List<Map<String, dynamic>> lembagaList = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        data['type'] = 'lembagaPendidikan';
+        data['name'] = data['nama'];
+        data['description'] = '${data['tingkat']} - Akreditasi ${data['akreditasi']}';
+        return data;
+      }).toList();
+
+      return lembagaList;
     } catch (e) {
       print("Gagal mengambil data lembaga pendidikan: $e");
       return [];
     }
   }
-
-
+  
   Future<List<Map<String, dynamic>>> getLembagaPendidikanList() async {
     try {
       QuerySnapshot querySnapshot = await lembagaCollection.get();

@@ -96,13 +96,16 @@ class FasilitasKesehatanService {
           .where('desa_id', isEqualTo: desaId)
           .get();
 
-      List<Map<String, dynamic>> fasilitasKesehatanList = snapshot.docs.map((doc) {
+      List<Map<String, dynamic>> fasilitasList = snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
+        data['type'] = 'fasilitasKesehatan';
+        data['name'] = data['nama'];
+        data['description'] = '${data['jenis']} di ${data['alamat']}';
         return data;
       }).toList();
 
-      return fasilitasKesehatanList;
+      return fasilitasList;
     } catch (e) {
       print("Error fetching fasilitas kesehatan data: $e");
       return [];

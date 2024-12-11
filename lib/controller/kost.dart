@@ -58,6 +58,9 @@ class KostService {
       List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
+        data['type'] = 'kost';
+        data['name'] = data['nama']; // Standardize name key
+        data['description'] = 'Kost dengan alamat ${data['alamat']}'; // Add description
         return data;
       }).toList();
 
