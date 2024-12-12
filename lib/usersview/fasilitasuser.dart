@@ -7,15 +7,19 @@ import 'package:xmanah/usersview/inlembaga.dart';
 import 'package:xmanah/usersview/intempatibadah.dart';
 
 class FasilitasUser extends StatelessWidget {
+   final int initialTabIndex;
+  FasilitasUser({this.initialTabIndex = 0});
   @override
   Widget build(BuildContext context) {
     // Inisialisasi layanan
     final lembagaPendidikanService = LembagaPendidikanService();
     final tempatIbadahService = TempatIbadahService();
     final fasilitasKesehatanService = FasilitasKesehatanService();
+   
 
     return DefaultTabController(
-      length: 3, // Jumlah tab
+     length: 3, // Jumlah tab
+     initialIndex: initialTabIndex, // Jumlah tab
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: kToolbarHeight - 50, // Tinggi AppBar
