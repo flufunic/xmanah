@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:xmanah/controller/kost.dart';
 import 'package:xmanah/controller/lembaga_pendidikan.dart';
 import 'package:xmanah/controller/tempat_makan.dart';
+import 'package:xmanah/usersview/inkost.dart';
+import 'package:xmanah/usersview/intempatmakan.dart';
+import 'package:xmanah/usersview/inlembaga.dart';
+import 'package:xmanah/usersview/kostuser.dart';
+import 'package:xmanah/usersview/tempatmakanuser.dart';
+import 'package:xmanah/usersview/fasilitasuser.dart';
+import 'package:xmanah/usersview/desa.dart';
+import 'package:xmanah/controller/desa.dart';
 import 'widgets/banner_card.dart';
 
 class HomePage extends StatelessWidget {
   final KostService kostService = KostService();
   final TempatMakanService tempatMakanService = TempatMakanService();
-  final LembagaPendidikanService lembagaPendidikanService =
-      LembagaPendidikanService();
+  final LembagaPendidikanService lembagaPendidikanService = LembagaPendidikanService();
+  final DesaService desaService = DesaService();
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +31,9 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Center secara horizontal
-                  crossAxisAlignment:
-                      CrossAxisAlignment.center, // Center secara vertikal
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Left side - Text
                     Expanded(
                       flex: 2,
                       child: RichText(
@@ -38,12 +43,10 @@ class HomePage extends StatelessWidget {
                             color: const Color.fromARGB(255, 0, 0, 0),
                           ),
                           children: [
-                            // "Selamat datang" - Bold
                             TextSpan(
                               text: 'Selamat datang ',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            // "di XMANAH," - Regular, warna ungu
                             TextSpan(
                               text: 'di XMANAH, ',
                               style: TextStyle(
@@ -51,8 +54,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text:
-                                  ' di sini kamu bisa cari informasi apa saja seputar kecamatan Kalimanah.',
+                              text: ' di sini kamu bisa cari informasi apa saja seputar kecamatan Kalimanah.',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             ),
                           ],
@@ -60,112 +62,60 @@ class HomePage extends StatelessWidget {
                         textAlign: TextAlign.justify,
                       ),
                     ),
-                    // Right side - Logo
-                    SizedBox(
-                      width: 16,
-                    ), // Add spacing between the text and the logo
+                    SizedBox(width: 16),
                     Image.asset(
-                      'assets/images/xmanah.png', // Your logo path here
-                      height: 180, // Increase the logo size
+                      'assets/images/xmanah.png',
+                      height: 180,
                       width: 180,
                     ),
                   ],
                 ),
               ),
 
-              // Compact Grid Menu with smaller icon and text size
-              Wrap(
-                alignment: WrapAlignment.spaceEvenly,
-                spacing: 20.0,
-                runSpacing: 20.0,
-                children: [
-                  _buildMenuItem(
-                    icon: Icons.apartment,
-                    label: 'Kost',
-                    color: const Color(0xFF334d2b),
-                    iconSize: 24.0, // Ukuran ikon lebih kecil
-                    labelSize: 12.0, // Ukuran teks lebih kecil
-                    iconPadding: 10.0,
-                    onPressed: () {
-                      // Add navigation or functionality here
-                    },
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.restaurant,
-                    label: 'Tempat Makan',
-                    color: const Color(0xFF334d2b),
-                    iconSize: 24.0,
-                    labelSize: 12.0,
-                    iconPadding: 10.0,
-                    onPressed: () {
-                      // Add navigation or functionality here
-                    },
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.mosque,
-                    label: 'Tempat Ibadah',
-                    color: const Color(0xFF334d2b),
-                    iconSize: 24.0,
-                    labelSize: 12.0,
-                    iconPadding: 10.0,
-                    onPressed: () {
-                      // Add navigation or functionality here
-                    },
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.local_hospital,
-                    label: 'Fasilitas Kesehatan',
-                    color: const Color(0xFF334d2b),
-                    iconSize: 24.0,
-                    labelSize: 12.0,
-                    iconPadding: 10.0,
-                    onPressed: () {
-                      // Add navigation or functionality here
-                    },
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.school,
-                    label: 'Lembaga Pendidikan',
-                    color: const Color(0xFF334d2b),
-                    iconSize: 24.0,
-                    labelSize: 12.0,
-                    iconPadding: 10.0,
-                    onPressed: () {
-                      // Add navigation or functionality here
-                    },
-                  ),
-                ],
-              ),
+              // Desa Menu
+              _buildSectionHeader(context, 'Desa di Kalimanah', onPressed: () {}),
+              _buildDesaMenu(context),
               SizedBox(height: 20),
 
               // Section 1: Banner for Kost
               _buildSectionHeader(context, 'Kost Populer', onPressed: () {
-                // Add "Lihat Selengkapnya" functionality for kost
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => KostUser())
+                );
               }),
               _buildFutureBannerList(
                 future: kostService.getKostList(),
                 placeholderText: 'Tidak ada data kost.',
+                type: 'kost',
               ),
               SizedBox(height: 20),
 
               // Section 2: Banner for Tempat Makan Populer
-              _buildSectionHeader(context, 'Tempat Makan Populer',
-                  onPressed: () {
-                // Add "Lihat Selengkapnya" functionality for tempat makan
+              _buildSectionHeader(context, 'Tempat Makan Populer', onPressed: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => TempatMakanUser())
+                );
               }),
               _buildFutureBannerList(
                 future: tempatMakanService.getTempatMakanList(),
                 placeholderText: 'Tidak ada data tempat makan.',
+                type: 'tempat_makan',
               ),
               SizedBox(height: 20),
 
               // Section 3: Lembaga Pendidikan
               _buildSectionHeader(context, 'Lembaga Pendidikan', onPressed: () {
-                // Add "Lihat Selengkapnya" functionality for lembaga pendidikan
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => FasilitasUser(initialTabIndex: 0))
+                );
               }),
               _buildFutureBannerList(
                 future: lembagaPendidikanService.getLembagaPendidikanList(),
                 placeholderText: 'Tidak ada data lembaga pendidikan.',
+                type: 'lembaga_pendidikan',
               ),
             ],
           ),
@@ -174,72 +124,86 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem({
-    required IconData icon,
-    required String label,
-    required Color color,
-    double iconSize = 24.0,
-    double labelSize = 12.0,
-    double iconPadding = 10.0,
-    required VoidCallback onPressed,
-  }) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 50, // Mengurangi ukuran kotak
-            height: 50, // Mengurangi tinggi kotak agar lebih kecil
-            decoration: BoxDecoration(
-              color: Colors.white, // Warna latar belakang putih tanpa gradasi
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10.0,
-                  offset: Offset(5, 5),
+ // Build Desa Menu with Icon adjusted to the device width
+Widget _buildDesaMenu(BuildContext context) {
+  return FutureBuilder<List<Map<String, dynamic>>>( 
+    future: desaService.getDesaList(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return Center(child: Text('Tidak ada data desa.'));
+      } else {
+        List<Map<String, dynamic>> desaList = snapshot.data!;
+        double itemWidth = MediaQuery.of(context).size.width / 5; // Calculate width for 5 items
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: desaList.map((desa) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Container(
+                  width: itemWidth, // Adjust width of each item based on the screen size
+                  child: _buildDesaMenuItem(
+                    context: context,
+                    label: desa['nama'],
+                    desaData: desa,
+                  ),
                 ),
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10.0,
-                  offset: Offset(-5, -5),
-                ),
-              ],
-            ),
-            child: Icon(
-              icon,
-              size: iconSize,
-              color: color,
-            ),
+              );
+            }).toList(),
           ),
-          SizedBox(height: 8.0), // Jarak antara ikon dan label
-          Container(
-            width: 55, // Menentukan lebar kontainer agar teks bisa dibungkus
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: labelSize,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2, // Membatasi teks menjadi maksimal 2 baris
-              overflow: TextOverflow
-                  .ellipsis, // Teks yang terlalu panjang akan dipotong dengan '...'
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        );
+      }
+    },
+  );
+}
 
-  Widget _buildSectionHeader(BuildContext context, String title,
-      {required VoidCallback onPressed}) {
+  // Build Individual Desa Menu Item with Icon
+// Build Individual Desa Menu Item with Icon
+Widget _buildDesaMenuItem({
+  required BuildContext context,
+  required String label,
+  required Map<String, dynamic> desaData,
+}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DesaDetail(desaData: desaData),
+        ),
+      );
+    },
+    child: Column(
+      children: [
+        Icon(
+          Icons.location_city,
+          color: Colors.green, // Set the icon color to green
+          size: 40, // Adjust the icon size
+        ),
+        SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.black, // Optional: Adjust text color
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+}
+
+
+  // Section Header Widget
+  Widget _buildSectionHeader(BuildContext context, String title, {required VoidCallback onPressed}) {
     return Padding(
-      padding:
-          const EdgeInsets.only(bottom: 8.0), // Adds space below the button
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -272,8 +236,9 @@ class HomePage extends StatelessWidget {
   Widget _buildFutureBannerList({
     required Future<List<Map<String, dynamic>>> future,
     required String placeholderText,
+    required String type,
   }) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
+    return FutureBuilder<List<Map<String, dynamic>>>( 
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -281,9 +246,7 @@ class HomePage extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(
-              child: Text(placeholderText,
-                  style: TextStyle(color: Color(0xFF334d2b))));
+          return Center(child: Text(placeholderText));
         } else {
           List<Map<String, dynamic>> itemList = snapshot.data!;
           return Container(
@@ -295,10 +258,56 @@ class HomePage extends StatelessWidget {
                 var item = itemList[index];
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: BannerCard(
-                    title: item['nama'],
-                    imageUrl:
-                        item['gambar'] ?? 'https://via.placeholder.com/200',
+                  child: GestureDetector(
+                    onTap: () {
+                      switch (type) {
+                        case 'kost':
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => KostDetail(
+                                kostId: item['id'],
+                                imageUrl: item['gambar'] ?? '',
+                                name: item['nama'],
+                                address: item['alamat'] ?? '',
+                                kontak: item['kontak'] ?? '',
+                                harga: item['harga'] ?? 0,
+                                fasilitas: item['fasilitas'] ?? '',
+                              ),
+                            ),
+                          );
+                          break;
+                        case 'tempat_makan':
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => TempatMakanDetail(
+                                makanId: item['id'],
+                                imageUrl: item['gambar'] ?? '',
+                                name: item['nama'],
+                                address: item['alamat'] ?? '',
+                                openingHours: item['jam_operasional'] ?? '',
+                              ),
+                            ),
+                          );
+                          break;
+                        case 'lembaga_pendidikan':
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => DetailLembagaPendidikan(
+                                data: item,
+                              ),
+                            ),
+                          );
+                          break;
+                      }
+                    },
+                    child: BannerCard(
+                      title: item['nama'],
+                      imageUrl:
+                          item['gambar'] ?? 'https://via.placeholder.com/200',
+                    ),
                   ),
                 );
               },
