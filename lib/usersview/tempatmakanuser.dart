@@ -2,32 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:xmanah/controller/tempat_makan.dart';
 import 'package:xmanah/usersview/intempatmakan.dart';
 
-
 class TempatMakanUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TempatMakanService tempatMakanService = TempatMakanService();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Daftar Tempat Makan",
-          style: TextStyle(color: Colors.black), // Ubah warna teks judul
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0), // Tentukan tinggi AppBar
+        child: AppBar(
+          title: Padding(
+            padding: EdgeInsets.only(left: 16.0), // Berikan padding kiri
+            child: Row(
+              children: [
+                Icon(Icons.fastfood, color: Colors.white), // Ikon makanan
+                SizedBox(width: 8.0), // Memberikan jarak antara ikon dan teks
+                Text(
+                  "Tempat Makan",
+                  style: TextStyle(
+                    color: Colors.white, // Warna teks
+                    fontSize: 18, // Ukuran teks yang lebih kecil
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: Color(0xFF334d2b), // Warna background AppBar
+          elevation: 0, // Hilangkan shadow
         ),
-        backgroundColor: Colors.white,
-        elevation: 0, // Ubah warna AppBar menjadi putih
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF334d2b),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: tempatMakanService
-            .getTempatMakanList(), // Mendapatkan daftar tempat makan
+        future: tempatMakanService.getTempatMakanList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error fetching tempat makan data"));
+            return Center(
+                child: Text("Error fetching tempat makan data",
+                    style: TextStyle(color: Colors.white)));
           } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-            return Center(child: Text("Tidak ada data tempat makan"));
+            return Center(
+                child: Text("Tidak ada data tempat makan",
+                    style: TextStyle(color: Colors.white)));
           } else {
             final tempatMakanList = snapshot.data!;
             return ListView.builder(
@@ -54,7 +72,7 @@ class TempatMakanUser extends StatelessWidget {
 }
 
 class TempatMakanCard extends StatelessWidget {
-   final String makanId;
+  final String makanId;
   final String imageUrl;
   final String name;
   final String address;
@@ -81,7 +99,7 @@ class TempatMakanCard extends StatelessWidget {
               imageUrl: imageUrl,
               name: name,
               address: address,
-              openingHours:openingHours,
+              openingHours: openingHours,
             ),
           ),
         );
@@ -89,8 +107,8 @@ class TempatMakanCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white, // Card dengan warna putih
+          borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
@@ -104,7 +122,7 @@ class TempatMakanCard extends StatelessWidget {
           children: [
             // Tempat Makan Image
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12.0)),
               child: imageUrl.isNotEmpty
                   ? Image.network(
                       imageUrl,
@@ -125,29 +143,61 @@ class TempatMakanCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4.0),
-                  Text(
-                    address,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey[600],
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.fastfood,
+                          size: 22,
+                          color:
+                              Color(0xFF334d2b)), // Ikon dengan warna kontras
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Color(0xFF334d2b), // Nama dengan warna kontras
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8.0),
-                  // Optional: Add price information
-                 Text(
-                    openingHours,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey[600],
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on,
+                          size: 20,
+                          color:
+                              Color(0xFF334d2b)), // Ikon dengan warna kontras
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          address,
+                          style: TextStyle(
+                              fontSize: 16.0, color: Color(0xFF334d2b)),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      Icon(Icons.access_time,
+                          size: 20,
+                          color:
+                              Color(0xFF334d2b)), // Ikon dengan warna kontras
+                      SizedBox(width: 8),
+                      Text(
+                        openingHours,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF334d2b),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8.0),
                 ],

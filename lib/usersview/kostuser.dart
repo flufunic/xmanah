@@ -9,23 +9,40 @@ class KostUser extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Daftar Kost",
-          style: TextStyle(color: Colors.black),
+        title: Padding(
+          padding: EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: [
+              Icon(Icons.home, color: Colors.white), // Ikon kost
+              SizedBox(width: 8.0),
+              Text(
+                "Daftar Kost",
+                style: TextStyle(
+                  color: Colors.white, // Warna teks
+                  fontSize: 18, // Ukuran teks
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFF334d2b), // Warna background AppBar
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF334d2b), // Warna background halaman
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: kostService.getKostList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error fetching kost data"));
+            return Center(
+                child: Text("Error fetching kost data",
+                    style: TextStyle(color: Colors.white)));
           } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-            return Center(child: Text("Tidak ada data kost"));
+            return Center(
+                child: Text("Tidak ada data kost",
+                    style: TextStyle(color: Colors.white)));
           } else {
             final kostList = snapshot.data!;
             return ListView.builder(
@@ -39,7 +56,6 @@ class KostUser extends StatelessWidget {
                   address: kost['alamat'] ?? 'Alamat Kost',
                   kontak: kost['kontak'] ?? 'Kontak',
                   fasilitas: kost['fasilitas'] ?? 'Fasilitas',
-
                   harga: kost['harga'] is int ? kost['harga'] : 0,
                 );
               },
@@ -93,8 +109,8 @@ class KostCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white, // Card berwarna putih
+          borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
@@ -108,7 +124,7 @@ class KostCard extends StatelessWidget {
           children: [
             // Kost Image
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12.0)),
               child: imageUrl.isNotEmpty
                   ? Image.network(
                       imageUrl,
@@ -129,31 +145,77 @@ class KostCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4.0),
-                  Text(
-                    address,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey[600],
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.home,
+                          size: 22, color: Color(0xFF334d2b)), // Ikon kost
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF334d2b), // Teks berwarna
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8.0),
-                  // Optional: Add price information
-                  Text(
-                    'Harga: Rp ${harga.toString()}',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on,
+                          size: 20, color: Color(0xFF334d2b)), // Ikon lokasi
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          address,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Color(0xFF334d2b), // Teks berwarna
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      Icon(Icons.phone,
+                          size: 20, color: Color(0xFF334d2b)), // Ikon kontak
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          kontak,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Color(0xFF334d2b), // Teks berwarna
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      Icon(Icons.money,
+                          size: 20, color: Color(0xFF334d2b)), // Ikon harga
+                      SizedBox(width: 8),
+                      Text(
+                        'Rp ${harga.toString()}',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF334d2b), // Teks berwarna
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
                 ],
               ),
             ),

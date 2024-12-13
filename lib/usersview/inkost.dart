@@ -24,11 +24,12 @@ class KostDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF334d2b), // Background Color Hijau
       appBar: AppBar(
-        title: Text(name, style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(name, style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF334d2b),
+        elevation: 4.0,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -36,62 +37,51 @@ class KostDetail extends StatelessWidget {
           children: [
             // Gambar Kost
             imageUrl.isNotEmpty
-                ? Image.network(
-                    imageUrl,
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.network(
+                      imageUrl,
+                      height: 250,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 : Container(
                     height: 250,
                     color: Colors.grey[300],
                     child: Icon(Icons.image, color: Colors.white, size: 50),
                   ),
-            
-            // Informasi Kost
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    address,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.grey[700],
-                    ),
-                  ),
+                  // Nama Kost dalam Card
+                  _buildInfoCard("Nama Kost", name),
+
                   SizedBox(height: 16.0),
-                  Text(
-                    "Fasilitas",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    fasilitas,
-                    style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
-                  ),
+
+                  // Alamat dalam Card
+                  _buildInfoCard("Alamat", address),
+
                   SizedBox(height: 16.0),
-                  Text(
-                    "Kontak: $kontak",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+
+                  // Fasilitas dalam Card
+                  _buildInfoCard("Fasilitas", fasilitas),
+
                   SizedBox(height: 16.0),
-                  
+
+                  // Kontak dalam Card
+                  _buildInfoCard("Kontak", kontak),
+
+                  SizedBox(height: 16.0),
+
+                  // Harga dalam Card
+                  _buildInfoCard("Harga", "Rp $harga"),
+
+                  SizedBox(height: 16.0),
+
                   // Integrated ComentKost Component
                   ComentKost(kostId: kostId),
                 ],
@@ -102,9 +92,41 @@ class KostDetail extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildInfoCard(String title, String value) {
+    return Card(
+      color: Color(0xFFF1F8E9),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-// The existing ComentKost component remains the same as in the original code
 class ComentKost extends StatefulWidget {
   final String kostId;
 
@@ -115,7 +137,6 @@ class ComentKost extends StatefulWidget {
 }
 
 class _ComentKostState extends State<ComentKost> {
-  // Variabel untuk menghitung rata-rata rating
   double _averageRating = 0.0;
 
   @override
@@ -124,7 +145,6 @@ class _ComentKostState extends State<ComentKost> {
     _calculateAverageRating();
   }
 
-  // Fungsi untuk menghitung rata-rata rating
   void _calculateAverageRating() async {
     QuerySnapshot reviewsSnapshot = await FirebaseFirestore.instance
         .collection('kost')
@@ -148,7 +168,6 @@ class _ComentKostState extends State<ComentKost> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Rating
         Row(
           children: [
             Text(
@@ -156,6 +175,7 @@ class _ComentKostState extends State<ComentKost> {
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
             SizedBox(width: 8.0),
@@ -167,6 +187,7 @@ class _ComentKostState extends State<ComentKost> {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -185,6 +206,7 @@ class _ComentKostState extends State<ComentKost> {
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
         _ReviewList(kostId: widget.kostId),
@@ -236,17 +258,17 @@ class __ReviewFormState extends State<_ReviewForm> {
 
     try {
       await FirebaseFirestore.instance
-        .collection('kost')
-        .doc(widget.kostId)
-        .collection('reviews')
-        .add({
-          'userId': currentUser.uid,
-          'userName': currentUser.displayName ?? 'Anonymous',
-          'userEmail': currentUser.email,
-          'review': _reviewController.text.trim(),
-          'rating': rating,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
+          .collection('kost')
+          .doc(widget.kostId)
+          .collection('reviews')
+          .add({
+        'userId': currentUser.uid,
+        'userName': currentUser.displayName ?? 'Anonymous',
+        'userEmail': currentUser.email,
+        'review': _reviewController.text.trim(),
+        'rating': rating,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
 
       _reviewController.clear();
       _ratingController.clear();
@@ -271,6 +293,9 @@ class __ReviewFormState extends State<_ReviewForm> {
           decoration: InputDecoration(
             hintText: 'Rating (1-5)',
             border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.green),
+            ),
           ),
         ),
         SizedBox(height: 8.0),
@@ -280,6 +305,9 @@ class __ReviewFormState extends State<_ReviewForm> {
           decoration: InputDecoration(
             hintText: 'Tulis ulasan Anda...',
             border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.green),
+            ),
           ),
         ),
         SizedBox(height: 8.0),
@@ -287,6 +315,7 @@ class __ReviewFormState extends State<_ReviewForm> {
           onPressed: _submitReview,
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color(0xFF334d2b), // Use the same color as the app
           ),
           child: Text('Kirim Ulasan'),
         ),
@@ -340,6 +369,10 @@ class _ReviewList extends StatelessWidget {
             var review = reviews[index];
             return Card(
               margin: EdgeInsets.symmetric(vertical: 8.0),
+              color: Color(0xFFF1F8E9),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(

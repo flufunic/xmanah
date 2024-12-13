@@ -15,7 +15,8 @@ import 'widgets/banner_card.dart';
 class HomePage extends StatelessWidget {
   final KostService kostService = KostService();
   final TempatMakanService tempatMakanService = TempatMakanService();
-  final LembagaPendidikanService lembagaPendidikanService = LembagaPendidikanService();
+  final LembagaPendidikanService lembagaPendidikanService =
+      LembagaPendidikanService();
   final DesaService desaService = DesaService();
 
   @override
@@ -54,7 +55,8 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: ' di sini kamu bisa cari informasi apa saja seputar kecamatan Kalimanah.',
+                              text:
+                                  ' di sini kamu bisa cari informasi apa saja seputar kecamatan Kalimanah.',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             ),
                           ],
@@ -73,16 +75,15 @@ class HomePage extends StatelessWidget {
               ),
 
               // Desa Menu
-              _buildSectionHeader(context, 'Desa di Kalimanah', onPressed: () {}),
+              _buildSectionHeader(context, 'Desa di Kalimanah',
+                  onPressed: () {}),
               _buildDesaMenu(context),
               SizedBox(height: 20),
 
               // Section 1: Banner for Kost
               _buildSectionHeader(context, 'Kost Populer', onPressed: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => KostUser())
-                );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => KostUser()));
               }),
               _buildFutureBannerList(
                 future: kostService.getKostList(),
@@ -92,11 +93,10 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 20),
 
               // Section 2: Banner for Tempat Makan Populer
-              _buildSectionHeader(context, 'Tempat Makan Populer', onPressed: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => TempatMakanUser())
-                );
+              _buildSectionHeader(context, 'Tempat Makan Populer',
+                  onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TempatMakanUser()));
               }),
               _buildFutureBannerList(
                 future: tempatMakanService.getTempatMakanList(),
@@ -107,10 +107,8 @@ class HomePage extends StatelessWidget {
 
               // Section 3: Lembaga Pendidikan
               _buildSectionHeader(context, 'Lembaga Pendidikan', onPressed: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => FasilitasUser(initialTabIndex: 0))
-                );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FasilitasUser()));
               }),
               _buildFutureBannerList(
                 future: lembagaPendidikanService.getLembagaPendidikanList(),
@@ -124,84 +122,86 @@ class HomePage extends StatelessWidget {
     );
   }
 
- // Build Desa Menu with Icon adjusted to the device width
-Widget _buildDesaMenu(BuildContext context) {
-  return FutureBuilder<List<Map<String, dynamic>>>( 
-    future: desaService.getDesaList(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      } else if (snapshot.hasError) {
-        return Center(child: Text('Error: ${snapshot.error}'));
-      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(child: Text('Tidak ada data desa.'));
-      } else {
-        List<Map<String, dynamic>> desaList = snapshot.data!;
-        double itemWidth = MediaQuery.of(context).size.width / 5; // Calculate width for 5 items
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: desaList.map((desa) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Container(
-                  width: itemWidth, // Adjust width of each item based on the screen size
-                  child: _buildDesaMenuItem(
-                    context: context,
-                    label: desa['nama'],
-                    desaData: desa,
+  // Build Desa Menu with Icon adjusted to the device width
+  Widget _buildDesaMenu(BuildContext context) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: desaService.getDesaList(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Tidak ada data desa.'));
+        } else {
+          List<Map<String, dynamic>> desaList = snapshot.data!;
+          double itemWidth = MediaQuery.of(context).size.width /
+              5; // Calculate width for 5 items
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: desaList.map((desa) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Container(
+                    width:
+                        itemWidth, // Adjust width of each item based on the screen size
+                    child: _buildDesaMenuItem(
+                      context: context,
+                      label: desa['nama'],
+                      desaData: desa,
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      }
-    },
-  );
-}
+                );
+              }).toList(),
+            ),
+          );
+        }
+      },
+    );
+  }
 
   // Build Individual Desa Menu Item with Icon
 // Build Individual Desa Menu Item with Icon
-Widget _buildDesaMenuItem({
-  required BuildContext context,
-  required String label,
-  required Map<String, dynamic> desaData,
-}) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DesaDetail(desaData: desaData),
-        ),
-      );
-    },
-    child: Column(
-      children: [
-        Icon(
-          Icons.location_city,
-          color: Colors.green, // Set the icon color to green
-          size: 40, // Adjust the icon size
-        ),
-        SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Colors.black, // Optional: Adjust text color
+  Widget _buildDesaMenuItem({
+    required BuildContext context,
+    required String label,
+    required Map<String, dynamic> desaData,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DesaDetail(desaData: desaData),
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    ),
-  );
-}
-
+        );
+      },
+      child: Column(
+        children: [
+          Icon(
+            Icons.location_city,
+            color: Colors.green, // Set the icon color to green
+            size: 40, // Adjust the icon size
+          ),
+          SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.black, // Optional: Adjust text color
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
 
   // Section Header Widget
-  Widget _buildSectionHeader(BuildContext context, String title, {required VoidCallback onPressed}) {
+  Widget _buildSectionHeader(BuildContext context, String title,
+      {required VoidCallback onPressed}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
@@ -238,7 +238,7 @@ Widget _buildDesaMenuItem({
     required String placeholderText,
     required String type,
   }) {
-    return FutureBuilder<List<Map<String, dynamic>>>( 
+    return FutureBuilder<List<Map<String, dynamic>>>(
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -263,7 +263,7 @@ Widget _buildDesaMenuItem({
                       switch (type) {
                         case 'kost':
                           Navigator.push(
-                            context, 
+                            context,
                             MaterialPageRoute(
                               builder: (context) => KostDetail(
                                 kostId: item['id'],
@@ -279,7 +279,7 @@ Widget _buildDesaMenuItem({
                           break;
                         case 'tempat_makan':
                           Navigator.push(
-                            context, 
+                            context,
                             MaterialPageRoute(
                               builder: (context) => TempatMakanDetail(
                                 makanId: item['id'],
@@ -293,7 +293,7 @@ Widget _buildDesaMenuItem({
                           break;
                         case 'lembaga_pendidikan':
                           Navigator.push(
-                            context, 
+                            context,
                             MaterialPageRoute(
                               builder: (context) => DetailLembagaPendidikan(
                                 data: item,
