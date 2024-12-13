@@ -35,94 +35,81 @@ class KostDetail extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar Kost
-            imageUrl.isNotEmpty
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.network(
-                      imageUrl,
-                      height: 250,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : Container(
-                    height: 250,
-                    color: Colors.grey[300],
-                    child: Icon(Icons.image, color: Colors.white, size: 50),
-                  ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            // Gambar Kost dan Data Kost dalam satu Card
+            Card(
+              color: Color(0xFFF1F8E9),
+              elevation: 4.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Nama Kost dalam Card
-                  _buildInfoCard("Nama Kost", name),
-
-                  SizedBox(height: 16.0),
-
-                  // Alamat dalam Card
-                  _buildInfoCard("Alamat", address),
-
-                  SizedBox(height: 16.0),
-
-                  // Fasilitas dalam Card
-                  _buildInfoCard("Fasilitas", fasilitas),
-
-                  SizedBox(height: 16.0),
-
-                  // Kontak dalam Card
-                  _buildInfoCard("Kontak", kontak),
-
-                  SizedBox(height: 16.0),
-
-                  // Harga dalam Card
-                  _buildInfoCard("Harga", "Rp $harga"),
-
-                  SizedBox(height: 16.0),
-
-                  // Integrated ComentKost Component
-                  ComentKost(kostId: kostId),
+                  // Gambar Kost
+                  imageUrl.isNotEmpty
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            imageUrl,
+                            height: 250,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Container(
+                          height: 250,
+                          color: Colors.grey[300],
+                          child:
+                              Icon(Icons.image, color: Colors.white, size: 50),
+                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Nama Kost
+                        _buildInfoRow(Icons.home, name),
+                        SizedBox(height: 16.0),
+                        // Alamat
+                        _buildInfoRow(Icons.location_on, address),
+                        SizedBox(height: 16.0),
+                        // Fasilitas
+                        _buildInfoRow(Icons.build, fasilitas),
+                        SizedBox(height: 16.0),
+                        // Harga
+                        _buildInfoRow(Icons.attach_money, "Rp $harga"),
+                        SizedBox(height: 16.0),
+                        // Kontak
+                        _buildInfoRow(Icons.phone, kontak),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
+            // Integrated ComentKost Component
+            ComentKost(kostId: kostId),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard(String title, String value) {
-    return Card(
-      color: Color(0xFFF1F8E9),
-      elevation: 4.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+  Widget _buildInfoRow(IconData icon, String value) {
+    return Row(
+      children: [
+        Icon(icon, color: Color(0xFF334d2b), size: 24),
+        SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 18.0,
+              color: Colors.black87,
             ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.black87,
-              ),
-            ),
-          ],
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -194,11 +181,19 @@ class _ComentKostState extends State<ComentKost> {
             ),
           ],
         ),
-
-        // Review Form
+        // Review Form dalam Card
         SizedBox(height: 16.0),
-        _ReviewForm(kostId: widget.kostId),
-
+        Card(
+          color: Color(0xFFF1F8E9),
+          elevation: 4.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _ReviewForm(kostId: widget.kostId),
+          ),
+        ),
         // Review List
         SizedBox(height: 16.0),
         Text(
@@ -232,16 +227,13 @@ class __ReviewFormState extends State<_ReviewForm> {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Anda harus login untuk memberikan ulasan.')),
-      );
+      // Menampilkan pop-up dialog jika pengguna belum login
+      _showDialog('Peringatan', 'Anda harus login untuk memberikan ulasan.');
       return;
     }
 
     if (_reviewController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ulasan tidak boleh kosong')),
-      );
+      _showDialog('Peringatan', 'Ulasan tidak boleh kosong');
       return;
     }
 
@@ -250,9 +242,7 @@ class __ReviewFormState extends State<_ReviewForm> {
       rating = int.parse(_ratingController.text);
       if (rating < 1 || rating > 5) throw FormatException();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Masukkan rating antara 1-5')),
-      );
+      _showDialog('Peringatan', 'Masukkan rating antara 1-5');
       return;
     }
 
@@ -273,14 +263,30 @@ class __ReviewFormState extends State<_ReviewForm> {
       _reviewController.clear();
       _ratingController.clear();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ulasan berhasil dikirim!')),
-      );
+      _showDialog('Sukses', 'Ulasan berhasil dikirim!');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengirim ulasan. Silakan coba lagi.')),
-      );
+      _showDialog('Gagal', 'Gagal mengirim ulasan. Silakan coba lagi.');
     }
+  }
+
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Menutup dialog
+              },
+              child: Text('Tutup'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -294,9 +300,10 @@ class __ReviewFormState extends State<_ReviewForm> {
             hintText: 'Rating (1-5)',
             border: OutlineInputBorder(),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green),
+              borderSide: BorderSide(color: Color(0xFFF1F8E9)),
             ),
           ),
+          style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
         ),
         SizedBox(height: 8.0),
         TextField(
@@ -306,19 +313,23 @@ class __ReviewFormState extends State<_ReviewForm> {
             hintText: 'Tulis ulasan Anda...',
             border: OutlineInputBorder(),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green),
+              borderSide: BorderSide(color: Color(0xFFF1F8E9)),
             ),
           ),
+          style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
         ),
         SizedBox(height: 8.0),
         ElevatedButton(
-          onPressed: _submitReview,
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 50),
-            backgroundColor: Color(0xFF334d2b), // Use the same color as the app
-          ),
-          child: Text('Kirim Ulasan'),
-        ),
+            onPressed: _submitReview,
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(double.infinity, 50),
+              backgroundColor:
+                  Color(0xFF334d2b), // Use the same color as the app
+            ),
+            child: Text(
+              'Kirim Ulasan',
+              style: TextStyle(color: Colors.white),
+            )),
       ],
     );
   }
