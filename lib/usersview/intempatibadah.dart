@@ -14,7 +14,7 @@ class DetailTempatIbadah extends StatelessWidget {
           'Detail Tempat Ibadah',
           style: TextStyle(color: Colors.white), // Text color updated
         ),
-        elevation: 4.0, // Added elevation for shadow effect
+        elevation: 6.0, // Added elevation for shadow effect
       ),
       body: Container(
         color: Color(0xFF334d2b), // Background color of the page
@@ -24,18 +24,18 @@ class DetailTempatIbadah extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Card untuk Gambar Tempat Ibadah
+                // Card for Image
                 Card(
                   color: Color(0xFFF1F8E9), // Light green background
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  elevation: 4,
+                  elevation: 6,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        // Gambar Tempat Ibadah
+                        // Image of Tempat Ibadah
                         data['gambar'] != null && data['gambar'].isNotEmpty
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(16),
@@ -63,15 +63,15 @@ class DetailTempatIbadah extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 16), // Adding space between cards
+                SizedBox(height: 20), // Adding space between cards
 
-                // Card untuk Data Tempat Ibadah (Alamat, Kategori, Jam Buka, Jam Tutup, Kontak)
+                // Card for Data (Address, Category, Opening hours, Contact)
                 Card(
                   color: Color(0xFFF1F8E9), // Light green background
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  elevation: 4,
+                  elevation: 6,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -81,24 +81,39 @@ class DetailTempatIbadah extends StatelessWidget {
                         Text(
                           data['nama'] ?? 'Nama Tidak Tersedia',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 26,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF334d2b), // Text color for name
                           ),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 12),
 
-                        // Alamat, Kategori, Jam Buka, Jam Tutup, Kontak dalam Card
-                        _buildDetailRow(Icons.location_on, 'Alamat',
-                            data['alamat'] ?? 'Tidak tersedia'),
-                        _buildDetailRow(Icons.category, 'Kategori',
-                            data['kategori'] ?? 'Tidak tersedia'),
-                        _buildDetailRow(Icons.access_time, 'Jam Buka',
-                            data['jamBuka'] ?? 'Tidak tersedia'),
-                        _buildDetailRow(Icons.access_time, 'Jam Tutup',
-                            data['jamTutup'] ?? 'Tidak tersedia'),
-                        _buildDetailRow(Icons.phone, 'Kontak',
-                            data['kontak'] ?? 'Tidak tersedia'),
+                        // Alamat, Kategori, Jam Buka, Jam Tutup, Kontak in Detail Rows
+                        _buildDetailRow(
+                          Icons.location_on,
+                          'Alamat',
+                          data['alamat'] ?? 'Tidak tersedia',
+                        ),
+                        _buildDetailRow(
+                          Icons.category,
+                          'Kategori',
+                          data['kategori'] ?? 'Tidak tersedia',
+                        ),
+                        _buildDetailRow(
+                          Icons.access_time,
+                          'Jam Buka',
+                          data['jamBuka'] ?? 'Tidak tersedia',
+                        ),
+                        _buildDetailRow(
+                          Icons.access_time,
+                          'Jam Tutup',
+                          data['jamTutup'] ?? 'Tidak tersedia',
+                        ),
+                        _buildDetailRow(
+                          Icons.phone,
+                          'Kontak',
+                          data['kontak'] ?? 'Tidak tersedia',
+                        ),
                       ],
                     ),
                   ),
@@ -114,16 +129,17 @@ class DetailTempatIbadah extends StatelessWidget {
   // Function to create detail rows (Icon + Text)
   Widget _buildDetailRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Row(
         children: [
-          Icon(icon, color: Color(0xFF334d2b), size: 24), // Icon for each row
-          SizedBox(width: 10),
+          Icon(icon, color: Color(0xFF334d2b), size: 28), // Icon size adjusted
+          SizedBox(width: 16), // Increased space between icon and text
           Expanded(
             child: Text(
               '$label: $value',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18, // Increased font size for better readability
+                fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
             ),

@@ -286,7 +286,7 @@ class HomePage extends StatelessWidget {
                                 imageUrl: item['gambar'] ?? '',
                                 name: item['nama'],
                                 address: item['alamat'] ?? '',
-                                openingHours: item['jam_operasional'] ?? '',
+                                openingHours: '${item['jamBuka'] ?? ''} - ${item['jamTutup'] ?? ''}',
                               ),
                             ),
                           );

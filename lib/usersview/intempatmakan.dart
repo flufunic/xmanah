@@ -20,26 +20,26 @@ class TempatMakanDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Color(0xFF334d2b), // Set background color to Color(0xFF334d2b)
+      backgroundColor: Color(0xFF334d2b),
       appBar: AppBar(
-        title: Text(name, style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: Text(name, style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF334d2b),
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.0), // Padding tambahan untuk membuat konten tidak mentok ke sisi layar
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Card untuk Gambar dan Data Tempat Makan
             Card(
-              color: Color(0xFFF1F8E9), // Light green background for the card
+              color: Color(0xFFF1F8E9),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               elevation: 6.0,
-              margin: EdgeInsets.all(16.0),
+              margin: EdgeInsets.symmetric(vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -56,8 +56,7 @@ class TempatMakanDetail extends StatelessWidget {
                         : Container(
                             height: 250,
                             color: Colors.grey[300],
-                            child: Icon(Icons.image,
-                                color: Colors.white, size: 50),
+                            child: Icon(Icons.image, color: Colors.white, size: 50),
                           ),
                   ),
                   Padding(
@@ -79,14 +78,12 @@ class TempatMakanDetail extends StatelessWidget {
                         // Alamat dengan ikon
                         Row(
                           children: [
-                            Icon(Icons.location_on,
-                                color: Color(0xFF334d2b), size: 24),
+                            Icon(Icons.location_on, color: Color(0xFF334d2b), size: 24),
                             SizedBox(width: 8.0),
                             Expanded(
                               child: Text(
                                 address,
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.grey[700]),
+                                style: TextStyle(fontSize: 18.0, color: Colors.grey[700]),
                               ),
                             ),
                           ],
@@ -96,8 +93,7 @@ class TempatMakanDetail extends StatelessWidget {
                         // Jam Buka dan Jam Tutup dengan ikon
                         Row(
                           children: [
-                            Icon(Icons.access_time,
-                                color: Color(0xFF334d2b), size: 24),
+                            Icon(Icons.access_time, color: Color(0xFF334d2b), size: 24),
                             SizedBox(width: 8.0),
                             Text(
                               "Jam Buka: ",
@@ -105,8 +101,7 @@ class TempatMakanDetail extends StatelessWidget {
                             ),
                             Text(
                               openingHours.split('-')[0], // Jam Buka
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.grey[800]),
+                              style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
                             ),
                           ],
                         ),
@@ -114,8 +109,7 @@ class TempatMakanDetail extends StatelessWidget {
 
                         Row(
                           children: [
-                            Icon(Icons.access_time,
-                                color: Color(0xFF334d2b), size: 24),
+                            Icon(Icons.access_time, color: Color(0xFF334d2b), size: 24),
                             SizedBox(width: 8.0),
                             Text(
                               "Jam Tutup: ",
@@ -123,8 +117,7 @@ class TempatMakanDetail extends StatelessWidget {
                             ),
                             Text(
                               openingHours.split('-')[1], // Jam Tutup
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.grey[800]),
+                              style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
                             ),
                           ],
                         ),
@@ -135,7 +128,7 @@ class TempatMakanDetail extends StatelessWidget {
               ),
             ),
 
-            // Integrated ComentTempata Makan Component
+            // Integrated ComentTempatMakan Component
             ComentMakan(makanId: makanId),
           ],
         ),
@@ -210,7 +203,7 @@ class _ComentMakanState extends State<ComentMakan> {
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: 6.0,
-          margin: EdgeInsets.all(16.0),
+          margin: EdgeInsets.symmetric(vertical: 16.0),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: _ReviewForm(makanId: widget.makanId),
@@ -233,7 +226,6 @@ class _ComentMakanState extends State<ComentMakan> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Teks "Ulasan" yang muncul di atas ulasan
                 Text(
                   'Ulasan:',
                   style: TextStyle(
@@ -244,7 +236,6 @@ class _ComentMakanState extends State<ComentMakan> {
                 ),
                 SizedBox(height: 8.0),
 
-                // Kondisi untuk menampilkan jika tidak ada ulasan
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty)
                   Text(
                     'Belum ada ulasan',
@@ -254,7 +245,6 @@ class _ComentMakanState extends State<ComentMakan> {
                     ),
                   )
                 else
-                  // Jika ada ulasan, tampilkan daftar ulasan dalam Card
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -262,14 +252,12 @@ class _ComentMakanState extends State<ComentMakan> {
                     itemBuilder: (context, index) {
                       var review = snapshot.data!.docs[index];
                       return Card(
-                        color: Color(
-                            0xFFF1F8E9), // Light green background for the card
+                        color: Color(0xFFF1F8E9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 6.0,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 16.0),
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -405,6 +393,7 @@ class __ReviewFormState extends State<_ReviewForm> {
           decoration: InputDecoration(
             hintText: 'Rating (1-5)',
             border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           ),
         ),
         SizedBox(height: 8.0),
@@ -414,6 +403,7 @@ class __ReviewFormState extends State<_ReviewForm> {
           decoration: InputDecoration(
             hintText: 'Tulis ulasan Anda...',
             border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           ),
         ),
         SizedBox(height: 8.0),

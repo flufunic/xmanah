@@ -12,7 +12,6 @@ class SearchResultsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Pisahkan hasil pencarian berdasarkan kategori
     List<Map<String, dynamic>> desaResults = results.where((item) => item['type'] == 'desa').toList();
     List<Map<String, dynamic>> kostResults = results.where((item) => item['type'] == 'kost').toList();
     List<Map<String, dynamic>> tempatMakanResults = results.where((item) => item['type'] == 'tempatMakan').toList();
@@ -22,43 +21,81 @@ class SearchResultsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hasil Pencarian'),
+        backgroundColor: Color(0xFF334d2b),
+        title: Text('Hasil Pencarian', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
       ),
-      body: results.isEmpty 
-        ? Center(child: Text('Tidak ada hasil yang ditemukan'))
-        : ListView(
-        children: [
-          if (desaResults.isNotEmpty) _buildSection('Desa', desaResults, context),
-          if (kostResults.isNotEmpty) _buildSection('Kost', kostResults, context),
-          if (tempatMakanResults.isNotEmpty) _buildSection('Tempat Makan', tempatMakanResults, context),
-          if (tempatIbadahResults.isNotEmpty) _buildSection('Tempat Ibadah', tempatIbadahResults, context),
-          if (lembagaPendidikanResults.isNotEmpty) _buildSection('Lembaga Pendidikan', lembagaPendidikanResults, context),
-          if (fasilitasKesehatanResults.isNotEmpty) _buildSection('Fasilitas Kesehatan', fasilitasKesehatanResults, context),
-        ],
+      body: Container(
+        color: Color(0xFF334d2b),
+        child: results.isEmpty
+            ? Center(
+                child: Text(
+                  'Tidak ada hasil yang ditemukan',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              )
+            : ListView(
+                children: [
+                  if (desaResults.isNotEmpty) _buildSection('Desa', desaResults, context),
+                  if (kostResults.isNotEmpty) _buildSection('Kost', kostResults, context),
+                  if (tempatMakanResults.isNotEmpty) _buildSection('Tempat Makan', tempatMakanResults, context),
+                  if (tempatIbadahResults.isNotEmpty) _buildSection('Tempat Ibadah', tempatIbadahResults, context),
+                  if (lembagaPendidikanResults.isNotEmpty) _buildSection('Lembaga Pendidikan', lembagaPendidikanResults, context),
+                  if (fasilitasKesehatanResults.isNotEmpty) _buildSection('Fasilitas Kesehatan', fasilitasKesehatanResults, context),
+                ],
+              ),
       ),
     );
   }
 
   Widget _buildSection(String title, List<Map<String, dynamic>> items, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          SizedBox(height: 8),
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: items.length,
             itemBuilder: (context, index) {
               var item = items[index];
-              return ListTile(
-                title: Text(item['nama'] ?? item['name'] ?? 'Nama Tidak Tersedia'),
-                subtitle: Text(_getSubtitle(item)),
-                onTap: () {
-                  // Navigate to appropriate detail page based on item type
-                  _navigateToDetailPage(context, item);
-                },
+              return Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                elevation: 4,
+                margin: EdgeInsets.symmetric(vertical: 6.0),
+                color: Colors.white,
+                child: ListTile(
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[200],
+                      image: DecorationImage(
+                        image: NetworkImage(item['gambar'] ?? 'https://via.placeholder.com/150'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    item['nama'] ?? item['name'] ?? 'Nama Tidak Tersedia',
+                    style: TextStyle(color: Color(0xFF334d2b), fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    _getSubtitle(item),
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  trailing: Icon(Icons.arrow_forward_ios, color: Color(0xFF334d2b), size: 16),
+                  onTap: () {
+                    _navigateToDetailPage(context, item);
+                  },
+                ),
               );
             },
           ),
@@ -67,22 +104,10 @@ class SearchResultsPage extends StatelessWidget {
     );
   }
 
-  // Metode untuk mendapatkan subtitle yang sesuai dengan tipe
   String _getSubtitle(Map<String, dynamic> item) {
-    switch (item['type']) {
-      case 'kost':
-      case 'tempatMakan':
-      case 'tempatIbadah':
-      case 'lembagaPendidikan':
-      case 'fasilitasKesehatan':
-      case 'desa':
-        return item['alamat'] ?? 'Alamat tidak tersedia';
-      default:
-        return 'Informasi tidak tersedia';
-    }
+    return item['alamat'] ?? 'Alamat tidak tersedia';
   }
 
-  // Metode untuk navigasi ke halaman detail sesuai tipe
   void _navigateToDetailPage(BuildContext context, Map<String, dynamic> item) {
     switch (item['type']) {
       case 'kost':
@@ -91,7 +116,7 @@ class SearchResultsPage extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => KostDetail(
               kostId: item['id'] ?? '',
-              imageUrl: item['imageUrl'] ?? '',
+              imageUrl: item['gambar'] ?? '',
               name: item['nama'] ?? item['name'] ?? '',
               address: item['alamat'] ?? '',
               kontak: item['kontak'] ?? '',
@@ -105,13 +130,13 @@ class SearchResultsPage extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TempatMakanDetail( 
+            builder: (context) => TempatMakanDetail(
               makanId: item['id'] ?? '',
-              imageUrl: item['imageUrl'] ?? '',
+              imageUrl: item['gambar'] ?? '',
               name: item['nama'] ?? item['name'] ?? '',
               address: item['alamat'] ?? '',
               openingHours: '${item['jamBuka'] ?? "N/A"} - ${item['jamTutup'] ?? "N/A"}',
-          ),
+            ),
           ),
         );
         break;
@@ -140,7 +165,6 @@ class SearchResultsPage extends StatelessWidget {
         );
         break;
       default:
-        // Optional: Show a snackbar or toast if no detail page is available
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Detail tidak tersedia untuk jenis ini')),
         );
