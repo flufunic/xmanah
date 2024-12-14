@@ -32,6 +32,7 @@ class KostDetail extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.0), // Padding untuk body
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,8 +41,9 @@ class KostDetail extends StatelessWidget {
               color: Color(0xFFF1F8E9),
               elevation: 4.0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
+              margin: EdgeInsets.only(bottom: 16.0), // Margin bawah untuk Card
               child: Column(
                 children: [
                   // Gambar Kost
@@ -58,8 +60,7 @@ class KostDetail extends StatelessWidget {
                       : Container(
                           height: 250,
                           color: Colors.grey[300],
-                          child:
-                              Icon(Icons.image, color: Colors.white, size: 50),
+                          child: Icon(Icons.image, color: Colors.white, size: 50),
                         ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -68,16 +69,16 @@ class KostDetail extends StatelessWidget {
                       children: [
                         // Nama Kost
                         _buildInfoRow(Icons.home, name),
-                        SizedBox(height: 16.0),
+                        SizedBox(height: 12.0), // Menyesuaikan jarak antar elemen
                         // Alamat
                         _buildInfoRow(Icons.location_on, address),
-                        SizedBox(height: 16.0),
+                        SizedBox(height: 12.0),
                         // Fasilitas
                         _buildInfoRow(Icons.build, fasilitas),
-                        SizedBox(height: 16.0),
+                        SizedBox(height: 12.0),
                         // Harga
                         _buildInfoRow(Icons.attach_money, "Rp $harga"),
-                        SizedBox(height: 16.0),
+                        SizedBox(height: 12.0),
                         // Kontak
                         _buildInfoRow(Icons.phone, kontak),
                       ],
@@ -187,8 +188,9 @@ class _ComentKostState extends State<ComentKost> {
           color: Color(0xFFF1F8E9),
           elevation: 4.0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
+          margin: EdgeInsets.only(bottom: 16.0), // Margin bawah untuk Card
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: _ReviewForm(kostId: widget.kostId),
@@ -382,7 +384,7 @@ class _ReviewList extends StatelessWidget {
               margin: EdgeInsets.symmetric(vertical: 8.0),
               color: Color(0xFFF1F8E9),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),

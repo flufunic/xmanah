@@ -130,7 +130,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
           ? TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Cari Desa, Fasilitas, Kost, dll.',
+                hintText: 'Cari...',
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: Colors.white),
               ),
