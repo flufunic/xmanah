@@ -121,39 +121,43 @@ class ContentTab extends StatelessWidget {
           return Center(child: Text("Tidak ada data tersedia"));
         } else {
           final lembagaList = snapshot.data!;
-          return ListView.builder(
-            itemCount: lembagaList.length,
-            itemBuilder: (context, index) {
-              final lembaga = lembagaList[index];
-              return FasilitasCard(
-                imageUrl: lembaga['gambar'] ?? '',
-                name: lembaga['nama'] ?? '',
-                address: lembaga['alamat'] ?? '',
-                akreditasi: lembaga['akreditasi'] ?? '',
-                tingkat: lembaga['tingkat'] ?? '',
-                jenis: lembaga['jenis'] ?? '',
-                kontak: lembaga['kontak'] ?? '',
-                openingHours: lembaga['jamBuka'] ?? '',
-                closedHours: lembaga['jamTutup'] ?? '',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        // Navigasi ke halaman detail yang sesuai berdasarkan kategori
-                        if (category == 'Pendidikan') {
-                          return DetailLembagaPendidikan(data: lembaga);
-                        } else if (category == 'Tempat Ibadah') {
-                          return DetailTempatIbadah(data: lembaga);
-                        } else {
-                          return DetailFasilitasKesehatan(data: lembaga);
-                        }
-                      },
-                    ),
-                  );
-                },
-              );
-            },
+          return SingleChildScrollView(
+            // Menambahkan scroll view untuk menghindari overflow
+            child: ListView.builder(
+              shrinkWrap: true, // Agar ListView tidak memenuhi seluruh area
+              itemCount: lembagaList.length,
+              itemBuilder: (context, index) {
+                final lembaga = lembagaList[index];
+                return FasilitasCard(
+                  imageUrl: lembaga['gambar'] ?? '',
+                  name: lembaga['nama'] ?? '',
+                  address: lembaga['alamat'] ?? '',
+                  akreditasi: lembaga['akreditasi'] ?? '',
+                  tingkat: lembaga['tingkat'] ?? '',
+                  jenis: lembaga['jenis'] ?? '',
+                  kontak: lembaga['kontak'] ?? '',
+                  openingHours: lembaga['jamBuka'] ?? '',
+                  closedHours: lembaga['jamTutup'] ?? '',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          // Navigasi ke halaman detail yang sesuai berdasarkan kategori
+                          if (category == 'Pendidikan') {
+                            return DetailLembagaPendidikan(data: lembaga);
+                          } else if (category == 'Tempat Ibadah') {
+                            return DetailTempatIbadah(data: lembaga);
+                          } else {
+                            return DetailFasilitasKesehatan(data: lembaga);
+                          }
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           );
         }
       },
@@ -210,11 +214,13 @@ class FasilitasCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
               child: imageUrl.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
-                      height: 150, // Disesuaikan untuk tampilan mobile
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                  ? AspectRatio(
+                      aspectRatio: 16 / 9, // Menjaga rasio aspek gambar
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit
+                            .cover, // Menyesuaikan gambar agar tidak terdistorsi
+                      ),
                     )
                   : Container(
                       height: 150,
@@ -227,18 +233,31 @@ class FasilitasCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.school, size: 16, color: Color(0xFF334d2b)),
-                      SizedBox(width: 8),
-                      Text(
-                        name,
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF334d2b)),
-                      ),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Row(
+                        children: [
+                          Icon(Icons.school,
+                              size: 16, color: Color(0xFF334d2b)),
+                          SizedBox(width: 8),
+                          Container(
+                            constraints: BoxConstraints(
+                              maxWidth: constraints.maxWidth *
+                                  0.6, // Menyesuaikan ukuran teks
+                            ),
+                            child: Text(
+                              name,
+                              overflow: TextOverflow
+                                  .ellipsis, // Menghindari overflow pada teks panjang
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF334d2b)),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   SizedBox(height: 4.0),
                   Row(
@@ -246,21 +265,20 @@ class FasilitasCard extends StatelessWidget {
                       Icon(Icons.location_on,
                           size: 16, color: Color(0xFF334d2b)),
                       SizedBox(width: 8),
-                      Text(address,
-                          style: TextStyle(
-                              fontSize: 14.0, color: Color(0xFF334d2b))),
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Icon(Icons.phone, size: 16, color: Color(0xFF334d2b)),
-                      SizedBox(width: 8),
-                      Text(
-                        "Kontak: $kontak",
-                        style: TextStyle(color: Color(0xFF334d2b)),
+                      Expanded(
+                        child: Text(
+                          address,
+                          style:
+                              TextStyle(fontSize: 14.0, color: Colors.black54),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    "Kontak: $kontak",
+                    style: TextStyle(fontSize: 14.0, color: Colors.black54),
                   ),
                 ],
               ),
