@@ -13,7 +13,6 @@ class DesaService {
     required String gambar,
   }) async {
     try {
-      // Add a new document to the 'desa' collection
       DocumentReference docRef = await desaCollection.add({
         'nama': nama,
         'kode_pos': kodePos,
@@ -21,16 +20,11 @@ class DesaService {
         'kontak': kontak,
         'gambar': gambar,
       });
-
       print("Data desa berhasil ditambahkan!");
-
-      // Return the ID of the new document
-      return docRef.id; // Returning the ID of the newly added document
+      return docRef.id;
     } catch (e) {
-      // Log the error and rethrow it
       print("Gagal menambahkan data desa: $e");
-      throw Exception(
-          "Gagal menambahkan data desa: $e"); // Rethrow the error for the UI to handle
+      throw Exception("Gagal menambahkan data desa: $e");
     }
   }
 
@@ -44,7 +38,6 @@ class DesaService {
     required String gambar,
   }) async {
     try {
-      // Update the document in the 'desa' collection
       await desaCollection.doc(desaId).update({
         'nama': nama,
         'kode_pos': kodePos,
@@ -52,40 +45,38 @@ class DesaService {
         'kontak': kontak,
         'gambar': gambar,
       });
-
       print("Data desa berhasil diperbarui!");
     } catch (e) {
-      // Log the error and rethrow it
       print("Gagal memperbarui data desa: $e");
-      throw Exception(
-          "Gagal memperbarui data desa: $e"); // Rethrow the error for the UI to handle
+      throw Exception("Gagal memperbarui data desa: $e");
     }
   }
 
   // Fungsi untuk mengambil daftar desa
   Future<List<Map<String, dynamic>>> getDesaList() async {
     try {
-      QuerySnapshot snapshot = await desaCollection.get(); // Ambil semua desa
-      List<Map<String, dynamic>> desaList = snapshot.docs.map((doc) {
-        return doc.data() as Map<String, dynamic>;
+      QuerySnapshot snapshot = await desaCollection.get();
+      return snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
       }).toList();
-      return desaList;
     } catch (e) {
       print("Error fetching desa data: $e");
       return [];
     }
   }
- Future<List<Map<String, dynamic>>> searchDesa(String query) async {
+  // Fungsi untuk mencari desa berdasarkan nama
+  Future<List<Map<String, dynamic>>> searchDesa(String query) async {
     try {
       QuerySnapshot snapshot = await desaCollection
-          .where('nama', isGreaterThanOrEqualTo: query.toLowerCase())
-          .where('nama', isLessThanOrEqualTo: query.toLowerCase() + '\uf8ff')
+          .where('nama', isGreaterThanOrEqualTo: query)
+          .where('nama', isLessThanOrEqualTo: query + '\uf8ff')
           .get();
-      
+
       return snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
-        data['type'] = 'desa';
         return data;
       }).toList();
     } catch (e) {

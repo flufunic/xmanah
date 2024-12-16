@@ -49,24 +49,21 @@ class KostService {
   }
 
   // Function to get kost by desaId (only one declaration should exist)
-  Future<List<Map<String, dynamic>>> getKostListByDesa(String desaId) async {
+   Future<List<Map<String, dynamic>>> getKostListByDesa(String desaId) async {
     try {
       QuerySnapshot snapshot = await kostCollection
           .where('desa_id', isEqualTo: desaId)
           .get();
-
-      List<Map<String, dynamic>> kostList = snapshot.docs.map((doc) {
+      return snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
         data['type'] = 'kost';
-        data['name'] = data['nama']; // Standardize name key
-        data['description'] = 'Kost dengan alamat ${data['alamat']}'; // Add description
+        data['name'] = data['nama'];
+        data['description'] = 'Kost dengan alamat ${data['alamat']}';
         return data;
       }).toList();
-
-      return kostList;
     } catch (e) {
-      print("Error fetching kost data for desa $desaId: $e");
+      print("Error fetching kost data: $e");
       return [];
     }
   }
