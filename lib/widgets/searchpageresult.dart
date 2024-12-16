@@ -12,12 +12,18 @@ class SearchResultsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> desaResults = results.where((item) => item['type'] == 'desa').toList();
-    List<Map<String, dynamic>> kostResults = results.where((item) => item['type'] == 'kost').toList();
-    List<Map<String, dynamic>> tempatMakanResults = results.where((item) => item['type'] == 'tempatMakan').toList();
-    List<Map<String, dynamic>> tempatIbadahResults = results.where((item) => item['type'] == 'tempatIbadah').toList();
-    List<Map<String, dynamic>> lembagaPendidikanResults = results.where((item) => item['type'] == 'lembagaPendidikan').toList();
-    List<Map<String, dynamic>> fasilitasKesehatanResults = results.where((item) => item['type'] == 'fasilitasKesehatan').toList();
+    List<Map<String, dynamic>> desaResults =
+        results.where((item) => item['type'] == 'desa').toList();
+    List<Map<String, dynamic>> kostResults =
+        results.where((item) => item['type'] == 'kost').toList();
+    List<Map<String, dynamic>> tempatMakanResults =
+        results.where((item) => item['type'] == 'tempatMakan').toList();
+    List<Map<String, dynamic>> tempatIbadahResults =
+        results.where((item) => item['type'] == 'tempatIbadah').toList();
+    List<Map<String, dynamic>> lembagaPendidikanResults =
+        results.where((item) => item['type'] == 'lembagaPendidikan').toList();
+    List<Map<String, dynamic>> fasilitasKesehatanResults =
+        results.where((item) => item['type'] == 'fasilitasKesehatan').toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -36,19 +42,29 @@ class SearchResultsPage extends StatelessWidget {
               )
             : ListView(
                 children: [
-                  if (desaResults.isNotEmpty) _buildSection('Desa', desaResults, context),
-                  if (kostResults.isNotEmpty) _buildSection('Kost', kostResults, context),
-                  if (tempatMakanResults.isNotEmpty) _buildSection('Tempat Makan', tempatMakanResults, context),
-                  if (tempatIbadahResults.isNotEmpty) _buildSection('Tempat Ibadah', tempatIbadahResults, context),
-                  if (lembagaPendidikanResults.isNotEmpty) _buildSection('Lembaga Pendidikan', lembagaPendidikanResults, context),
-                  if (fasilitasKesehatanResults.isNotEmpty) _buildSection('Fasilitas Kesehatan', fasilitasKesehatanResults, context),
+                  if (desaResults.isNotEmpty)
+                    _buildSection('Desa', desaResults, context),
+                  if (kostResults.isNotEmpty)
+                    _buildSection('Kost', kostResults, context),
+                  if (tempatMakanResults.isNotEmpty)
+                    _buildSection('Tempat Makan', tempatMakanResults, context),
+                  if (tempatIbadahResults.isNotEmpty)
+                    _buildSection(
+                        'Tempat Ibadah', tempatIbadahResults, context),
+                  if (lembagaPendidikanResults.isNotEmpty)
+                    _buildSection('Lembaga Pendidikan',
+                        lembagaPendidikanResults, context),
+                  if (fasilitasKesehatanResults.isNotEmpty)
+                    _buildSection('Fasilitas Kesehatan',
+                        fasilitasKesehatanResults, context),
                 ],
               ),
       ),
     );
   }
 
-  Widget _buildSection(String title, List<Map<String, dynamic>> items, BuildContext context) {
+  Widget _buildSection(
+      String title, List<Map<String, dynamic>> items, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
       child: Column(
@@ -56,7 +72,8 @@ class SearchResultsPage extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           SizedBox(height: 8),
           ListView.builder(
@@ -66,7 +83,8 @@ class SearchResultsPage extends StatelessWidget {
             itemBuilder: (context, index) {
               var item = items[index];
               return Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 elevation: 4,
                 margin: EdgeInsets.symmetric(vertical: 6.0),
                 color: Colors.white,
@@ -78,20 +96,23 @@ class SearchResultsPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.grey[200],
                       image: DecorationImage(
-                        image: NetworkImage(item['gambar'] ?? 'https://via.placeholder.com/150'),
+                        image: NetworkImage(item['gambar'] ??
+                            'https://via.placeholder.com/150'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   title: Text(
                     item['nama'] ?? item['name'] ?? 'Nama Tidak Tersedia',
-                    style: TextStyle(color: Color(0xFF334d2b), fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Color(0xFF334d2b), fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     _getSubtitle(item),
                     style: TextStyle(color: Colors.grey[700]),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios, color: Color(0xFF334d2b), size: 16),
+                  trailing: Icon(Icons.arrow_forward_ios,
+                      color: Color(0xFF334d2b), size: 16),
                   onTap: () {
                     _navigateToDetailPage(context, item);
                   },
@@ -135,7 +156,8 @@ class SearchResultsPage extends StatelessWidget {
               imageUrl: item['gambar'] ?? '',
               name: item['nama'] ?? item['name'] ?? '',
               address: item['alamat'] ?? '',
-              openingHours: '${item['jamBuka'] ?? "N/A"} - ${item['jamTutup'] ?? "N/A"}',
+              openingHours:
+                  '${item['jamBuka'] ?? "N/A"} - ${item['jamTutup'] ?? "N/A"}',
             ),
           ),
         );

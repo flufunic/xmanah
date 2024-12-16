@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:xmanah/controller/lembaga_pendidikan.dart';
 import 'package:xmanah/controller/tempat_ibadah.dart';
 import 'package:xmanah/controller/fasilitas_kesehatan.dart';
+import 'package:xmanah/usersview/intempatibadah.dart';
 import 'package:xmanah/usersview/inkesehatan.dart';
 import 'package:xmanah/usersview/inlembaga.dart';
-import 'package:xmanah/usersview/intempatibadah.dart'; // Import halaman detail fasilitas kesehatan
 
 class FasilitasUser extends StatefulWidget {
   @override
@@ -42,8 +42,7 @@ class _FasilitasUserState extends State<FasilitasUser> {
                   color: selectedIndex == index
                       ? Color(0xFF334d2b)
                       : Colors.grey[300],
-                  borderRadius:
-                      BorderRadius.circular(20), // Bentuk oval lebih kecil
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   children: [
@@ -53,7 +52,7 @@ class _FasilitasUserState extends State<FasilitasUser> {
                           : index == 1
                               ? Icons.mosque
                               : Icons.local_hospital,
-                      size: 16, // Ukuran ikon lebih kecil
+                      size: 16,
                       color: selectedIndex == index
                           ? Colors.white
                           : Colors.black54,
@@ -62,7 +61,7 @@ class _FasilitasUserState extends State<FasilitasUser> {
                     Text(
                       tabs[index],
                       style: TextStyle(
-                        fontSize: 12.0, // Ukuran teks lebih kecil
+                        fontSize: 12.0,
                         color: selectedIndex == index
                             ? Colors.white
                             : Colors.black87,
@@ -121,43 +120,33 @@ class ContentTab extends StatelessWidget {
           return Center(child: Text("Tidak ada data tersedia"));
         } else {
           final lembagaList = snapshot.data!;
-          return SingleChildScrollView(
-            // Menambahkan scroll view untuk menghindari overflow
-            child: ListView.builder(
-              shrinkWrap: true, // Agar ListView tidak memenuhi seluruh area
-              itemCount: lembagaList.length,
-              itemBuilder: (context, index) {
-                final lembaga = lembagaList[index];
-                return FasilitasCard(
-                  imageUrl: lembaga['gambar'] ?? '',
-                  name: lembaga['nama'] ?? '',
-                  address: lembaga['alamat'] ?? '',
-                  akreditasi: lembaga['akreditasi'] ?? '',
-                  tingkat: lembaga['tingkat'] ?? '',
-                  jenis: lembaga['jenis'] ?? '',
-                  kontak: lembaga['kontak'] ?? '',
-                  openingHours: lembaga['jamBuka'] ?? '',
-                  closedHours: lembaga['jamTutup'] ?? '',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          // Navigasi ke halaman detail yang sesuai berdasarkan kategori
-                          if (category == 'Pendidikan') {
-                            return DetailLembagaPendidikan(data: lembaga);
-                          } else if (category == 'Tempat Ibadah') {
-                            return DetailTempatIbadah(data: lembaga);
-                          } else {
-                            return DetailFasilitasKesehatan(data: lembaga);
-                          }
-                        },
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+          return ListView.builder(
+            itemCount: lembagaList.length,
+            itemBuilder: (context, index) {
+              final lembaga = lembagaList[index];
+              return FasilitasCard(
+                imageUrl: lembaga['gambar'] ?? '',
+                name: lembaga['nama'] ?? '',
+                address: lembaga['alamat'] ?? '',
+                kontak: lembaga['kontak'] ?? '',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        if (category == 'Pendidikan') {
+                          return DetailLembagaPendidikan(data: lembaga);
+                        } else if (category == 'Tempat Ibadah') {
+                          return DetailTempatIbadah(data: lembaga);
+                        } else {
+                          return DetailFasilitasKesehatan(data: lembaga);
+                        }
+                      },
+                    ),
+                  );
+                },
+              );
+            },
           );
         }
       },
@@ -169,27 +158,16 @@ class FasilitasCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String address;
-  final String akreditasi;
-  final String tingkat;
-  final String jenis;
   final String kontak;
-  final String openingHours;
-  final String closedHours;
   final VoidCallback onTap;
 
   const FasilitasCard({
-    Key? key,
     required this.imageUrl,
     required this.name,
     required this.address,
-    required this.akreditasi,
-    required this.tingkat,
-    required this.jenis,
     required this.kontak,
-    required this.openingHours,
-    required this.closedHours,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -215,12 +193,8 @@ class FasilitasCard extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
               child: imageUrl.isNotEmpty
                   ? AspectRatio(
-                      aspectRatio: 16 / 9, // Menjaga rasio aspek gambar
-                      child: Image.network(
-                        imageUrl,
-                        fit: BoxFit
-                            .cover, // Menyesuaikan gambar agar tidak terdistorsi
-                      ),
+                      aspectRatio: 16 / 9,
+                      child: Image.network(imageUrl, fit: BoxFit.cover),
                     )
                   : Container(
                       height: 150,
@@ -233,31 +207,13 @@ class FasilitasCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Row(
-                        children: [
-                          Icon(Icons.school,
-                              size: 16, color: Color(0xFF334d2b)),
-                          SizedBox(width: 8),
-                          Container(
-                            constraints: BoxConstraints(
-                              maxWidth: constraints.maxWidth *
-                                  0.6, // Menyesuaikan ukuran teks
-                            ),
-                            child: Text(
-                              name,
-                              overflow: TextOverflow
-                                  .ellipsis, // Menghindari overflow pada teks panjang
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF334d2b)),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF334d2b),
+                    ),
                   ),
                   SizedBox(height: 4.0),
                   Row(

@@ -104,126 +104,137 @@ class _TambahKostPageState extends State<TambahKostPage> {
             Color.fromARGB(255, 255, 255, 255), // app bar background color
       ),
       body: Container(
-        color: Color(0xFF334d2b), // Set background color to green
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Title for the form
-                      Text(
-                        'Tambah Data Kost',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF334d2b), // Text color
-                        ),
+        decoration: BoxDecoration(
+          color: Color(0xFF334d2b), // Background color
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      SizedBox(height: 16),
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Title for the form
+                              Text(
+                                'Tambah Data Kost',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF334d2b), // Text color
+                                ),
+                              ),
+                              SizedBox(height: 16),
 
-                      // Nama Kost
-                      _buildTextField(
-                        controller: _namaController,
-                        label: 'Nama Kos',
-                        icon: Icons.home,
-                      ),
-                      SizedBox(height: 16),
+                              // Nama Kost
+                              _buildTextField(
+                                controller: _namaController,
+                                label: 'Nama Kos',
+                                icon: Icons.home,
+                              ),
+                              SizedBox(height: 16),
 
-                      // Alamat
-                      _buildTextField(
-                        controller: _alamatController,
-                        label: 'Alamat',
-                        icon: Icons.location_on,
-                      ),
-                      SizedBox(height: 16),
+                              // Alamat
+                              _buildTextField(
+                                controller: _alamatController,
+                                label: 'Alamat',
+                                icon: Icons.location_on,
+                              ),
+                              SizedBox(height: 16),
 
-                      // Fasilitas
-                      _buildTextField(
-                        controller: _fasilitasController,
-                        label: 'Fasilitas',
-                        icon: Icons.settings,
-                      ),
-                      SizedBox(height: 16),
+                              // Fasilitas
+                              _buildTextField(
+                                controller: _fasilitasController,
+                                label: 'Fasilitas',
+                                icon: Icons.settings,
+                              ),
+                              SizedBox(height: 16),
 
-                      // Kontak
-                      _buildTextField(
-                        controller: _kontakController,
-                        label: 'Kontak',
-                        icon: Icons.phone,
-                        keyboardType: TextInputType.phone,
-                      ),
-                      SizedBox(height: 16),
+                              // Kontak
+                              _buildTextField(
+                                controller: _kontakController,
+                                label: 'Kontak',
+                                icon: Icons.phone,
+                                keyboardType: TextInputType.phone,
+                              ),
+                              SizedBox(height: 16),
 
-                      // Harga
-                      _buildTextField(
-                        controller: _hargaController,
-                        label: 'Harga',
-                        icon: Icons.attach_money,
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: 16),
+                              // Harga
+                              _buildTextField(
+                                controller: _hargaController,
+                                label: 'Harga',
+                                icon: Icons.attach_money,
+                                keyboardType: TextInputType.number,
+                              ),
+                              SizedBox(height: 16),
 
-                      // URL Gambar
-                      _buildTextField(
-                        controller: _gambarController,
-                        label: 'URL Gambar',
-                        icon: Icons.image,
-                      ),
-                      SizedBox(height: 16),
+                              // URL Gambar
+                              _buildTextField(
+                                controller: _gambarController,
+                                label: 'URL Gambar',
+                                icon: Icons.image,
+                              ),
+                              SizedBox(height: 16),
 
-                      // Dropdown Desa
-                      DropdownButtonFormField<String>(
-                        value: _selectedDesaId,
-                        items: _desaItems,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedDesaId = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Desa',
-                          prefixIcon: Icon(Icons.location_city),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                              // Dropdown Desa
+                              DropdownButtonFormField<String>(
+                                value: _selectedDesaId,
+                                items: _desaItems,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedDesaId = value;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Desa',
+                                  prefixIcon: Icon(Icons.location_city),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                                validator: (value) =>
+                                    value == null ? 'Pilih desa' : null,
+                              ),
+                              SizedBox(height: 20),
+
+                              // Save Button
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: _simpanKost,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color(0xFF334d2b), // Button color
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Simpan Data Kos',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        validator: (value) =>
-                            value == null ? 'Pilih desa' : null,
                       ),
-                      SizedBox(height: 20),
-
-                      // Save Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _simpanKost,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF334d2b), // Button color
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Text(
-                            'Simpan Data Kos',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
