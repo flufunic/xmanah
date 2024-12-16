@@ -76,13 +76,13 @@ class TempatMakanService {
   }
 
  // Method to get tempat makan list filtered by desa
-  Future<List<Map<String, dynamic>>> getTempatMakanListByDesa(String desaId) async {
+   Future<List<Map<String, dynamic>>> getTempatMakanListByDesa(
+      String desaId) async {
     try {
       QuerySnapshot snapshot = await tempatMakanCollection
           .where('desa_id', isEqualTo: desaId)
           .get();
-
-      List<Map<String, dynamic>> tempatMakanList = snapshot.docs.map((doc) {
+      return snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
         data['type'] = 'tempatMakan';
@@ -90,8 +90,6 @@ class TempatMakanService {
         data['description'] = 'Buka ${data['jamBuka']} - ${data['jamTutup']}';
         return data;
       }).toList();
-
-      return tempatMakanList;
     } catch (e) {
       print("Error fetching tempat makan data: $e");
       return [];
